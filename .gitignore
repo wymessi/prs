@@ -19,4 +19,8 @@ gen/
 # Eclipse project files  
 .classpath  
 .project  
+<<<<<<< HEAD
 .DS_Store
+=======
+.DS_Store  
+>>>>>>> branch 'master' of https://github.com/wymessi/prs.git
