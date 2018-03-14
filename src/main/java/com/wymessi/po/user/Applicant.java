@@ -1,6 +1,6 @@
 package com.wymessi.po.user;
 
-public class User {
+public class Applicant {
     private int id;
     private String name;
     private int age;
