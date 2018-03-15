@@ -28,7 +28,7 @@ spring:
   #数据库连接池配置
   datasource:
     name: test
-    url: jdbc:mysql://localhost:3306/test
+    url: jdbc:mysql://localhost:3306/prs
     username: root
     password: root
     type: com.alibaba.druid.pool.DruidDataSource

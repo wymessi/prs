@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>PRS-登录页面</title>
+<link rel="stylesheet" href="layui/css/layui.css"/>
+<link rel="stylesheet" href="layui/css/login.css"/>
+</head>
+<body class="layui-layout-body layui-bg-black">
+	<div class="layui-col-md8">
+		<h1>
+			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统
+		</h1>
+	</div>
+	<div class="layui-col-md4">
+		<div id="login-wrap">
+			<div class="login">
+				<form class="layui-form layui-bg-gray" action="" method="POST">
+					<div class="layui-form-item">
+						<label class="layui-form-label">系统角色</label>
+						<div class="layui-input-inline">
+							<select name="role" lay-verify="role">
+								<option value=""></option>
+								<option value="0">系统工作人员</option>
+								<option value="1">评审专家</option>
+								<option value="2">项目申请者</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户名</label>
+						<div class="layui-input-inline">
+							<input id="username" type="text" name="title" required
+								lay-verify="username" placeholder="请输入用户名" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">密码</label>
+						<div class="layui-input-inline">
+							<input type="password" name="password" required
+								lay-verify="password" placeholder="请输入密码" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
+							<button class="layui-btn">注册</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="layui/layui.js"></script>
+	<script>
+		//JavaScript代码区域
+		layui.use('form', function() {
+			var form = layui.form;
+
+			form.verify({
+				role : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "<span style='color:#FF5722'>角色不能为空</span>";
+					}
+				},
+				username : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "<span style='color:#FF5722'>用户名不能为空</span>";
+					}
+				},
+				password : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "<span style='color:#FF5722'>密码不能为空</span>";
+					}
+				}
+			});
+			//监听提交
+			form.on('submit(formDemo)', function(data) {
+				layer.msg(JSON.stringify(data.field));
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>
