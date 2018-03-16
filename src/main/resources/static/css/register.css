@@ -1,36 +1,31 @@
-.layui-form-item{
-	padding-bottom: 20px;
-}
 .layui-form-label{
 	font-weight:bold;
 	color: #009688;
 }
-a{
-	text-decoration: none;
-	color: #fff;
-}
 h1{
-	font-size: 60px; 
+	font-size: 30px; 
+	padding-left:20px;
+	padding-top:20px;
 	color: #009688;
-	padding:250px 0 0 250px;
 }
 h1 i{
 	padding-right:20px;
 }
 .layui-icon{
-	font-size: 60px;
+	font-size: 30px;
     color: #009688;
 }
-.login{
+.register{
 	width:400px;
-	height:400px;
+	height:450px;
 	background: #F0F0F0;
 	border-radius: 4px; 
-	margin: 150px 0 0 0;
+	margin: 120px auto;
+	margin-bottom:0px;
 	padding-top:50px;
 }
 .layui-btn{
-	width:88px;
+	width:190px;
 }
 .layui-footer{
 	height:150px;
@@ -39,7 +34,7 @@ h1 i{
 }
 .layui-footer p{
 	height:150px;
-	line-height:150px;
+	line-height:80px;
 	text-align:center;
 	color:black;
 }

@@ -51,4 +51,5 @@ spring:
     prefix: classpath:/templates/  
     suffix: .html  
     mode: HTML5  
-    encoding: UTF-8 
+    encoding: UTF-8
+    cache: false 

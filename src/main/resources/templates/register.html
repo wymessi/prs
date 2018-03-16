@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-注册页面</title>
+<link rel="stylesheet" href="../static/css/layui.css"
+	th:href="@{/css/layui.css}" />
+<link rel="stylesheet" href="../static/css/register.css"
+	th:href="@{/css/register.css}" />
+</head>
+<body class="layui-layout-body layui-bg-cyan">
+	<div class="layui-col-md12">
+		<h1>
+			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统
+		</h1>
+	</div>
+	<div class="layui-col-md12">
+		<div id="register-wrap">
+			<div class="register">
+				<form class="layui-form layui-bg-gray" action="" method="POST">
+					<div class="layui-form-item">
+						<label class="layui-form-label">系统角色</label>
+						<div class="layui-input-inline">
+							<select name="role" lay-verify="role">
+								<option value=""></option>
+								<option value="0" disabled="disabled">系统工作人员</option>
+								<option value="1" disabled="disabled">评审专家</option>
+								<option value="2" selected="selected">项目申请者</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户名</label>
+						<div class="layui-input-inline">
+							<input id="username" type="text" name="title"
+								lay-verify="username" placeholder="请输入用户名" autocomplete="off"
+								class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">密码</label>
+						<div class="layui-input-inline">
+							<input id="password" type="password" name="password" lay-verify="password"
+								placeholder="请输入密码" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">确认密码</label>
+						<div class="layui-input-inline">
+							<input type="password" name="repassword" lay-verify="repassword"
+								placeholder="请确认密码" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">手机</label>
+						<div class="layui-input-inline">
+							<input id="phone" type="text" name="title" lay-verify="phone"
+								placeholder="请输入手机号" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">邮箱</label>
+						<div class="layui-input-inline">
+							<input id="mail" type="text" name="title" lay-verify="mail"
+								placeholder="请输入邮箱" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">单选框</label>
+						<div class="layui-input-block">
+							<input type="radio" name="sex" value="1" title="男"/> <input
+								type="radio" name="sex" value="0" title="女" checked="checked"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit="lay-submit" lay-filter="formDemo">注册</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="layui-col-md12">
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p>© All Rights Reserve By PRS</p>
+		</div>
+	</div>
+	<script src="../static/layui.js" th:src="@{/layui.js}"></script>
+	<script>
+		//JavaScript代码区域
+		layui.use(['form','jquery'], function() {
+			var form = layui.form
+			,$ = layui.$;
+			
+			form.render();
+			form.verify({
+				  username: function(value, item){ //value：表单的值、item：表单的DOM对象
+				    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+				      return "<span style='color:#FF5722'>用户名不能有特殊字符</span>";
+				    }
+				    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+				      return "<span style='color:#FF5722'>用户名首尾不能出现下划线\'_\'</span>";
+				    }
+				    if(/^\d+\d+\d$/.test(value)){
+				      return "<span style='color:#FF5722'>用户名不能全为数字</span>";
+				    }
+				  }
+				  ,repassword: function(value, item){ //value：表单的值、item：表单的DOM对象
+					  var password = $('#password').val();
+					  if(value != password){
+				      return "<span style='color:#FF5722'>密码不一致</span>";
+				    }
+				  }
+				  //我们既支持上述函数式的方式，也支持下述数组的形式
+				  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+				  ,password: [
+				    /^[\S]{6,12}$/
+				    ,"<span style='color:#FF5722'>密码必须6到12位，且不能出现空格</span>"
+				  ]
+				  ,phone: [
+				    /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/
+				    ,"<span style='color:#FF5722'>请填写有效手机号</span>"
+				  ]
+				  ,mail: [
+				    /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+				    ,"<span style='color:#FF5722'>请填写有效邮箱地址</span>"
+				  ]
+				});
+			//监听提交
+			form.on('submit(formDemo)', function(data) {
+				layer.msg(JSON.stringify(data.field));
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>
