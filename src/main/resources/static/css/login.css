@@ -1,3 +1,6 @@
+.layui-layout-body{
+	background: #5FB878;
+}
 .layui-form-item{
 	padding-bottom: 20px;
 }
@@ -11,7 +14,7 @@ a{
 }
 h1{
 	font-size: 60px; 
-	color: #009688;
+	color: #393D49;
 	padding:250px 0 0 250px;
 }
 h1 i{
@@ -19,7 +22,7 @@ h1 i{
 }
 .layui-icon{
 	font-size: 60px;
-    color: #009688;
+    color: #393D49;
 }
 .login{
 	width:400px;

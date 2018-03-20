@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-基本信息页面</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/baseinfo.css"
+	th:href="@{/css/baseinfo.css}" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">科研项目评审系统</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> 贤心
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="">基本信息</a>
+						</dd>
+						<dd>
+							<a href="">我的申请</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="">注销</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;">项目申请</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;">基本信息</a>
+							</dd>
+							<dd>
+								<a href="javascript:;">我的申请</a>
+							</dd>
+						</dl></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<div class="register">
+				<form class="layui-form" action="" method="POST">
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户名</label>
+						<div class="layui-input-inline">
+							<input id="username" type="text" name="title"
+								lay-verify="username" placeholder="请输入用户名" autocomplete="off"
+								class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">密码</label>
+						<div class="layui-input-inline">
+							<input id="password" type="password" name="password" lay-verify="password"
+								placeholder="请输入密码" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">确认密码</label>
+						<div class="layui-input-inline">
+							<input type="password" name="repassword" lay-verify="repassword"
+								placeholder="请确认密码" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">手机</label>
+						<div class="layui-input-inline">
+							<input id="phone" type="text" name="title" lay-verify="phone"
+								placeholder="请输入手机号" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">邮箱</label>
+						<div class="layui-input-inline">
+							<input id="mail" type="text" name="title" lay-verify="email"
+								placeholder="请输入邮箱" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">单选框</label>
+						<div class="layui-input-block">
+							<input type="radio" name="sex" value="1" title="男"/> <input
+								type="radio" name="sex" value="0" title="女" checked="checked"/>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit="lay-submit" lay-filter="formDemo">确认修改</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p style="text-align: center;">© All Rights Reserve By PRS</p>
+		</div>
+	</div>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
+	<script>
+		//JavaScript代码区域
+		layui.use([ 'form', 'jquery', 'layer' ,'element','upload'], function() {
+			var form = layui.form, $ = layui.$, layer = layui.layer,element = layui.element ,upload = layui.upload;
+			
+		});
+	</script>
+
+</body>
+</html>

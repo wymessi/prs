@@ -5,12 +5,12 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>PRS-登录页面</title>
-<link rel="stylesheet" href="../static/css/layui.css"
-	th:href="@{/css/layui.css}" />
+<link rel="stylesheet" href="../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../static/css/login.css"
 	th:href="@{/css/login.css}" />
 </head>
-<body class="layui-layout-body layui-bg-cyan">
+<body class="layui-layout-body">
 	<div class="layui-col-md8">
 		<h1>
 			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统
@@ -50,7 +50,7 @@
 					<div class="layui-form-item">
 						<div class="layui-input-block">
 							<button class="layui-btn" lay-submit="lay-submit" lay-filter="formDemo">登录</button>
-							<a  class="layui-btn" href="register.html" th:href="@{/register}">注册</a>
+							<a  class="layui-btn" href="register.html" th:href="@{/applicant/register}">注册</a>
 						</div>
 					</div>
 				</form>
@@ -63,28 +63,26 @@
 			<p>© All Rights Reserve By PRS</p>
 		</div>
 	</div>
-	<script src="../static/layui.js" th:src="@{/layui.js}"></script>
+	<script src="../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 	<script>
 		//JavaScript代码区域
 		layui.use('form', function() {
 			var form = layui.form
 			,element = layui.element;
-			form.render();
-			element.init();
 			form.verify({
 				role : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
-						return "<span style='color:#FF5722'>角色不能为空</span>";
+						return "角色不能为空";
 					}
 				},
 				username : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
-						return "<span style='color:#FF5722'>用户名不能为空</span>";
+						return "用户名不能为空";
 					}
 				},
 				password : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
-						return "<span style='color:#FF5722'>密码不能为空</span>";
+						return "密码不能为空";
 					}
 				}
 			});

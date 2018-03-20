@@ -1,0 +1,17 @@
+.layui-form{
+	padding: 100px 0 0 50px;
+}
+.layui-form-item{
+	width: 600px;	
+}
+.layui-textarea,.tagsinput,.tagsinput-typeahead,.input-lg{
+	border-radius:10px;
+	border-color: #EBEDEF;
+	color:#EBEDEF;
+	font-size: 14px;
+}
+.layui-textarea{
+	border-width: 2px;
+	outline: none;
+}
+

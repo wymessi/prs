@@ -5,12 +5,12 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>PRS-注册页面</title>
-<link rel="stylesheet" href="../static/css/layui.css"
-	th:href="@{/css/layui.css}" />
-<link rel="stylesheet" href="../static/css/register.css"
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/register.css"
 	th:href="@{/css/register.css}" />
 </head>
-<body class="layui-layout-body layui-bg-cyan">
+<body class="layui-layout-body">
 	<div class="layui-col-md12">
 		<h1>
 			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统
@@ -63,7 +63,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">邮箱</label>
 						<div class="layui-input-inline">
-							<input id="mail" type="text" name="title" lay-verify="mail"
+							<input id="mail" type="text" name="title" lay-verify="email"
 								placeholder="请输入邮箱" autocomplete="off" class="layui-input"/>
 						</div>
 					</div>
@@ -89,46 +89,38 @@
 			<p>© All Rights Reserve By PRS</p>
 		</div>
 	</div>
-	<script src="../static/layui.js" th:src="@{/layui.js}"></script>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 	<script>
 		//JavaScript代码区域
-		layui.use(['form','jquery'], function() {
+		layui.use(['form','jquery','layer'], function() {
 			var form = layui.form
-			,$ = layui.$;
+			,$ = layui.$, layer = layui.layer;
 			
-			form.render();
 			form.verify({
 				  username: function(value, item){ //value：表单的值、item：表单的DOM对象
 				    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
-				      return "<span style='color:#FF5722'>用户名不能有特殊字符</span>";
+				      return "用户名不能有特殊字符";
 				    }
 				    if(/(^\_)|(\__)|(\_+$)/.test(value)){
-				      return "<span style='color:#FF5722'>用户名首尾不能出现下划线\'_\'</span>";
+				      return "用户名首尾不能出现下划线\'_\'";
 				    }
 				    if(/^\d+\d+\d$/.test(value)){
-				      return "<span style='color:#FF5722'>用户名不能全为数字</span>";
+				      return "用户名不能全为数字";
 				    }
 				  }
 				  ,repassword: function(value, item){ //value：表单的值、item：表单的DOM对象
 					  var password = $('#password').val();
 					  if(value != password){
-				      return "<span style='color:#FF5722'>密码不一致</span>";
+				      return "密码不一致";
 				    }
 				  }
 				  //我们既支持上述函数式的方式，也支持下述数组的形式
 				  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
 				  ,password: [
 				    /^[\S]{6,12}$/
-				    ,"<span style='color:#FF5722'>密码必须6到12位，且不能出现空格</span>"
+				    ,"密码必须6到12位，且不能出现空格"
 				  ]
-				  ,phone: [
-				    /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/
-				    ,"<span style='color:#FF5722'>请填写有效手机号</span>"
-				  ]
-				  ,mail: [
-				    /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-				    ,"<span style='color:#FF5722'>请填写有效邮箱地址</span>"
-				  ]
+				  
 				});
 			//监听提交
 			form.on('submit(formDemo)', function(data) {

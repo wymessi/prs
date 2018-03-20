@@ -1,3 +1,6 @@
+.layui-layout-body{
+	background: #5FB878;
+}
 .layui-form-label{
 	font-weight:bold;
 	color: #009688;
@@ -6,14 +9,14 @@ h1{
 	font-size: 30px; 
 	padding-left:20px;
 	padding-top:20px;
-	color: #009688;
+	color: #393D49;
 }
 h1 i{
 	padding-right:20px;
 }
 .layui-icon{
 	font-size: 30px;
-    color: #009688;
+    color: #393D49;
 }
 .register{
 	width:400px;

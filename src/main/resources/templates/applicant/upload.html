@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-项目申请页面</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/upload.css"
+	th:href="@{/css/upload.css}" />
+<!-- Loading Bootstrap -->
+<link
+	href="../../static/flatui/css/vendor/bootstrap/css/bootstrap.min.css"
+	th:href="@{/flatui/css/vendor/bootstrap/css/bootstrap.min.css}"
+	rel="stylesheet" />
+
+<!-- Loading Flat UI -->
+<link href="../../static/flatui/css/flat-ui.min.css"
+	th:href="@{/flatui/css/flat-ui.min.css}" rel="stylesheet" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">科研项目评审系统</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> 贤心
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="">基本信息</a>
+						</dd>
+						<dd>
+							<a href="">我的申请</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="">注销</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;">项目申请</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;">基本信息</a>
+							</dd>
+							<dd>
+								<a href="javascript:;">我的申请</a>
+							</dd>
+						</dl></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<div class="layui-form" action="" method="POST">
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input name="tagsinput"
+							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea name="desc" placeholder="请输入项目摘要" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn" id="upload">
+							<i class="layui-icon" style="padding-left: 10px;">&#xe67c;</i>上传文件
+						</button>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn" id="cupload">
+							<i class="layui-icon cicon">&#xe618;</i>确认申请
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p style="text-align: center;">© All Rights Reserve By PRS</p>
+		</div>
+	</div>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+	<!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+	<script src="../../static/flatui/js/vendor/jquery.min.js"
+		th:src="@{/flatui/js/vendor/jquery.min.js}"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../../static/flatui/js/vendor/video.js"
+		th:src="@{/flatui/js/vendor/video.js}"></script>
+	<script src="../../static/flatui/js/flat-ui.min.js"
+		th:src="@{/flatui/js/flat-ui.min.js}"></script>
+	<script>
+		//JavaScript代码区域
+		layui.use([ 'form', 'jquery', 'layer' ,'element','upload'], function() {
+			var form = layui.form, $ = layui.$, layer = layui.layer,element = layui.element ,upload = layui.upload;
+
+			$('input.tagsinput').tagsinput();
+			upload.render({
+				  elem: '#upload'
+				  ,url: ''
+				  ,auto: false //选择文件后不自动上传
+				  ,bindAction: '#cupload' //指向一个按钮触发上传
+				  ,done: function(res, index, upload){ //上传后的回调
+				  
+				  } 
+				  ,accept: 'file' //允许上传的文件类型
+				  //,size: 50 //最大允许上传的文件大小
+				  //,……
+				})
+
+		});
+	</script>
+
+</body>
+</html>
