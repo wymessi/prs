@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-注册页面</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+</head>
+<body class="layui-layout-body">
+
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+	<script th:inline="javascript">
+		//JavaScript代码区域
+		layui.use('layer', function() {
+			var layer = layui.layer;
+			//弹出层
+			var message = [[${message}]];
+			var href = [[${href}]];
+			layer.open({
+				content : message,
+				btn : [ '确认' ],
+				yes : function(index, layero) {
+					window.location.href = href;
+				},
+				cancel : function() {
+
+				}
+			});
+
+		});
+	</script>
+</body>
+</html>

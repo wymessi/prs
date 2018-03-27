@@ -34,7 +34,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">用户名</label>
 						<div class="layui-input-inline">
-							<input id="username" type="text" name="title" 
+							<input id="username" type="text" name="username" 
 								lay-verify="username" placeholder="请输入用户名" autocomplete="off"
 								class="layui-input"/>
 						</div>
@@ -49,8 +49,8 @@
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button class="layui-btn" lay-submit="lay-submit" lay-filter="formDemo">登录</button>
-							<a  class="layui-btn" href="register.html" th:href="@{/applicant/register}">注册</a>
+							<button class="layui-btn" lay-submit="submit" lay-filter="formDemo">登录</button>
+							<a class="layui-btn" href="register.html" th:href="@{/applicant/registerPage}">注册</a>
 						</div>
 					</div>
 				</form>

@@ -24,10 +24,10 @@ public class GlobalExceptionHandler {
 		return builder.toString();
 	}
 	
-	@ResponseBody
+	/*@ResponseBody
 	@ExceptionHandler(Exception.class)
 	public String exceptionHandle(Exception exception) {
 		
 		return "未知错误,请联系管理员！！！";
-	}
+	}*/
 }

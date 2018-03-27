@@ -53,5 +53,4 @@ public class RequestUtils {
 		JSONObject json = toJson(request);
 		return json == null ? null : json.getJSONObject("data");
 	}
-	
 }
