@@ -27,11 +27,11 @@
 
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> 贤心
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> <span th:text="${applicant.applicantName}">贤心</span>
 				</a>
 					<dl class="layui-nav-child">
 						<dd>
-							<a href="">基本信息</a>
+							<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
 						</dd>
 						<dd>
 							<a href="">我的申请</a>
@@ -50,7 +50,7 @@
 					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="javascript:;">基本信息</a>
+								<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">我的申请</a>
@@ -64,13 +64,19 @@
 			<div class="layui-form" action="" method="POST">
 				<div class="layui-form-item">
 					<div class="layui-input-block">
+						<input name="projectName"
+							class="layui-input" type="text" placeholder="请输入项目名"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
 						<input name="tagsinput"
 							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<textarea name="desc" placeholder="请输入项目摘要" class="layui-textarea"></textarea>
+						<textarea name="abstract" placeholder="请输入项目摘要" class="layui-textarea"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">

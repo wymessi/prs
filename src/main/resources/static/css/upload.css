@@ -4,7 +4,7 @@
 .layui-form-item{
 	width: 600px;	
 }
-.layui-textarea,.tagsinput,.tagsinput-typeahead,.input-lg{
+.layui-textarea,.tagsinput,.tagsinput-typeahead,.input-lg,.layui-input{
 	border-radius:10px;
 	border-color: #EBEDEF;
 	color:#EBEDEF;
@@ -14,4 +14,10 @@
 	border-width: 2px;
 	outline: none;
 }
+.layui-input{
+	border-width: 2px;
+	outline: none;
+}
+
+
 

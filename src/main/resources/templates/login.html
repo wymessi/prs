@@ -19,7 +19,7 @@
 	<div class="layui-col-md4">
 		<div id="login-wrap">
 			<div class="login">
-				<form class="layui-form layui-bg-gray" action="" method="POST">
+				<form class="layui-form layui-bg-gray" action="" method="POST" th:action="login">
 					<div class="layui-form-item">
 						<label class="layui-form-label">系统角色</label>
 						<div class="layui-input-inline">
@@ -27,7 +27,7 @@
 								<option value=""></option>
 								<option value="0">系统工作人员</option>
 								<option value="1">评审专家</option>
-								<option value="2">项目申请者</option>
+								<option value="2" selected="selected">项目申请者</option>
 							</select>
 						</div>
 					</div>
@@ -49,7 +49,7 @@
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button class="layui-btn" lay-submit="submit" lay-filter="formDemo">登录</button>
+							<button class="layui-btn" lay-submit="submit" lay-filter="login">登录</button>
 							<a class="layui-btn" href="register.html" th:href="@{/applicant/registerPage}">注册</a>
 						</div>
 					</div>
@@ -64,7 +64,7 @@
 		</div>
 	</div>
 	<script src="../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
-	<script>
+	<script th:inline="javascript">
 		//JavaScript代码区域
 		layui.use('form', function() {
 			var form = layui.form
@@ -86,10 +86,13 @@
 					}
 				}
 			});
+			var message = [[${message}]];
+			if (message != null){
+				layer.msg(message)
+			}
 			//监听提交
-			form.on('submit(formDemo)', function(data) {
-				layer.msg(JSON.stringify(data.field));
-				return false;
+			form.on('submit(login)', function(data) {
+				
 			});
 		});
 	</script>

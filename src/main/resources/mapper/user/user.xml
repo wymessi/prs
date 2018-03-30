@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wymessi.mapper.UserMapper">
+<mapper namespace="com.wymessi.dao.UserDao">
 
+	<resultMap type="applicant" id="applicantMap">
+		<id column="id" property="id"/>
+		<result column="applicant_name" property="applicantName"/>
+		<result column="password" property="password"/>
+		<result column="sex" property="sex"/>
+		<result column="mail" property="mail"/>
+		<result column="phone" property="phone"/>
+	</resultMap>
 	<insert id="registerApplicant" parameterType="applicant">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
@@ -11,4 +19,8 @@
 		VALUES(#{id},#{applicantName},#{password},#{sex},#{mail},#{phone})
 	</insert>
 
+	<select id="applicantLogin" resultMap="applicantMap">
+		SELECT * FROM applicant WHERE applicant_name = #{param.username} AND password = #{param.password}
+	</select>
+	
 </mapper>

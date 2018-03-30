@@ -3,6 +3,7 @@ package com.wymessi.service;
 import org.springframework.stereotype.Service;
 
 import com.wymessi.po.user.Applicant;
+import com.wymessi.vo.user.LoginVo;
 /**
  * 系统角色业务层接口
  * @author 王冶
@@ -16,4 +17,11 @@ public interface UserService {
 	 * @param applicant
 	 */
 	void registerApplicant(Applicant applicant);
+
+	/**
+	 * 项目申请者登陆
+	 * @param vo
+	 * @return
+	 */
+	Applicant applicantLogin(LoginVo vo);
 }
