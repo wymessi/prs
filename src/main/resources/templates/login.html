@@ -13,7 +13,7 @@
 <body class="layui-layout-body">
 	<div class="layui-col-md8">
 		<h1>
-			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统
+			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统 <span th:text="${#httpServletRequest.getContextPath()}"></span>
 		</h1>
 	</div>
 	<div class="layui-col-md4">
@@ -53,6 +53,7 @@
 							<a class="layui-btn" href="register.html" th:href="@{/applicant/registerPage}">注册</a>
 						</div>
 					</div>
+					<input type="hidden" th:value="${session.token}" name="token"/>
 				</form>
 			</div>
 		</div>

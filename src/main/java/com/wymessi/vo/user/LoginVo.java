@@ -9,6 +9,15 @@ public class LoginVo {
 	private int role; //  0：系统工作人员 ，1：评审专家，2：项目申请者
 	private String username;
 	private String password;
+	private String token; //唯一标识符，防止表单重复提交
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public int getRole() {
 		return role;

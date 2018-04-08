@@ -2,25 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wymessi.dao.UserDao">
 
-	<resultMap type="applicant" id="applicantMap">
+	<resultMap type="sysUser" id="userMap">
 		<id column="id" property="id"/>
-		<result column="applicant_name" property="applicantName"/>
+		<result column="username" property="username"/>
 		<result column="password" property="password"/>
 		<result column="sex" property="sex"/>
 		<result column="mail" property="mail"/>
 		<result column="phone" property="phone"/>
+		<result column="title" property="tilte"/>
 	</resultMap>
-	<insert id="registerApplicant" parameterType="applicant">
+	<insert id="registerApplicant" parameterType="sysUser">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
-		INSERT INTO applicant(id,applicant_name,password,sex,mail,phone)
-		VALUES(#{id},#{applicantName},#{password},#{sex},#{mail},#{phone})
+		INSERT INTO applicant(id,applicant_name,password,sex,mail,phone,title)
+		VALUES(#{id},#{applicantName},#{password},#{sex},#{mail},#{phone},#{title})
 	</insert>
 
-	<select id="applicantLogin" resultMap="applicantMap">
-		SELECT * FROM applicant WHERE applicant_name = #{param.username} AND password = #{param.password}
+	<select id="login" resultMap="userMap">
+		SELECT * FROM sys_user WHERE username = #{param.username} AND password = #{param.password}
 	</select>
 	
 </mapper>

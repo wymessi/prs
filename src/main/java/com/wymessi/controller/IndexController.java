@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wymessi.po.user.Applicant;
-import com.wymessi.vo.user.LoginVo;
+import com.wymessi.po.user.SysUser;
+import com.wymessi.utils.UUIDUtils;
 
 /**
  * 首页访问 控制器
@@ -28,35 +28,11 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping({ "/", "/index" })
-	public String index() {
+	public String index(HttpSession session) {
+		session.setAttribute("token", UUIDUtils.generateUUIDString());
 		return "login";
 	}
 
-	/**
-	 * 登录过滤，判断角色转发对应请求
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/login")
-	public String login(LoginVo vo) {
-		String url = null;
-		switch (vo.getRole()) {
-		case 0:
-			url = "forward:/sysUser/login";
-			break;
-		case 1:
-			url = "forward:/expert/login";
-			break;
-		case 2:
-			url = "forward:/applicant/login";
-			break;
-		default:
-			break;
-		}
-		
-		return url;
-	}
-	
 	/**
 	 * 将用户基本信息以json的形式返回
 	 * 
@@ -71,8 +47,8 @@ public class IndexController {
 			model.addAttribute("message", "未登录，请先登录");
 			model.addAttribute("href", "/prs/");
 		}
-		Applicant applicant = (Applicant) session.getAttribute("userSession");
-		String json = "{code:0,msg:'',count:1000,data:["+JSON.toJSONString(applicant)+"]}";
+		SysUser sysUser = (SysUser) session.getAttribute("userSession");
+		String json = "{code:0,msg:'',count:1000,data:["+JSON.toJSONString(sysUser)+"]}";
 		JSONObject jsonObject = JSONObject.parseObject(json);
 		return jsonObject;
 	}

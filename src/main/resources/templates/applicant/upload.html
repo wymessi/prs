@@ -71,7 +71,7 @@
 				<div class="layui-form-item">
 					<div class="layui-input-block">
 						<input name="tagsinput"
-							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域"/>
+							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域,输入文字并回车确定"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -110,11 +110,19 @@
 		th:src="@{/flatui/js/vendor/video.js}"></script>
 	<script src="../../static/flatui/js/flat-ui.min.js"
 		th:src="@{/flatui/js/flat-ui.min.js}"></script>
-	<script>
+	<script th:inline="javascript">
 		//JavaScript代码区域
 		layui.use([ 'form', 'jquery', 'layer' ,'element','upload'], function() {
-			var form = layui.form, $ = layui.$, layer = layui.layer,element = layui.element ,upload = layui.upload;
+			var form = layui.form, 
+			$ = layui.$, 
+			layer = layui.layer,
+			element = layui.element,
+			upload = layui.upload;
 
+			var message = [[${message}]];
+			if (message != null){
+				layer.msg(message)
+			}
 			$('input.tagsinput').tagsinput();
 			upload.render({
 				  elem: '#upload'

@@ -2,7 +2,7 @@ package com.wymessi.dao;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.wymessi.po.user.Applicant;
+import com.wymessi.po.user.SysUser;
 import com.wymessi.vo.user.LoginVo;
 
 public interface UserDao {
@@ -11,12 +11,12 @@ public interface UserDao {
 	 * 项目申请者注册
 	 * @param applicant
 	 */
-	void registerApplicant(Applicant applicant);
+	void registerApplicant(SysUser sysUser);
 
 	/**
-	 * 项目申请者登陆
+	 * 用户登陆
 	 * @param param
 	 */
-	Applicant applicantLogin(@Param("param")LoginVo param);
+	SysUser login(@Param("param")LoginVo param);
 
 }

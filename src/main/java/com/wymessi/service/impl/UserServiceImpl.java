@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wymessi.dao.UserDao;
-import com.wymessi.po.user.Applicant;
+import com.wymessi.po.user.SysUser;
 import com.wymessi.service.UserService;
 import com.wymessi.vo.user.LoginVo;
 /**
@@ -23,9 +23,9 @@ public class UserServiceImpl implements UserService {
 	 * @param applicant
 	 */
 	@Override
-	public void registerApplicant(Applicant applicant) {
-		if (applicant != null)
-			userDao.registerApplicant(applicant);
+	public void registerApplicant(SysUser sysUser) {
+		if (sysUser != null)
+			userDao.registerApplicant(sysUser);
 	}
 	
 	/**
@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
 	 * @return
 	 */
 	@Override
-	public Applicant applicantLogin(LoginVo param) {
+	public SysUser applicantLogin(LoginVo param) {
 		if (param != null){
-			Applicant applicant = userDao.applicantLogin(param);
-			return applicant;
+			SysUser sysUser = userDao.login(param);
+			return sysUser;
 		}
 		return null;
 	}

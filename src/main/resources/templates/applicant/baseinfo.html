@@ -63,7 +63,8 @@
 		</div>
 		<div class="layui-footer">
 			<!-- 底部固定区域 -->
-			<p style="text-align: center;">© All Rights Reserve By PRS</p>
+			<p style="text-align: center;">© All Rights Reserve By PRS</p><a th:href="${#httpServletRequest.getContextPath()} "
+ id="contextPath"></a>
 		</div>
 	</div>
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
@@ -77,10 +78,13 @@
 				element = layui.element, 
 				table = layui.table;
 			
+			$(function () {
+			    var contextPath = $('#contextPath').attr('href');//获取应用的根目录，我的绝对路径是http://localhost:80/
+			});
 			//执行一个 table 实例
 			  table.render({
 			    elem: '#baseinfo'
-			    ,url: '/prs/userBaseInfo.json'
+			    ,url: contextPath+'/userBaseInfo.json'
 			    ,width: 968
 			    ,height: 80
 			    ,skin: 'row' //无边框风格
