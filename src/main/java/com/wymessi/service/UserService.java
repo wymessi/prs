@@ -2,10 +2,9 @@ package com.wymessi.service;
 
 import org.springframework.stereotype.Service;
 
-import com.wymessi.po.user.SysUser;
-import com.wymessi.vo.user.LoginVo;
+import com.wymessi.po.SysUser;
 /**
- * 系统角色业务层接口
+ * 系统用户业务层接口
  * @author 王冶
  *
  */
@@ -23,5 +22,5 @@ public interface UserService {
 	 * @param vo
 	 * @return
 	 */
-	SysUser applicantLogin(LoginVo vo);
+	SysUser login(SysUser sysUser);
 }

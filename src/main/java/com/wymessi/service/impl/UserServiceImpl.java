@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wymessi.dao.UserDao;
-import com.wymessi.po.user.SysUser;
+import com.wymessi.po.SysUser;
 import com.wymessi.service.UserService;
-import com.wymessi.vo.user.LoginVo;
+
 /**
- * 系统角色业务层接口实现
+ * 系统用户业务层接口实现
+ * 
  * @author 王冶
  *
  */
@@ -17,9 +18,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-	
+
 	/**
 	 * 项目申请者注册
+	 * 
 	 * @param applicant
 	 */
 	@Override
@@ -27,17 +29,18 @@ public class UserServiceImpl implements UserService {
 		if (sysUser != null)
 			userDao.registerApplicant(sysUser);
 	}
-	
+
 	/**
 	 * 项目申请者登陆
+	 * 
 	 * @param param
 	 * @return
 	 */
 	@Override
-	public SysUser applicantLogin(LoginVo param) {
-		if (param != null){
-			SysUser sysUser = userDao.login(param);
-			return sysUser;
+	public SysUser login(SysUser sysUser) {
+		if (sysUser != null) {
+			SysUser user = userDao.login(sysUser);
+			return user;
 		}
 		return null;
 	}

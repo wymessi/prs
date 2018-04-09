@@ -1,7 +1,7 @@
 package com.wymessi.exception;
 /**
  * request请求转化成json转化异常
- * @author wangye
+ * @author 王冶
  *
  */
 public class JsonFormatException extends RuntimeException{

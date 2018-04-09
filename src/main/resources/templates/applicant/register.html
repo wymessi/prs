@@ -23,19 +23,18 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">系统角色</label>
 						<div class="layui-input-inline">
-							<select name="role" lay-verify="role">
-								<option value=""></option>
-								<option value="0" disabled="disabled">系统工作人员</option>
-								<option value="1" disabled="disabled">评审专家</option>
-								<option value="2" selected="selected">项目申请者</option>
+							<select name="roleId" lay-verify="role">
+								<option value="3" disabled="disabled">系统工作人员</option>
+								<option value="2" disabled="disabled">评审专家</option>
+								<option value="1" selected="selected">项目申请者</option>
 							</select>
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">用户名</label>
 						<div class="layui-input-inline">
-							<input id="applicantName" type="text" name="applicantName"
-								lay-verify="applicantName" placeholder="请输入用户名" autocomplete="off"
+							<input id="username" type="text" name="username"
+								lay-verify="username" placeholder="请输入用户名" autocomplete="off"
 								class="layui-input"/>
 						</div>
 					</div>
@@ -70,8 +69,8 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">单选框</label>
 						<div class="layui-input-block">
-							<input id="sex" type="radio" name="sex" value="1" title="男"/> <input
-								type="radio" name="sex" value="0" title="女" checked="checked"/>
+							<input id="sex" type="radio" name="sex" value="男" title="男"/> <input
+								type="radio" name="sex" value="女" title="女" checked="checked"/>
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -98,7 +97,7 @@
 			,$ = layui.$, layer = layui.layer;
 			
 			form.verify({
-			   applicantName: function(value, item){ //value：表单的值、item：表单的DOM对象
+				username: function(value, item){ //value：表单的值、item：表单的DOM对象
 			    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
 			      return "用户名不能有特殊字符";
 			    }

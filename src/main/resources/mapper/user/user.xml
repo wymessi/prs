@@ -10,18 +10,19 @@
 		<result column="mail" property="mail"/>
 		<result column="phone" property="phone"/>
 		<result column="title" property="tilte"/>
+		<result column="role_id" property="roleId"/>
 	</resultMap>
 	<insert id="registerApplicant" parameterType="sysUser">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
-		INSERT INTO applicant(id,applicant_name,password,sex,mail,phone,title)
-		VALUES(#{id},#{applicantName},#{password},#{sex},#{mail},#{phone},#{title})
+		INSERT INTO sys_user(id,username,password,sex,mail,phone,title,role_id)
+		VALUES(#{id},#{username},#{password},#{sex},#{mail},#{phone},#{title},#{roleId})
 	</insert>
 
 	<select id="login" resultMap="userMap">
-		SELECT * FROM sys_user WHERE username = #{param.username} AND password = #{param.password}
+		SELECT * FROM sys_user WHERE username = #{username} AND password = #{password}
 	</select>
 	
 </mapper>

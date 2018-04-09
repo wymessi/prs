@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wymessi.po.user.SysUser;
-import com.wymessi.utils.UUIDUtils;
+import com.wymessi.po.SysUser;
 
 /**
  * 首页访问 控制器
@@ -28,8 +27,7 @@ public class IndexController {
 	 * @return
 	 */
 	@RequestMapping({ "/", "/index" })
-	public String index(HttpSession session) {
-		session.setAttribute("token", UUIDUtils.generateUUIDString());
+	public String index() {
 		return "login";
 	}
 

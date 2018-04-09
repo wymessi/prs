@@ -13,14 +13,14 @@
 <body class="layui-layout-body">
 	<div class="layui-col-md8">
 		<h1>
-			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统 <span th:text="${#httpServletRequest.getContextPath()}"></span>
+			<i class="layui-icon">&#xe735;</i>PRS-科研项目评审系统 <!-- <span th:text="${#httpServletRequest.getContextPath()}"></span> -->
 		</h1>
 	</div>
 	<div class="layui-col-md4">
 		<div id="login-wrap">
 			<div class="login">
-				<form class="layui-form layui-bg-gray" action="" method="POST" th:action="login">
-					<div class="layui-form-item">
+				<form class="layui-form layui-bg-gray" action="" method="POST" th:action="@{/user/login}">
+					<!-- <div class="layui-form-item">
 						<label class="layui-form-label">系统角色</label>
 						<div class="layui-input-inline">
 							<select name="role" lay-verify="role">
@@ -30,7 +30,7 @@
 								<option value="2" selected="selected">项目申请者</option>
 							</select>
 						</div>
-					</div>
+					</div> -->
 					<div class="layui-form-item">
 						<label class="layui-form-label">用户名</label>
 						<div class="layui-input-inline">
@@ -50,7 +50,7 @@
 					<div class="layui-form-item">
 						<div class="layui-input-block">
 							<button class="layui-btn" lay-submit="submit" lay-filter="login">登录</button>
-							<a class="layui-btn" href="register.html" th:href="@{/applicant/registerPage}">注册</a>
+							<a class="layui-btn" href="register.html" th:href="@{/user/registerPage}">注册</a>
 						</div>
 					</div>
 					<input type="hidden" th:value="${session.token}" name="token"/>
@@ -71,11 +71,11 @@
 			var form = layui.form
 			,element = layui.element;
 			form.verify({
-				role : function(value, item) { //value：表单的值、item：表单的DOM对象
+				/* role : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
 						return "角色不能为空";
 					}
-				},
+				}, */
 				username : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
 						return "用户名不能为空";

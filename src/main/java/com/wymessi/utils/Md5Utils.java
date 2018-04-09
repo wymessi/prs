@@ -16,4 +16,7 @@ public class Md5Utils {
 	    String newstr=base64en.encode(md5.digest(str.getBytes("utf-8")));
 	    return newstr;
 	}
+	public static void main(String[] args) throws Exception {
+		System.out.println(md5("admin"));
+	}
 }
