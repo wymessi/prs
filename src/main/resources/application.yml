@@ -52,4 +52,9 @@ spring:
     suffix: .html  
     mode: HTML5  
     encoding: UTF-8
-    cache: false 
+    cache: false
+  #上传文件大小配置
+  http:
+    multipart:
+      maxFileSize: 20Mb
+    maxRequestSize: 200Mb 

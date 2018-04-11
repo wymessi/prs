@@ -18,19 +18,17 @@
 
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><!-- <span
-						th:if="${applicant.applicantName} != null"
-						th:text="${applicant.applicantName}">贤心</span> -->贤心
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
 				</a>
 					<dl class="layui-nav-child">
 						<dd>
-							<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
+							<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
 						</dd>
 						<dd>
 							<a href="">我的申请</a>
 						</dd>
 					</dl></li>
-				<li class="layui-nav-item"><a href="">注销</a></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
 			</ul>
 		</div>
 
@@ -39,11 +37,11 @@
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;">项目申请</a></li>
+						href="javascript:;" th:href="@{/user/uploadPage}">项目申请</a></li>
 					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
+								<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">我的申请</a>
@@ -54,22 +52,34 @@
 		</div>
 
 		<div class="layui-body">
-			<table class="layui-hide" id="baseinfo" lay-filter="demo"></table>
+			<!-- <table class="layui-hide" id="baseinfo" lay-filter="baseinfotable"></table>
 
 			<script type="text/html" id="barDemo">
                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-	        </script>
+	        </script>  -->
+	        
+	        <table class="layui-table" lay-data="{url:'/prs/user/userBaseInfo.json', id:'baseinfo'}" lay-filter="baseinfo">
+			  <thead>
+			    <tr style="width:1048">
+			      <th lay-data="{field:'id', width:80, sort: true}">ID</th>
+			      <th lay-data="{field:'username', width:120, sort: true, edit: 'text'}">用户名</th>
+			      <th lay-data="{field:'mail', edit: 'text', minWidth: 120}">邮箱</th>
+			      <th lay-data="{field:'sex', width:80, edit: 'text'}">性别</th>
+			      <th lay-data="{field:'phone', edit: 'text', minWidth: 100}">手机号</th>
+			    </tr>
+			  </thead>
+			</table>
 		</div>
 		<div class="layui-footer">
 			<!-- 底部固定区域 -->
-			<p style="text-align: center;">© All Rights Reserve By PRS</p><a th:href="${#httpServletRequest.getContextPath()} "
- id="contextPath"></a>
+			<p style="text-align: center;">© All Rights Reserve By PRS</p><!-- <a th:href="${#httpServletRequest.getContextPath()} "
+ id="contextPath"></a> -->
 		</div>
 	</div>
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 
-	<script>
+	<script th:inline="javascript">
 		//JavaScript代码区域
 		layui.use([ 'form', 'jquery', 'layer', 'element','table'],function() {
 			var form = layui.form, 
@@ -78,29 +88,28 @@
 				element = layui.element, 
 				table = layui.table;
 			
-			$(function () {
-			    var contextPath = $('#contextPath').attr('href');//获取应用的根目录，我的绝对路径是http://localhost:80/
-			});
+			/* $(function () {
+			    var contextPath = $('#contextPath').attr('href');//获取应用的根目录
+			}); */
 			//执行一个 table 实例
-			  table.render({
+			  /* table.render({
 			    elem: '#baseinfo'
-			    ,url: contextPath+'/userBaseInfo.json'
-			    ,width: 968
+			    ,url: '/prs/user/userBaseInfo.json'
+			    ,width: 1048
 			    ,height: 80
-			    ,skin: 'row' //无边框风格
-			    ,even: true //开启隔行背景
 			    ,cols: [[ //表头
 			      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-			      ,{field: 'applicantName', title: '用户名', width:180}
-			      ,{field: 'sex', title: '性别(1：男，0：女)', width:180, sort: true}
+			      ,{field: 'username', title: '用户名', width:180}
+			      ,{field: 'sex', title: '性别', width:80, sort: true}
 			      ,{field: 'mail', title: '邮箱', width:180} 
 			      ,{field: 'phone', title: '手机号', width: 180}
+			      ,{field: 'title', title: '职称', width: 180}
 			      ,{fixed: 'right', width: 160, align:'center', toolbar: '#barDemo'}
 			    ]]
-			  });
+			  }); 
 			
 			//监听工具条
-			  table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  table.on('tool(baseinfotable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'detail'){
@@ -114,6 +123,14 @@
 			    } else if(layEvent === 'edit'){
 			      layer.msg('编辑操作');
 			    }
+			  });*/
+			
+			//监听单元格编辑
+			  table.on('edit(baseinfo)', function(obj){
+			    var value = obj.value //得到修改后的值
+			    ,data = obj.data //得到所在行所有键值
+			    ,field = obj.field; //得到字段
+			    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
 			  });
 		});
 	</script>

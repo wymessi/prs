@@ -12,8 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
-import com.wymessi.exception.JsonFormatException;
+import com.wymessi.exception.CustomException;
 
 
 
@@ -34,7 +33,7 @@ public class RequestUtils {
 		try{
 			t = JSON.toJavaObject(dataJson, clazz);
 		}catch (Exception e) {
-			throw new JsonFormatException("json转化异常");
+			throw new CustomException("json转化异常","");
 		}			
 		return t;
 	}

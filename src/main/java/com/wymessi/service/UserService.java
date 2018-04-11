@@ -1,14 +1,11 @@
 package com.wymessi.service;
 
-import org.springframework.stereotype.Service;
-
 import com.wymessi.po.SysUser;
 /**
  * 系统用户业务层接口
  * @author 王冶
  *
  */
-@Service
 public interface UserService {
 
 	/**

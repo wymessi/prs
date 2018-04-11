@@ -1,18 +1,18 @@
 package com.wymessi.exception;
 
 /**
- * 未登录异常
+ * 自定义异常
  * 
  * @author 王冶
  *
  */
-public class UnloginException extends RuntimeException {
+public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	private String message;
 	private String href;
 
-	public UnloginException(String message, String href) {
+	public CustomException(String message, String href) {
 		super();
 		this.message = message;
 		this.href = href;

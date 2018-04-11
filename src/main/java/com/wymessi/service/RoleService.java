@@ -8,7 +8,6 @@ import com.wymessi.po.SysRole;
  * @author 王冶
  *
  */
-@Service
 public interface RoleService {
 
 	/**

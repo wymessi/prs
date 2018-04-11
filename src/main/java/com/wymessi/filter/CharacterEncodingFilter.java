@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter(filterName="characterEncodingFilter", value={"/*"})
+//@WebFilter(filterName="characterEncodingFilter", value={"/*"})
 public class CharacterEncodingFilter implements Filter {
 
 	@Override

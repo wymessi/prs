@@ -10,14 +10,13 @@
 <link rel="stylesheet" href="../../static/css/upload.css"
 	th:href="@{/css/upload.css}" />
 <!-- Loading Bootstrap -->
-<link
+ <link
 	href="../../static/flatui/css/vendor/bootstrap/css/bootstrap.min.css"
 	th:href="@{/flatui/css/vendor/bootstrap/css/bootstrap.min.css}"
 	rel="stylesheet" />
-
-<!-- Loading Flat UI -->
+<!--  Loading Flat UI-->
 <link href="../../static/flatui/css/flat-ui.min.css"
-	th:href="@{/flatui/css/flat-ui.min.css}" rel="stylesheet" />
+	th:href="@{/flatui/css/flat-ui.min.css}" rel="stylesheet" /> 
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -27,17 +26,17 @@
 
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> <span th:text="${applicant.applicantName}">贤心</span>
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /> <span th:text="${session.user.username}">贤心</span>
 				</a>
 					<dl class="layui-nav-child">
 						<dd>
-							<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
+							<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
 						</dd>
 						<dd>
 							<a href="">我的申请</a>
 						</dd>
 					</dl></li>
-				<li class="layui-nav-item"><a href="">注销</a></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
 			</ul>
 		</div>
 
@@ -46,11 +45,11 @@
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;">项目申请</a></li>
+						href="javascript:;" th:href="@{/user/uploadPage}">项目申请</a></li>
 					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="" th:href="@{/applicant/baseinfoPage}">基本信息</a>
+								<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">我的申请</a>
@@ -61,39 +60,42 @@
 		</div>
 
 		<div class="layui-body">
-			<div class="layui-form" action="" method="POST">
+			<blockquote class="layui-elem-quote">上传仅支持.pdf、.doc、.docx格式</blockquote>
+			<form class="layui-form layui-bg-gray" action="" method="POST" th:action="@{/project/upload}" enctype="multipart/form-data">
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<input name="projectName"
-							class="layui-input" type="text" placeholder="请输入项目名"/>
+						<input id="projectName" name="projectName"
+							class="layui-input" type="text" placeholder="请输入项目名" lay-verify="projectName"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<input name="tagsinput"
+						<input id="fields" name="tagsinput"
 							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域,输入文字并回车确定"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<textarea name="abstract" placeholder="请输入项目摘要" class="layui-textarea"></textarea>
+						<textarea id="description" name="description" placeholder="请输入项目摘要" class="layui-textarea" lay-verify="description"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<div class="layui-input-block">
-						<button type="button" class="layui-btn" id="upload">
+					<div class="layui-input-block file">
+						<!-- <button type="button" class="layui-btn" id="upload">
 							<i class="layui-icon" style="padding-left: 10px;">&#xe67c;</i>上传文件
-						</button>
+						</button> -->
+						 <span class="icon"><i class="layui-icon">&#xe67c;</i>上传文件</span><input lay-verify="upload" class="uploadBtn" id="upload" name="file" type="file" value="上传文件"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<button type="button" class="layui-btn" id="cupload">
+						<!-- <button type="submit" class="layui-btn" id="cupload" lay-filter="up">
 							<i class="layui-icon cicon">&#xe618;</i>确认申请
-						</button>
+						</button> -->
+						<button class="layui-btn" lay-submit="submit" lay-filter="up"><i class="layui-icon cicon">&#xe618;</i>确认申请</button>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 
 		<div class="layui-footer">
@@ -123,20 +125,53 @@
 			if (message != null){
 				layer.msg(message)
 			}
-			$('input.tagsinput').tagsinput();
-			upload.render({
+			form.verify({
+				projectName : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "申请项目名不能为空";
+					}
+				},
+				description : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "摘要不能为空";
+					}
+				},
+				upload : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "上传文件不能为空";
+					}
+				}
+			});
+			//监听提交
+			form.on('submit(up)', function(data) {
+			});
+			 $('input.tagsinput').tagsinput(); 
+			 /*upload.render({
 				  elem: '#upload'
-				  ,url: ''
+				  ,url: '/prs/project/upload'
 				  ,auto: false //选择文件后不自动上传
+				  ,exts: 'pdf|doc|docx'
+				  ,data: {projectName:$('#projectName').val(),description:$('#description').val()}
 				  ,bindAction: '#cupload' //指向一个按钮触发上传
 				  ,done: function(res, index, upload){ //上传后的回调
-				  
+				  	
 				  } 
 				  ,accept: 'file' //允许上传的文件类型
 				  //,size: 50 //最大允许上传的文件大小
 				  //,……
-				})
-
+				});
+				$('#cupload').click(function(){
+					 $.ajax({
+			             type: "GET",
+			             url: "/prs/project/upload",
+			             data: {projectName:$('#projectName').val(),description:$('#description').val()},
+			             dataType: "json",
+			             success: function(data){
+			                        
+			                      }
+			         }); 
+			         alert($('#projectName').val());
+				}) */
 		});
 	</script>
 

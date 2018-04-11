@@ -1,13 +1,18 @@
+a{
+	text-decoration: none;
+}
 .layui-form{
-	padding: 100px 0 0 50px;
+	padding: 100px 0 320px 50px;
 }
 .layui-form-item{
 	width: 600px;	
 }
-.layui-textarea,.tagsinput,.tagsinput-typeahead,.input-lg,.layui-input{
+.layui-form,.layui-elem-quote{
+	margin: 12px 500px 12px 400px;
+}
+.layui-textarea,/* .tagsinput,.tagsinput-typeahead,.input-lg, */.layui-input{
 	border-radius:10px;
 	border-color: #EBEDEF;
-	color:#EBEDEF;
 	font-size: 14px;
 }
 .layui-textarea{
@@ -18,6 +23,32 @@
 	border-width: 2px;
 	outline: none;
 }
-
-
-
+.layui-btn{
+	width: 490px;
+}
+.file {
+    position: relative;
+    display: inline-block;
+    background: #009688;
+    border-radius: 4px;
+    padding: 4px 12px;
+    width:490px;
+    color:#fff;
+    overflow: hidden;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.icon{
+	width:200px;
+	position: absolute;
+	left:200px;
+	top:10px;
+}
