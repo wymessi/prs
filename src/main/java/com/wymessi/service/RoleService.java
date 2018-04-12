@@ -1,7 +1,5 @@
 package com.wymessi.service;
 
-import org.springframework.stereotype.Service;
-
 import com.wymessi.po.SysRole;
 /**
  * 系统角色业务层接口

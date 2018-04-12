@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class Md5Utils {
 
 	public static String md5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException{

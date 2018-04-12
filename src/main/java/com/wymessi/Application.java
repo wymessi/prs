@@ -6,10 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -21,9 +21,9 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 @ServletComponentScan // 本项目中，确保druid监控servlet能被扫到
 @SpringBootApplication(scanBasePackages = { "com.wymessi" })
-@EnableTransactionManagement
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
-		DataSourceTransactionManagerAutoConfiguration.class })
+@EnableAspectJAutoProxy
+@EnableTransactionManagement(proxyTargetClass = true)
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class})
 public class Application {
 
 	public static void main(String[] args) {

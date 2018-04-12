@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wymessi.dao.EntityFieldMappingDao">
+
+	<resultMap type="entityField" id="entityFieldMap">
+		<id column="id" property="id" />
+		<result column="field_id" property="fieldId" />
+		<result column="entity_id" property="entityId" />
+		<result column="entity_type" property="entityType" />
+	</resultMap>
+	<insert id="insert" parameterType="entityField">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO entity_field(id,field_id,entity_id,entity_type)
+		VALUES(#{id},#{fieldId},#{entityId},#{entityType})
+	</insert>
+
+	<sql id="insql">
+	     <foreach collection="list" item="item" separator="," open="(" close=")">
+	         #{item}
+	     </foreach>
+    </sql>
+</mapper>
