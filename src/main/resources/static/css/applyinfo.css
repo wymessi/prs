@@ -1,0 +1,26 @@
+/* .layui-body{
+	padding: 150px 350px 0 150px;
+}
+ */
+.layui-breadcrumb{
+	position: absolute;
+	height:20px;
+	top:15px;
+	left: 15px;
+}
+.layui-form{
+	width:1500px;
+	position: absolute;
+	top:80px;
+	left:150px;
+}
+.layui-bg-green{
+	height:10px;
+	margin-top: 200px;
+}
+#tableInfo{
+	width:1500px;
+	position: absolute;
+	top:200px;
+	left:40px;
+}

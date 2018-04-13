@@ -11,7 +11,9 @@
 		<result column="create_time" property="createTime" />
 		<result column="last_update_time" property="lastUpdateTime" />
 		<result column="create_user_id" property="createUserId" />
-		<association property="sysUser" javaType="sysUser" resultMap="com.wymessi.dao.UserDao.userMap"/>
+		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser">
+			
+		</association>
 			
 	</resultMap>
 	<insert id="insert" parameterType="project">
@@ -22,5 +24,49 @@
 		INSERT INTO project(id,project_name,description,status,file_save_path,create_time,last_update_time,create_user_id)
 		VALUES(#{id},#{projectName},#{description},#{status},#{fileSavePath},#{createTime},#{lastUpdateTime},#{createUserId})
 	</insert>
-
+	
+	<select id="listProject" resultMap="projectrMap">
+		SELECT * FROM project 
+		<where>
+			<if test="projectName != null">
+	            and project_name = #{projectName}
+	        </if>
+	        <if test="status != null">
+	            and status = #{status}
+	        </if>
+	        <if test="createUserId != null">
+	            and create_user_id = #{createUserId}
+	        </if>
+	        <if test="startTime != null">
+	            and create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and create_time &lt; #{endTime}
+	        </if>
+        </where>
+        LIMIT #{offset},#{limit}
+	</select>
+	<select id="getCreateUser" resultType="sysUser" parameterType="long">
+		SELECT * FROM sys_user WHERE id = #{create_user_id}
+	</select>
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM project 
+		<where>
+			<if test="projectName != null">
+	            and project_name = #{projectName}
+	        </if>
+	        <if test="status != null">
+	            and status = #{status}
+	        </if>
+	        <if test="createUserId != null">
+	            and create_user_id = #{createUserId}
+	        </if>
+	        <if test="startTime != null">
+	            and create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and create_time &lt; #{endTime}
+	        </if>
+        </where>
+	</select>
 </mapper>

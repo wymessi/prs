@@ -140,6 +140,21 @@ public class UserController {
 	}
 	
 	/**
+	 * 项目申请信息页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/applyInfoPage")
+	public String applyInfoPage(HttpSession session) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		
+		return "applicant/applyinfo";
+	}
+	
+	/**
 	 * 将用户基本信息以json的形式返回
 	 * 
 	 * @return
@@ -147,7 +162,7 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/userBaseInfo.json")
-	public Map<String,Object> baseinfoPage(Model model, HttpSession session, HttpServletRequest request) throws Exception {
+	public Map<String,Object> getBaseinfoJson(HttpSession session) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}

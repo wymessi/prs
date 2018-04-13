@@ -11,7 +11,7 @@ public interface EntityFieldMappingService {
 
 	/**
 	 * 添加关联
-	 * @param sysRole
+	 * @param entityField
 	 */
 	void insert(EntityField entityField);
 

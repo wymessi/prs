@@ -52,3 +52,9 @@ a{
 	left:200px;
 	top:10px;
 }
+.layui-breadcrumb{
+	position: absolute;
+	height:20px;
+	top:15px;
+	left: 15px;
+}

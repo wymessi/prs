@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wymessi.dao.FieldDao;
 import com.wymessi.dao.ProjectDao;
 import com.wymessi.param.GenerateApplyParam;
+import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.EntityField;
 import com.wymessi.po.Field;
 import com.wymessi.po.Project;
@@ -113,5 +114,31 @@ public class ProjectServiceImpl implements ProjectService {
 		if (project != null) {
 			projectDao.insert(project);
 		}
+	}
+
+	/**
+	 * 查询projects
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<Project> listProject(ProjectListParam param) {
+		if (param != null){
+			return projectDao.listProject(param);
+		}
+		return null;
+	}
+
+	/**
+	 * 查询总记录数
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public int getTotalCount(ProjectListParam param) {
+		if (param != null){
+			return projectDao.getTotalCount(param);
+		}
+		return 0;
 	}
 }

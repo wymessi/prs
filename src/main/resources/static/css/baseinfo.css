@@ -1,3 +1,9 @@
 .layui-body{
 	padding: 200px 350px 0 350px;
 }
+.layui-breadcrumb{
+	position: absolute;
+	height:20px;
+	top:15px;
+	left: 15px;
+}

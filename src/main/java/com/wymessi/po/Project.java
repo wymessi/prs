@@ -10,9 +10,10 @@ import java.util.Date;
  */
 public class Project {
 
-	//项目评审状态 ：(待分配，待评审，评审完成)
+	//项目评审状态 ：(待分配，待评审，评审中，评审完成)
 	public static final String PROJECT_REVIEW_STATUS_WAIT_ALLOCATE = "WAIT_ALLOCATE";
     public static final String PROJECT_REVIEW_STATUS_WAIT_REVIEW = "WAIT_REVIEW";
+    public static final String PROJECT_REVIEW_STATUS_IN_REVIEW = "IN_REVIEW";
     public static final String PROJECT_REVIEW_STATUS_REVIEW_DONG = "REVIEW_DONG" ;
 	
 	private long id;
@@ -21,6 +22,7 @@ public class Project {
 	private String status; // 项目评审状态
 	private String fileSavePath; // 项目文件保存路径
 	private long createUserId; // 申请者id
+	private String createUserName; //因layui的限制所创建，用于显示layui表格的限制
 	private Date createTime; // 申请创建时间
 	private Date lastUpdateTime; // 最后更改时间
 	private SysUser user; // 项目申请者持久类
@@ -67,6 +69,14 @@ public class Project {
 
 	public long getCreateUserId() {
 		return createUserId;
+	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
 	}
 
 	public void setCreateUserId(long createUserId) {
