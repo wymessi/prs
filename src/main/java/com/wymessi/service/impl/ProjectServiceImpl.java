@@ -141,4 +141,41 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		return 0;
 	}
+
+	/**
+	 * 更新申请记录
+	 * @param project
+	 * @return
+	 */
+	@Override
+	public int update(Project project) {
+		if (project != null){
+			return projectDao.update(project);
+		}
+		return 0;
+	}
+
+	/**
+	 * 通过id查询项目申请记录
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Project getProjectById(Long id) {
+		if (id != null ){
+			return projectDao.getProjectById(id);
+		}
+		return null;
+	}
+
+	/**
+	 * 通过id删除项目申请记录
+	 * @param id
+	 */
+	@Override
+	public void deleteById(Long id) {
+		if (id != null ){
+			projectDao.deleteById(id);
+		}
+	}
 }

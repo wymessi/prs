@@ -24,6 +24,7 @@ import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.ProjectService;
+import com.wymessi.utils.Result;
 
 @Controller
 @RequestMapping("/project")
@@ -76,6 +77,57 @@ public class ProjectController {
 		return "applicant/upload";
 	}
 
+	@RequestMapping("/delete")
+	public void delete(HttpSession session, Long id) {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		// 删除记录
+		projectService.deleteById(id);
+	}
+
+	/**
+	 * 更新申请记录接口
+	 * 
+	 * @param model
+	 * @param session
+	 * @param project
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/update")
+	public Result<String> update(Model model, HttpSession session, Project project) {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		Result<String> result = new Result<String>();
+		Project p = projectService.getProjectById(project.getId());
+		if (p == null) {
+			result.setData("该申请记录不存在，请刷新页面重新查看");
+			return result;
+		}
+		p.setProjectName(project.getProjectName());
+		p.setDescription(project.getDescription());
+		// 更新申请记录
+		p.setLastUpdateTime(new Date());
+		int rows = projectService.update(p); // 返回影响的行数
+		if (rows > 0) {
+			result.setData("修改成功");
+		} else {
+			result.setData("修改失败");
+		}
+		return result;
+	}
+
+	/**
+	 * 查询项目申请记录接口，以json的形式返回
+	 * 
+	 * @param session
+	 * @param request
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/projects.json")
 	public Map<String, Object> getProjectsJson(HttpSession session, HttpServletRequest request) {
@@ -91,19 +143,19 @@ public class ProjectController {
 			param.setProjectName(projectName);
 		if (!StringUtils.isEmpty(status))
 			param.setStatus(status);
-		
+
 		String createUserIdStr = request.getParameter("createUserId");
 		Long createUserId = null;
 		if (!StringUtils.isEmpty(createUserIdStr))
 			createUserId = Long.valueOf(createUserIdStr);
-		
+
 		param.setCreateUserId(createUserId == null ? user.getId() : createUserId); // 若前端输入了createUserId则使用传入的参数，否则使用当前用户的id
 		// 设置正确的日期格式
 		if (!StringUtils.isEmpty(createTime))
 			setTimeRange(param, createTime);
 		param.setOffset(offset);
 		param.setLimit(limit);
-		
+
 		int totalCount = projectService.getTotalCount(param);
 		List<Project> projects = projectService.listProject(param);
 		// 因为layui数据表格的限制，故将数据转成表格需要的格式
@@ -116,7 +168,6 @@ public class ProjectController {
 		return map;
 	}
 
-	
 	/**
 	 * 设置正确的日期格式
 	 * 
@@ -144,6 +195,7 @@ public class ProjectController {
 
 	/**
 	 * 因为layui数据表格的限制，故将数据转成表格需要的格式
+	 * 
 	 * @param projects
 	 */
 	private void formatProject(List<Project> projects) {
@@ -164,5 +216,4 @@ public class ProjectController {
 		}
 	}
 
-	
 }

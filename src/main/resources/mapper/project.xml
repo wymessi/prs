@@ -11,9 +11,7 @@
 		<result column="create_time" property="createTime" />
 		<result column="last_update_time" property="lastUpdateTime" />
 		<result column="create_user_id" property="createUserId" />
-		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser">
-			
-		</association>
+		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser"/>
 			
 	</resultMap>
 	<insert id="insert" parameterType="project">
@@ -29,7 +27,7 @@
 		SELECT * FROM project 
 		<where>
 			<if test="projectName != null">
-	            and project_name = #{projectName}
+	            and project_name LIKE CONCAT('%',#{projectName},'%')
 	        </if>
 	        <if test="status != null">
 	            and status = #{status}
@@ -69,4 +67,37 @@
 	        </if>
         </where>
 	</select>
+	<select id="getProjectById" resultMap="projectrMap" parameterType="long">
+		SELECT * FROM project WHERE id = #{id}
+	</select>
+	<update id="update" parameterType="project">
+		UPDATE project
+		<set>
+			<if test="projectName != null">
+	            project_name = #{projectName},
+	        </if>
+	        <if test="description != null">
+	            description = #{description},
+	        </if>
+	        <if test="status != null">
+	            status = #{status},
+	        </if>
+	        <if test="fileSavePath != null">
+	            file_save_path = #{fileSavePath},
+	        </if>
+	        <if test="status != null">
+	            status = #{status},
+	        </if>
+	        <if test="createTime != null">
+	            create_time = #{createTime},
+	        </if>
+	        <if test="lastUpdateTime != null">
+	            last_update_time = #{lastUpdateTime},
+	        </if>
+		</set>
+		WHERE id  = #{id}
+	</update>
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM project WHERE id = #{id}
+	</delete>
 </mapper>

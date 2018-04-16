@@ -45,4 +45,32 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	/**
+	 * 修改个人信息
+	 * 
+	 * @param user
+	 */
+	@Override
+	public int update(SysUser user) {
+		if (user != null) {
+			return userDao.update(user);
+		}
+		return 0;
+	}
+
+	/**
+	 * 根据id查找用户
+	 * @param user
+	 * @return
+	 */
+	@Override
+	public SysUser getUserById(Long id) {
+		if (id != null) {
+			SysUser user = userDao.getUserById(id);
+			if (user != null)
+				return user;
+		}
+		return null;
+	}
+
 }

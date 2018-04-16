@@ -62,17 +62,22 @@
 			  <a href="">个人中心</a>
 			  <a href=""><cite>基本信息</cite></a>
 			</span>
+			<blockquote class="layui-elem-quote">单击下方单元格可修改信息</blockquote>
 	        <table class="layui-table" lay-data="{url:'/prs/user/userBaseInfo.json', id:'baseinfo'}" lay-filter="baseinfo">
 			  <thead>
 			    <tr style="width:1048">
 			      <th lay-data="{field:'id', width:80, sort: true}">ID</th>
-			      <th lay-data="{field:'username', width:120, sort: true, edit: 'text'}">用户名</th>
+			      <th lay-data="{field:'username', width:120, sort: true}">用户名</th>
 			      <th lay-data="{field:'mail', edit: 'text', minWidth: 120}">邮箱</th>
 			      <th lay-data="{field:'sex', width:80, edit: 'text'}">性别</th>
 			      <th lay-data="{field:'phone', edit: 'text', minWidth: 100}">手机号</th>
+			      <th lay-data="{fixed: 'right', width: 160, align:'center', toolbar: '#barDemo'}">操作</th>
 			    </tr>
 			  </thead>
 			</table>
+			<script type="text/html" id="barDemo">
+  					<a id="refresh" class="layui-btn layui-btn-xs" lay-event="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
+			</script>
 		</div>
 		<div class="layui-footer">
 			<!-- 底部固定区域 -->
@@ -83,6 +88,7 @@
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 
 	<script th:inline="javascript">
+	/*<![CDATA[*/
 		//JavaScript代码区域
 		layui.use([ 'form', 'jquery', 'layer', 'element','table'],function() {
 			var form = layui.form, 
@@ -111,31 +117,59 @@
 			    ]]
 			  }); 
 			
+			*/
 			//监听工具条
-			  table.on('tool(baseinfotable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  table.on('tool(baseinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
-			    if(layEvent === 'detail'){
-			      layer.msg('查看操作');
-			    } else if(layEvent === 'del'){
-			      layer.confirm('真的删除行么', function(index){
-			        obj.del(); //删除对应行（tr）的DOM结构
-			        layer.close(index);
-			        //向服务端发送删除指令
-			      });
-			    } else if(layEvent === 'edit'){
-			      layer.msg('编辑操作');
-			    }
-			  });*/
-			
+			    if(layEvent === 'refresh'){
+			    	table.reload('baseinfo', {
+						  url: '/prs/user/userBaseInfo.json'
+						  ,where: {} //设定异步数据接口的额外参数
+						});
+			    } 
+			  });
 			//监听单元格编辑
 			  table.on('edit(baseinfo)', function(obj){
 			    var value = obj.value //得到修改后的值
 			    ,data = obj.data //得到所在行所有键值
 			    ,field = obj.field; //得到字段
-			    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+			    var flag = true;
+			    var mailRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+			    var phoneRegex = /^1\d{10}$/;
+			    /* layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value); */
+			    if (value == null || value == ''){
+			    	layer.msg("字段[" + field + "]值不能为空！！！");
+			    	flag = false;
+			    } else if (field == 'sex' && (value != '男'&&value != '女')){
+		    		layer.msg("字段[" + field + "]只能是男或女！！！");
+		    		flag = false;
+			    } else if (field == 'mail' && !(mailRegex).test(value)){
+		    	    layer.msg("邮箱格式不合法！！");
+		    	    flag = false;
+			    } else if (field == 'phone' && !(phoneRegex).test(value)) {
+		    	    layer.msg("手机号格式不合法！！");
+		    	    flag = false;
+			    }
+			    if (flag){
+			    	$.ajax({
+			             type: "POST",
+			             url: "/prs/user/update",
+			             data: {
+			            	 id:data.id,
+			            	 sex : data.sex,
+			            	 mail : data.mail,
+			            	 phone : data.phone
+			             },
+			             dataType: "json",
+			             success: function(data){
+			                     layer.msg(data.data);   
+			             }
+			         });
+			    }
 			  });
 		});
+		/* ]]> */
 	</script>
 
 </body>

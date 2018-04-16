@@ -93,8 +93,7 @@
 				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
 	
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
   					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 				</script>
 			</div>
@@ -127,29 +126,20 @@
 			   var tableIns = table.render({
 			    elem: '#applyinfo'
 			    ,url: '/prs/project/projects.json'
-			    ,width: 1048
+			    ,width: 1208
 			    ,cols: [[ //表头
 			      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-			      ,{field: 'projectName', title: '项目名', width:160}
-			      ,{field: 'description', title: '摘要', width:180}
+			      ,{field: 'projectName', title: '项目名', width:160, edit:true}
+			      ,{field: 'description', title: '摘要', width:180, edit:true}
 			      ,{field: 'status', title: '评审状态', width:100} 
 			      ,{field: 'createUserName', title: '创建人', width: 100}
 			      ,{field: 'createTime', title: '创建时间', width: 260, sort: true}
+			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 260, sort: true}
 			      ,{fixed: 'right', title:'操作', width: 160, align:'center', toolbar: '#barDemo'}
 			    ]]
 			   ,page: true
 			  });
 			  $('#select').click(function(){
-				   /* table.reload('reloadId', {
-					   where: { //设定异步数据接口的额外参数，任意设
-					     projectName: $('#projectName')
-					     ,status: $('#status')
-					     ,createTime: $('#createTime')
-					   }
-					   ,page: {
-					     curr: 1 //重新从第 1 页开始
-					   }
-					 }); */
 				   tableIns.reload({
 					   where: { //设定异步数据接口的额外参数，任意设
 						   projectName: $('#projectName').val()
@@ -173,10 +163,34 @@
 			        obj.del(); //删除对应行（tr）的DOM结构
 			        layer.close(index);
 			        //向服务端发送删除指令
+			        $.get("/prs/project/delete", { id: data.id} );
 			      });
-			    } else if(layEvent === 'edit'){
-			      layer.msg('编辑操作');
 			    }
+			  });
+			//监听单元格编辑
+			  table.on('edit(applyinfotable)', function(obj){
+			    var value = obj.value //得到修改后的值
+			    ,data = obj.data //得到所在行所有键值
+			    ,field = obj.field; //得到字段
+			    /* layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ data.projectName); */
+			    if (value == null || value == ''){
+			    	layer.msg("字段[" + field + "]值不能为空！！！");
+			    } else {
+			    	$.ajax({
+			             type: "POST",
+			             url: "/prs/project/update",
+			             data: {
+			            	 id:data.id,
+			            	 projectName:data.projectName,
+			            	 description:data.description
+			             },
+			             dataType: "json",
+			             success: function(data){
+			                     layer.msg(data.data);   
+			             }
+			         });
+			    }
+			    
 			  });
 		});
 	</script>

@@ -18,4 +18,17 @@ public interface UserDao {
 	 */
 	SysUser login(SysUser sysUser);
 
+	/**
+	 * 修改个人信息
+	 * @param user
+	 */
+	int update(SysUser user);
+
+	/**
+	 * 根据id查找用户
+	 * @param user
+	 * @return
+	 */
+	SysUser getUserById(Long id);
+
 }

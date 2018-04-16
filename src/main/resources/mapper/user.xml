@@ -18,11 +18,33 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO sys_user(id,username,password,sex,mail,phone,title,role_id)
-		VALUES(#{id},#{username},#{password},#{sex},#{mail},#{phone},#{title},#{roleId})
+		VALUES(#{id},#{username},#{password},#{sex},#{mail},#{mail},#{title},#{roleId})
 	</insert>
 
 	<select id="login" resultMap="userMap">
 		SELECT * FROM sys_user WHERE username = #{username} AND password = #{password}
 	</select>
 	
+	<select id="getUserById" resultMap="userMap" parameterType="long">
+		SELECT * FROM sys_user WHERE id = #{id}
+	</select>
+	
+	<update id="update" parameterType="sysUser">
+		UPDATE sys_user
+		<set>
+			<if test="username != null">
+	            username = #{username},
+	        </if>
+	        <if test="sex != null">
+	            sex = #{sex},
+	        </if>
+	        <if test="mail != null">
+	            mail = #{mail},
+	        </if>
+	        <if test="mail != null">
+	            phone = #{phone},
+	        </if>
+		</set>
+		WHERE id  = #{id}
+	</update>
 </mapper>

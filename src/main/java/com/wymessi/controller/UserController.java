@@ -19,6 +19,7 @@ import com.wymessi.exception.CustomException;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.UserService;
 import com.wymessi.utils.Md5Utils;
+import com.wymessi.utils.Result;
 
 @Controller
 @RequestMapping("/user")
@@ -152,6 +153,32 @@ public class UserController {
 		}
 		
 		return "applicant/applyinfo";
+	}
+	
+	/**
+	 * 修改个人信息
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/update")
+	public Result<String> update(HttpSession session, SysUser user) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		Result<String> result = new Result<String>();
+		int rows = userService.update(user);
+		if (rows > 0) {
+			result.setData("修改成功");
+		} else {
+			result.setData("修改失败");
+		}
+		
+		//由于个人信息都是从session当中取，故更改信息后需重新设置session,否则页面更改完刷新页面后，信息又恢复原样，只有重新登陆才能正确显示
+		SysUser newUser = userService.getUserById(user.getId());
+		session.setAttribute("user", newUser);
+		return result;
 	}
 	
 	/**

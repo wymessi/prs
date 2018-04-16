@@ -45,5 +45,25 @@ public interface ProjectService {
 	 * @return
 	 */
 	int getTotalCount(ProjectListParam param);
+
+	/**
+	 * 更新申请记录
+	 * @param project
+	 * @return
+	 */
+	int update(Project project);
+
+	/**
+	 * 通过id查询项目申请记录
+	 * @param id
+	 * @return
+	 */
+	Project getProjectById(Long id);
+
+	/**
+	 * 通过id删除项目申请记录
+	 * @param id
+	 */
+	void deleteById(Long id);
 	
 }
