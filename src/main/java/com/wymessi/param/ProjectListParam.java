@@ -1,6 +1,7 @@
 package com.wymessi.param;
 
 import java.util.Date;
+import java.util.List;
 /**
  * 查询申请项目时参数封装类
  * @author 王冶
@@ -10,7 +11,7 @@ public class ProjectListParam {
 
 	private String projectName;
 	private String status;
-	private long createUserId;
+	private List<Long> createUserIds;
 	private Date startTime;
 	private Date endTime;
 	
@@ -34,12 +35,12 @@ public class ProjectListParam {
 		this.status = status;
 	}
 
-	public long getCreateUserId() {
-		return createUserId;
+	public List<Long> getCreateUserIds() {
+		return createUserIds;
 	}
 
-	public void setCreateUserId(long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUserIds(List<Long> createUserIds) {
+		this.createUserIds = createUserIds;
 	}
 
 	public Date getStartTime() {

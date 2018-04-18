@@ -1,6 +1,7 @@
 package com.wymessi.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.ProjectService;
+import com.wymessi.service.UserService;
 import com.wymessi.utils.Result;
 
 @Controller
@@ -33,6 +35,9 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 
+	@Autowired
+	private UserService userService;
+	
 	/**
 	 * 项目申请页面
 	 * 
@@ -47,6 +52,22 @@ public class ProjectController {
 
 		return "applicant/upload";
 	}
+	
+	/**
+	 * 项目分配页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/allocatePage")
+	public String allocatePage(HttpSession session) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+
+		return "system/allocate";
+	}
+
 
 	/**
 	 * 处理上传请求
@@ -135,7 +156,9 @@ public class ProjectController {
 		String projectName = request.getParameter("projectName");
 		String status = request.getParameter("status");
 		String createTime = request.getParameter("createTime");
+		String isApplicant = request.getParameter("isApplicant");
 		int limit = Integer.valueOf(request.getParameter("limit"));
+		List<Long> createUserIds = null;
 		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
 		// 生成查询参数
 		ProjectListParam param = new ProjectListParam();
@@ -143,13 +166,17 @@ public class ProjectController {
 			param.setProjectName(projectName);
 		if (!StringUtils.isEmpty(status))
 			param.setStatus(status);
-
-		String createUserIdStr = request.getParameter("createUserId");
-		Long createUserId = null;
-		if (!StringUtils.isEmpty(createUserIdStr))
-			createUserId = Long.valueOf(createUserIdStr);
-
-		param.setCreateUserId(createUserId == null ? user.getId() : createUserId); // 若前端输入了createUserId则使用传入的参数，否则使用当前用户的id
+		if (!StringUtils.isEmpty(isApplicant)){
+			createUserIds = new ArrayList<Long>();
+			createUserIds.add(user.getId());
+			param.setCreateUserIds(createUserIds);
+		}
+		String createUserName = request.getParameter("username");
+		if (!StringUtils.isEmpty(createUserName)) {
+			createUserIds = userService.getUserByUserName(createUserName);
+			param.setCreateUserIds(createUserIds);
+		}
+		
 		// 设置正确的日期格式
 		if (!StringUtils.isEmpty(createTime))
 			setTimeRange(param, createTime);

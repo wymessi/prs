@@ -1,0 +1,15 @@
+.layui-elem-quote{
+	margin: 40px 0;
+}
+.layui-breadcrumb{
+	position: absolute;
+	height:20px;
+	top:15px;
+	left: 15px;
+}
+#tableInfo{
+	width:1000px;
+	position: absolute;
+	top:200px;
+	left:40px;
+}

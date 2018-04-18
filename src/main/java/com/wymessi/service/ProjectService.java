@@ -65,5 +65,5 @@ public interface ProjectService {
 	 * @param id
 	 */
 	void deleteById(Long id);
-	
+
 }

@@ -2,15 +2,15 @@ a{
 	text-decoration: none;
 }
 .layui-form{
-	padding: 100px 0 320px 50px;
+	padding: 50px 0 50px 0;
 }
 .layui-form-item{
 	width: 600px;	
 }
 .layui-form,.layui-elem-quote{
-	margin: 12px 500px 12px 400px;
+	margin: 12px 200px 12px 200px;
 }
-.layui-textarea,/* .tagsinput,.tagsinput-typeahead,.input-lg, */.layui-input{
+.layui-textarea, .tagsinput,.tagsinput-typeahead,.input-lg, .layui-input{
 	border-radius:10px;
 	border-color: #EBEDEF;
 	font-size: 14px;

@@ -14,6 +14,13 @@
 		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser"/>
 			
 	</resultMap>
+	
+	<sql id="insql">
+	     <foreach collection="param.list" item="item" separator="," open="(" close=")">
+	         #{item}
+	     </foreach>
+    </sql>
+	
 	<insert id="insert" parameterType="project">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
@@ -32,8 +39,11 @@
 	        <if test="status != null">
 	            and status = #{status}
 	        </if>
-	        <if test="createUserId != null">
-	            and create_user_id = #{createUserId}
+	        <if test="createUserIds != null">
+	            and create_user_id in 
+				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
 	        </if>
 	        <if test="startTime != null">
 	            and create_time &gt; #{startTime} 
@@ -51,13 +61,16 @@
 		SELECT count(*) FROM project 
 		<where>
 			<if test="projectName != null">
-	            and project_name = #{projectName}
+	            and project_name LIKE CONCAT('%',#{projectName},'%')
 	        </if>
 	        <if test="status != null">
 	            and status = #{status}
 	        </if>
-	        <if test="createUserId != null">
-	            and create_user_id = #{createUserId}
+	        <if test="createUserIds != null">
+	            and create_user_id in 
+				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
 	        </if>
 	        <if test="startTime != null">
 	            and create_time &gt; #{startTime} 

@@ -47,4 +47,8 @@
 		</set>
 		WHERE id  = #{id}
 	</update>
+	
+	<select id="getUserByUserName" resultMap="userMap">
+		SELECT * FROM sys_user WHERE username LIKE CONCAT('%',#{userName},'%')
+	</select>
 </mapper>

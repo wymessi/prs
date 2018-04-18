@@ -1,5 +1,8 @@
 package com.wymessi.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,4 +76,21 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	/**
+	 * 通过name模糊搜索用户
+	 * @param createUserName
+	 * @return
+	 */
+	@Override
+	public List<Long> getUserByUserName(String createUserName) {
+		if (createUserName == null){
+			return null;
+		}
+		List<SysUser> users = userDao.getUserByUserName(createUserName);
+		List<Long> userIds = new ArrayList<Long>();
+		for (SysUser user : users) {
+			userIds.add(user.getId());
+		}
+		return userIds;
+	}
 }

@@ -7,8 +7,8 @@
 <title>PRS-申请记录页面</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
-<link rel="stylesheet" href="../../static/css/applyinfo.css"
-	th:href="@{/css/applyinfo.css}" />
+<link rel="stylesheet" href="../../static/css/allocate.css"
+	th:href="@{/css/allocate.css}" />
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -17,17 +17,8 @@
 			<!-- 头部区域（可配合layui已有的水平导航） -->
 
 			<ul class="layui-nav layui-layout-right">
-				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
-				</a>
-					<dl class="layui-nav-child">
-						<dd>
-							<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
-						</dd>
-						<dd>
-							<a href="" th:href="@{/user/applyInfoPage}">我的申请</a>
-						</dd>
-					</dl></li>
+			<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span></a></li>
 				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
 			</ul>
 		</div>
@@ -37,25 +28,21 @@
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;" th:href="@{/project/uploadPage}">项目申请</a></li>
-					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
-						<dl class="layui-nav-child">
-							<dd>
-								<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
-							</dd>
-							<dd>
-								<a href="" th:href="@{/user/applyInfoPage}">我的申请</a>
-							</dd>
-						</dl></li>
+						href="javascript:;" th:href="@{/project/allocatePage}">项目分配</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">项目管理</a></li>
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/project/uploadPage}">专家管理</a></li>
+						<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/project/uploadPage}">领域标签管理</a></li>
 				</ul>
 			</div>
 		</div>
 
 		<div class="layui-body">
 			<span class="layui-breadcrumb" lay-separator="/">
-			  <a href="">个人中心</a>
-			  <a href=""><cite>我的申请</cite></a>
+			  <a href=""><cite>项目分配</cite></a>
 			</span>
+			<blockquote class="layui-elem-quote">以下为为所有未分配项目</blockquote>
 			<form class="layui-form" method="POST">
 				<div class="layui-inline">
 					<label class="layui-form-label">项目名</label>
@@ -66,15 +53,11 @@
 					</div>
 				</div>
 				<div class="layui-inline">
-					<label class="layui-form-label">评审状态</label>
+					<label class="layui-form-label">创建人</label>
 					<div class="layui-input-inline">
-						<select id="status" name="status">
-							<option value=""></option>
-							<option value="WAIT_ALLOCATE">待分配</option>
-							<option value="WAIT_REVIEW">待评审</option>
-							<option value="IN_REVIEW">评审中</option>
-							<option value="REVIEW_DONG">评审完成</option>
-						</select>
+						<input id="username" type="text" name="username" 
+							placeholder="根据姓名模糊搜索" autocomplete="off"
+							class="layui-input"/>
 					</div>
 				</div>
 				<div class="layui-inline">
@@ -88,7 +71,6 @@
 					<a id="select" class="layui-btn">查询</a>
 				</div>
 			</form>
-			<hr class="layui-bg-green"/>
 			<div id="tableInfo">
 				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
 	
@@ -145,7 +127,7 @@
 						   projectName: $('#projectName').val()
 						   ,status: $('#status').val()
 						   ,createTime: $('#createTime').val()
-						   ,isApplicant:"isApplicant"
+						   ,username: $('#username').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始

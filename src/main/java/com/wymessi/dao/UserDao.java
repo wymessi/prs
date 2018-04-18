@@ -1,5 +1,7 @@
 package com.wymessi.dao;
 
+import java.util.List;
+
 import com.wymessi.po.SysUser;
 
 public interface UserDao {
@@ -30,5 +32,13 @@ public interface UserDao {
 	 * @return
 	 */
 	SysUser getUserById(Long id);
+	
+	/**
+	 * 通过name模糊搜索用户
+	 * @param createUserName
+	 * @return
+	 */
+	List<SysUser> getUserByUserName(String userName);
+
 
 }

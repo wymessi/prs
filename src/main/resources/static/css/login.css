@@ -15,7 +15,7 @@ a{
 h1{
 	font-size: 60px; 
 	color: #393D49;
-	padding:250px 0 0 250px;
+	padding:100px 0 0 100px;
 }
 h1 i{
 	padding-right:20px;
@@ -26,23 +26,23 @@ h1 i{
 }
 .login{
 	width:400px;
-	height:400px;
+	height:300px;
 	background: #F0F0F0;
 	border-radius: 4px; 
-	margin: 150px 0 0 0;
+	margin: 100px 0 0 0;
 	padding-top:50px;
 }
 .layui-btn{
 	width:88px;
 }
 .layui-footer{
-	height:150px;
-	margin-top:200px;
+	height:50px;
+	margin-top:80px;
 	background: #ccc;
 }
 .layui-footer p{
-	height:150px;
-	line-height:150px;
+	height:50px;
+	line-height:50px;
 	text-align:center;
 	color:black;
 }

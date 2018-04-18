@@ -1,5 +1,7 @@
 package com.wymessi.service;
 
+import java.util.List;
+
 import com.wymessi.po.SysUser;
 /**
  * 系统用户业务层接口
@@ -33,4 +35,11 @@ public interface UserService {
 	 * @return
 	 */
 	SysUser getUserById(Long id);
+
+	/**
+	 * 通过name模糊搜索用户
+	 * @param createUserName
+	 * @return
+	 */
+	List<Long> getUserByUserName(String createUserName);
 }

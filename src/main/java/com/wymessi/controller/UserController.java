@@ -106,7 +106,7 @@ public class UserController {
 			path = "expert/baseinfo";
 			break;
 		case "3":
-			path = "system/baseinfo";
+			path = "system/allocate";
 			break;
 		default:
 			break;
