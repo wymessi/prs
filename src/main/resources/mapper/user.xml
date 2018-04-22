@@ -49,6 +49,31 @@
 	</update>
 	
 	<select id="getUserByUserName" resultMap="userMap">
-		SELECT * FROM sys_user WHERE username LIKE CONCAT('%',#{userName},'%')
+		SELECT * FROM sys_user WHERE username LIKE CONCAT('%',#{username},'%')
+	</select>
+	
+	<select id="listUsersByNameAndRole" resultMap="userMap">
+		SELECT * FROM sys_user
+		<where>
+			<if test="username != null and username != ''">
+				AND username LIKE CONCAT('%',#{username},'%')
+			</if>
+			<if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+		</where>
+		LIMIT #{offset},#{limit}
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM sys_user
+		<where>
+			<if test="username != null and username != ''">
+				AND username LIKE CONCAT('%',#{username},'%')
+			</if>
+			<if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+		</where>
 	</select>
 </mapper>

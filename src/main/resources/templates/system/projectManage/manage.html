@@ -4,11 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>PRS-项目分配</title>
+<title>PRS-项目管理</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../../static/css/allocate.css"
 	th:href="@{/css/allocate.css}" />
+<style type="text/css">
+.layui-inline{
+	margin-top: 10px;
+}
+#tableInfo{
+	width:1000px;
+	position: absolute;
+	top:250px;
+	left:40px;
+}
+</style>
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -41,7 +52,7 @@
 							<dd>
 								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=3}">工作人员管理</a>
 							</dd>
-						</dl></li>					
+						</dl></li>
 						<li class="layui-nav-item layui-nav-itemed"><a class=""
 						href="javascript:;" th:href="@{/field/fieldPage}">领域标签管理</a></li>
 				</ul>
@@ -50,9 +61,9 @@
 
 		<div class="layui-body">
 			<span class="layui-breadcrumb" lay-separator="/">
-			  <a href=""><cite>项目分配</cite></a>
+			  <a href=""><cite>项目管理</cite></a>
 			</span>
-			<blockquote class="layui-elem-quote">系统所有未分配项目</blockquote>
+			<blockquote class="layui-elem-quote">系统所有项目</blockquote>
 			<form class="layui-form" method="POST">
 				<div class="layui-inline">
 					<label class="layui-form-label">项目名</label>
@@ -71,6 +82,18 @@
 					</div>
 				</div>
 				<div class="layui-inline">
+					<label class="layui-form-label">评审状态</label>
+					<div class="layui-input-inline">
+						<select id="status" name="status">
+							<option value=""></option>
+							<option value="WAIT_ALLOCATE">待分配</option>
+							<option value="WAIT_REVIEW">待评审</option>
+							<option value="IN_REVIEW">评审中</option>
+							<option value="REVIEW_DONG">评审完成</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
 					<label class="layui-form-label">创建时间</label>
 					<div class="layui-input-inline">
 						<input type="text" class="layui-input" id="createTime" placeholder="开始时间~结束时间"/>
@@ -85,7 +108,8 @@
 				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
 	
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-xs" lay-event="detail"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>分配</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="detail"><i style="padding-right: 4px;" class="layui-icon">&#xe705;</i>查看结果</a>
+  					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
 				</script>
 			</div>
 		</div>
@@ -116,8 +140,8 @@
 			 //执行一个 table 实例
 			   var tableIns = table.render({
 			    elem: '#applyinfo'
-			    ,url: '/prs/project/projects.json?status=WAIT_ALLOCATE'
-			    ,width: 1040
+			    ,url: '/prs/project/projects.json'
+			    ,width: 1090
 			    ,cols: [[ //表头
 			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
 			      ,{field: 'projectName', title: '项目名', width:130, edit:true}
@@ -126,7 +150,7 @@
 			      ,{field: 'createUserName', title: '创建人', width: 85}
 			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
 			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
-			      ,{fixed: 'right', title:'操作', width: 130, align:'center', toolbar: '#barDemo'}
+			      ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'}
 			    ]]
 			   ,page: true
 			  });
@@ -134,7 +158,7 @@
 				   tableIns.reload({
 					   where: { //设定异步数据接口的额外参数，任意设
 						   projectName: $('#projectName').val()
-						   ,status: "WAIT_ALLOCATE"
+						   ,status: $('#status').val()
 						   ,createTime: $('#createTime').val()
 						   ,username: $('#username').val()
 					   }
@@ -149,7 +173,14 @@
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'detail'){
-			      layer.msg('分配操作');  
+			      layer.msg('查看操作');  
+			    } else if(layEvent === 'del'){
+			      layer.confirm('真的删除行么', function(index){
+			        obj.del(); //删除对应行（tr）的DOM结构
+			        layer.close(index);
+			        //向服务端发送删除指令
+			        $.get("/prs/project/delete", { id: data.id} );
+			      });
 			    }
 			  });
 			//监听单元格编辑

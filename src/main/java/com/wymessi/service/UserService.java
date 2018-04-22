@@ -2,6 +2,7 @@ package com.wymessi.service;
 
 import java.util.List;
 
+import com.wymessi.param.UserListParam;
 import com.wymessi.po.SysUser;
 /**
  * 系统用户业务层接口
@@ -42,4 +43,19 @@ public interface UserService {
 	 * @return
 	 */
 	List<Long> getUserByUserName(String createUserName);
+
+	/**
+	 * 通过name和角色搜索用户
+	 * @param username
+	 * @param roleId
+	 * @return
+	 */
+	List<SysUser> listUsersByNameAndRole(UserListParam param);
+
+	/**
+	 * 得到总记录数
+	 * @param username
+	 * @param roleId
+	 */
+	int getTotalCount(UserListParam param);
 }

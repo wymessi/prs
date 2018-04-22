@@ -2,6 +2,7 @@ package com.wymessi.service;
 
 import java.util.List;
 
+import com.wymessi.param.FieldsListParam;
 import com.wymessi.po.Field;
 /**
  * 领域标签业务层接口
@@ -27,5 +28,19 @@ public interface FieldService {
 	 * 
 	 */
 	void getValidFieldAndInsertBatch(List<String> inputFields, long createUserId);
+
+	/**
+	 * 得到总记录数
+	 * @param param
+	 * @return
+	 */
+	int getTotalCount(FieldsListParam param);
+
+	/**
+	 * 查询标签
+	 * @param param
+	 * @return
+	 */
+	List<Field> listField(FieldsListParam param);
 	
 }

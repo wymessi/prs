@@ -3,10 +3,12 @@ package com.wymessi.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wymessi.dao.UserDao;
+import com.wymessi.param.UserListParam;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.UserService;
 
@@ -92,5 +94,29 @@ public class UserServiceImpl implements UserService {
 			userIds.add(user.getId());
 		}
 		return userIds;
+	}
+
+	/**
+	 * 通过name和角色搜索用户
+	 * @param username
+	 * @param roleId
+	 * @return
+	 */
+	@Override
+	public List<SysUser> listUsersByNameAndRole(UserListParam param) {
+		List<SysUser> users = null;
+		if (param.getRoleId() == null && StringUtils.isEmpty(param.getUsername())){
+			return null;
+		}
+		users = userDao.listUsersByNameAndRole(param);
+		return users;
+	}
+
+	@Override
+	public int getTotalCount(UserListParam param) {
+		if (param != null){
+			return userDao.getTotalCount(param);
+		}
+		return 0;
 	}
 }

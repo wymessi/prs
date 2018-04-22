@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wymessi.exception.CustomException;
+import com.wymessi.param.UserListParam;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.UserService;
 import com.wymessi.utils.Md5Utils;
@@ -189,15 +190,35 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/userBaseInfo.json")
-	public Map<String,Object> getBaseinfoJson(HttpSession session) throws Exception {
-		if (session.getAttribute("user") == null) {
+	public Map<String,Object> getBaseinfoJson(HttpSession session, HttpServletRequest request) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
+		String username = request.getParameter("username");
+		String roleStr = request.getParameter("role");
 		Map<String,Object> map = new HashMap<String, Object>();
-		List<SysUser> users = new ArrayList<SysUser>();
-		users.add((SysUser)session.getAttribute("user"));
-		map.put("code", "0");
-		map.put("count", "1000");
+		int limit = Integer.valueOf(request.getParameter("limit"));
+		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
+		
+		List<SysUser> users = null;
+		int totalCount = 0;
+		if (user.getRoleId() != 3){
+			users =  new ArrayList<SysUser>();
+			users.add(user);
+		} else {
+			UserListParam param = new UserListParam();
+			param.setUsername(username);
+			Long roleId = Long.valueOf(roleStr);
+			param.setRoleId(roleId);
+			param.setLimit(limit);
+			param.setOffset(offset);
+			users = userService.listUsersByNameAndRole(param);
+			totalCount = userService.getTotalCount(param);
+		}
+		
+		map.put("code", 0);
+		map.put("count", totalCount);
 		map.put("msg", "");
 		map.put("data", users);
 		

@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.wymessi.dao.FieldDao;
 import com.wymessi.exception.CustomException;
+import com.wymessi.param.FieldsListParam;
 import com.wymessi.po.Field;
 import com.wymessi.service.FieldService;
 import com.wymessi.utils.ListUtils;
@@ -74,6 +75,32 @@ public class FieldServiceImpl implements FieldService {
 			validFields = ListUtils.removeAll(validFields, existFields);
 		if (!CollectionUtils.isEmpty(validFields))
 			insertBatch(validFields);
+	}
+
+	/**
+	 * 得到总记录数
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public int getTotalCount(FieldsListParam param) {
+		if (param != null){
+			return fieldDao.getTotalCount(param);
+		}
+		return 0;
+	}
+
+	/**
+	 * 查询标签
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<Field> listField(FieldsListParam param) {
+		if (param != null){
+			return fieldDao.listField(param);
+		}
+		return null;
 	}
 
 }
