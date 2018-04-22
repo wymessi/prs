@@ -54,6 +54,36 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 专家管理页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/expertPage")
+	public String expertPage(HttpSession session, HttpServletRequest request) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		String role = request.getParameter("role");
+		String path = null;
+		switch (role) {
+		case "1":
+			path = "system/userManage/applicant";
+			break;
+		case "2":
+			path = "system/userManage/expert";
+			break;
+		case "3":
+			path = "system/userManage/system";
+			break;
+		default:
+			break;
+		}
+
+		return path;
+	}
+	
+	/**
 	 * 项目分配页面
 	 * 
 	 * @return
@@ -68,6 +98,19 @@ public class ProjectController {
 		return "system/allocate";
 	}
 
+	/**
+	 * 项目管理页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/managePage")
+	public String managePage(HttpSession session, HttpServletRequest request) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		return "system/projectManage/manage";
+	}
 
 	/**
 	 * 处理上传请求

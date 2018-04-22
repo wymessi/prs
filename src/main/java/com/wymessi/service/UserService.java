@@ -42,4 +42,12 @@ public interface UserService {
 	 * @return
 	 */
 	List<Long> getUserByUserName(String createUserName);
+
+	/**
+	 * 通过name和角色搜索用户
+	 * @param username
+	 * @param roleId
+	 * @return
+	 */
+	List<SysUser> listUsersByNameAndRole(String username, Long roleId);
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -189,13 +190,23 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/userBaseInfo.json")
-	public Map<String,Object> getBaseinfoJson(HttpSession session) throws Exception {
-		if (session.getAttribute("user") == null) {
+	public Map<String,Object> getBaseinfoJson(HttpSession session, HttpServletRequest request) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
+		String username = request.getParameter("username");
+		String roleStr = request.getParameter("role");
 		Map<String,Object> map = new HashMap<String, Object>();
-		List<SysUser> users = new ArrayList<SysUser>();
-		users.add((SysUser)session.getAttribute("user"));
+		List<SysUser> users = null;
+		if (user.getRoleId() != 3){
+			users =  new ArrayList<SysUser>();
+			users.add(user);
+		} else {
+			Long roleId = Long.valueOf(roleStr);
+			users = userService.listUsersByNameAndRole(username,roleId);
+		}
+		
 		map.put("code", "0");
 		map.put("count", "1000");
 		map.put("msg", "");

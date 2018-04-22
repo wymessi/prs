@@ -4,11 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>PRS-申请记录</title>
+<title>PRS-项目管理</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
-<link rel="stylesheet" href="../../static/css/applyinfo.css"
-	th:href="@{/css/applyinfo.css}" />
+<link rel="stylesheet" href="../../static/css/allocate.css"
+	th:href="@{/css/allocate.css}" />
+<style type="text/css">
+.layui-inline{
+	margin-top: 10px;
+}
+#tableInfo{
+	width:1000px;
+	position: absolute;
+	top:250px;
+	left:40px;
+}
+</style>
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -17,17 +28,8 @@
 			<!-- 头部区域（可配合layui已有的水平导航） -->
 
 			<ul class="layui-nav layui-layout-right">
-				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
-				</a>
-					<dl class="layui-nav-child">
-						<dd>
-							<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
-						</dd>
-						<dd>
-							<a href="" th:href="@{/user/applyInfoPage}">我的申请</a>
-						</dd>
-					</dl></li>
+			<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span></a></li>
 				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
 			</ul>
 		</div>
@@ -37,31 +39,45 @@
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;" th:href="@{/project/uploadPage}">项目申请</a></li>
-					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						href="javascript:;" th:href="@{/project/allocatePage}">项目分配</a></li>
+					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" th:href="@{/project/managePage}">项目管理</a></li>
+					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;">用户管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
+								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=1}">申请者管理</a>
 							</dd>
 							<dd>
-								<a href="" th:href="@{/user/applyInfoPage}">我的申请</a>
+								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=2}">评审专家管理</a>
+							</dd>
+							<dd>
+								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=3}">工作人员管理</a>
 							</dd>
 						</dl></li>
+						<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/field/fieldPage}">领域标签管理</a></li>
 				</ul>
 			</div>
 		</div>
 
 		<div class="layui-body">
 			<span class="layui-breadcrumb" lay-separator="/">
-			  <a href="">个人中心</a>
-			  <a href=""><cite>我的申请</cite></a>
+			  <a href=""><cite>项目管理</cite></a>
 			</span>
+			<blockquote class="layui-elem-quote">系统所有项目</blockquote>
 			<form class="layui-form" method="POST">
 				<div class="layui-inline">
 					<label class="layui-form-label">项目名</label>
 					<div class="layui-input-inline">
 						<input id="projectName" type="text" name="projectName" 
 							placeholder="根据项目名模糊搜索" autocomplete="off"
+							class="layui-input"/>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">创建人</label>
+					<div class="layui-input-inline">
+						<input id="username" type="text" name="username" 
+							placeholder="根据姓名模糊搜索" autocomplete="off"
 							class="layui-input"/>
 					</div>
 				</div>
@@ -88,7 +104,6 @@
 					<a id="select" class="layui-btn">查询</a>
 				</div>
 			</form>
-			<hr class="layui-bg-green"/>
 			<div id="tableInfo">
 				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
 	
@@ -145,7 +160,7 @@
 						   projectName: $('#projectName').val()
 						   ,status: $('#status').val()
 						   ,createTime: $('#createTime').val()
-						   ,isApplicant:"isApplicant"
+						   ,username: $('#username').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始
@@ -158,24 +173,7 @@
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'detail'){
-			    	if (data.status != '评审完成'){
-			    		layer.msg('目前评审状态为：'+ data.status + ",请耐心等待");
-			    	} else {
-			    		$.ajax({
-				             type: "POST",
-				             url: "/prs/review/result",
-				             data: {
-				            	 id:data.id,
-				            	 projectName:data.projectName,
-				            	 description:data.description
-				             },
-				             dataType: "json",
-				             success: function(data){
-				                 layer.msg(data.data);   
-				             }
-				         });
-			    	}
-			      
+			      layer.msg('查看操作');  
 			    } else if(layEvent === 'del'){
 			      layer.confirm('真的删除行么', function(index){
 			        obj.del(); //删除对应行（tr）的DOM结构

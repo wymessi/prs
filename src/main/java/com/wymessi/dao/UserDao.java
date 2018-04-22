@@ -2,6 +2,8 @@ package com.wymessi.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wymessi.po.SysUser;
 
 public interface UserDao {
@@ -38,7 +40,14 @@ public interface UserDao {
 	 * @param createUserName
 	 * @return
 	 */
-	List<SysUser> getUserByUserName(String userName);
+	List<SysUser> getUserByUserName(String username);
 
+	/**
+	 * 通过name和角色搜索用户
+	 * @param username
+	 * @param roleId
+	 * @return
+	 */
+	List<SysUser> listUsersByNameAndRole(@Param("username")String username, @Param("roleId")Long roleId);
 
 }
