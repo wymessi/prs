@@ -216,9 +216,10 @@ public class UserController {
 			users = userService.listUsersByNameAndRole(param);
 			totalCount = userService.getTotalCount(param);
 		}
-		
+	
 		map.put("code", 0);
 		map.put("count", totalCount);
+
 		map.put("msg", "");
 		map.put("data", users);
 		
