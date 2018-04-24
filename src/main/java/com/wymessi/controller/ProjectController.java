@@ -84,20 +84,35 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 项目分配管理页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/allocateManagePage")
+	public String allocateManagePage(HttpSession session) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+
+		return "system/allocateManage/allocateManage";
+	}
+
+	/**
 	 * 项目分配页面
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/allocatePage")
-	public String allocatePage(HttpSession session) throws Exception {
+	public String allocatePage(HttpSession session,Long id, Long applicantId) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-
-		return "system/allocate";
+		
+		return "system/allocateManage/allocate";
 	}
-
+	
 	/**
 	 * 项目管理页面
 	 * 
