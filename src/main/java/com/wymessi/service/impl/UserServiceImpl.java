@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.wymessi.dao.UserDao;
 import com.wymessi.param.UserListParam;
@@ -118,5 +119,19 @@ public class UserServiceImpl implements UserService {
 			return userDao.getTotalCount(param);
 		}
 		return 0;
+	}
+
+	/**
+	 * 根据id查询专家
+	 * @return
+	 */
+	@Override
+	public List<SysUser> listExpertByIds(List<Long> idList) {
+		List<SysUser> experts = null;
+		if (CollectionUtils.isEmpty(idList)){
+			return null;
+		}
+		experts = userDao.listExpertByIds(idList);
+		return experts;
 	}
 }

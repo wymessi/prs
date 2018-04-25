@@ -58,4 +58,10 @@ public interface UserService {
 	 * @param roleId
 	 */
 	int getTotalCount(UserListParam param);
+
+	/**
+	 * 根据id查询专家
+	 * @return
+	 */
+	List<SysUser> listExpertByIds(List<Long> idList);
 }

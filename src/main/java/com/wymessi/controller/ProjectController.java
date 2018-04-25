@@ -105,11 +105,12 @@ public class ProjectController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/allocatePage")
-	public String allocatePage(HttpSession session,Long id, Long applicantId) throws Exception {
+	public String allocatePage(Model model, HttpSession session,Long id, Long applicantId) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-		
+		model.addAttribute("projectId",id);
+		model.addAttribute("applicantId",applicantId);
 		return "system/allocateManage/allocate";
 	}
 	

@@ -225,4 +225,32 @@ public class UserController {
 		
 		return map;
 	}
+	
+	/**
+	 * 显示与申请项目所属领域最匹配的专家
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/expert.json")
+	public Map<String,Object> getExpertJson(HttpSession session, HttpServletRequest request, String projectId, String applicantId) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		Map<String,Object> map = new HashMap<String, Object>();
+		List<Long> idList = new ArrayList<>();
+		idList.add(2l);
+		idList.add(3l);
+		List<SysUser> users = userService.listExpertByIds(idList);
+
+		map.put("code", 0);
+		map.put("count", 5);
+
+		map.put("msg", "");
+		map.put("data", users);
+		
+		return map;
+	}
 }

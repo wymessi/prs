@@ -9,7 +9,7 @@
 		<result column="sex" property="sex"/>
 		<result column="mail" property="mail"/>
 		<result column="phone" property="phone"/>
-		<result column="title" property="tilte"/>
+		<result column="title" property="title"/>
 		<result column="role_id" property="roleId"/>
 	</resultMap>
 	<insert id="registerApplicant" parameterType="sysUser">
@@ -75,5 +75,16 @@
 				AND role_id = #{roleId}
 			</if>
 		</where>
+	</select>
+	
+	<sql id="insql">
+	     <foreach collection="list" item="item" separator="," open="(" close=")">
+	         #{item}
+	     </foreach>
+    </sql>
+	
+	<select id="listExpertByIds" resultMap="userMap">
+		SELECT * FROM sys_user WHERE role_id = 2
+		and id in <include refid="insql"/>
 	</select>
 </mapper>

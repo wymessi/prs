@@ -2,6 +2,8 @@ package com.wymessi.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wymessi.param.UserListParam;
 import com.wymessi.po.SysUser;
 
@@ -55,4 +57,10 @@ public interface UserDao {
 	 * @param roleId
 	 */
 	int getTotalCount(UserListParam param);
+	
+	/**
+	 * 根据id查询专家
+	 * @return
+	 */
+	List<SysUser> listExpertByIds(@Param("list")List<Long> idList);
 }

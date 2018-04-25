@@ -57,12 +57,11 @@
 			<span class="layui-breadcrumb" lay-separator="/">
 			  <a href=""><cite>项目分配</cite></a>
 			</span>
-			<blockquote class="layui-elem-quote">为申请项目分配评审专家</blockquote>
+			<blockquote class="layui-elem-quote">以下显示与申请项目所属领域匹配度最高的专家们</blockquote>
 			<div id="tableInfo">
-				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
-	
+				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="expertinfo" lay-filter="expertinfotable"></table>
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-xs" lay-event="allocate"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>分配</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="detail"><i style="padding-right: 4px;" class="layui-icon">&#xe705;</i>查看所属领域</a>
 				</script>
 			</div>
 			<div class="layui-inline">
@@ -76,7 +75,8 @@
 	</div>
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 
-	<script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
 		//JavaScript代码区域
 		layui.use([ 'jquery', 'layer' ,'form' ,'table', 'laydate','element'], function() {
 			var $ = layui.$, 
@@ -85,30 +85,23 @@
 			table = layui.table,
 			laydate = layui.laydate,
 			element = layui.element;
-			
-			 //日期时间范围
-			  laydate.render({
-			    elem: '#createTime'
-			    ,type: 'datetime'
-			    ,range: '~'
-			    ,format: 'yyyy-MM-dd HH:mm:ss'
-			  });			
+			var projectId = [[${projectId}]];
+			var applicantId = [[${applicantId}]];
 			 //执行一个 table 实例
 			   var tableIns = table.render({
-			    elem: '#applyinfo'
-			    ,url: '/prs/project/projects.json?status=WAIT_ALLOCATE'
-			    ,width: 1040
+			    elem: '#expertinfo'
+			    ,url: '/prs/user/expert.json?projectId='+projectId+'&&applicantId='+applicantId
+			    ,width: 878
 			    ,cols: [[ //表头
-			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
-			      ,{field: 'projectName', title: '项目名', width:130, edit:true}
-			      ,{field: 'description', title: '摘要', width:150, edit:true}
-			      ,{field: 'status', title: '评审状态', width:85} 
-			      ,{field: 'createUserName', title: '创建人', width: 85}
-			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
-			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
-			      ,{fixed: 'right', title:'操作', width: 130, align:'center', toolbar: '#barDemo'}
+			       {type:'checkbox'}
+			      ,{field: 'id', title: 'ID', width:80, sort: true}
+			      ,{field: 'username', title: '专家姓名', width:130, edit:true}
+			      ,{field: 'mail', title: '邮箱', width:150, edit:true}
+			      ,{field: 'sex', title: '性别', width:80} 
+			      ,{field: 'phone', title: '手机号', width: 100}
+			      ,{field: 'title', title: '职称', width: 100}
+			      ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'}
 			    ]]
-			   ,page: true
 			  });
 			  $('#select').click(function(){
 				   tableIns.reload({
@@ -158,6 +151,7 @@
 			    
 			  });
 		});
+		/* ]]> */
 	</script>
 
 </body>
