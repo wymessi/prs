@@ -70,6 +70,7 @@
 						<input id="projectName" name="projectName"
 							class="layui-input" type="text" placeholder="请输入项目名" lay-verify="projectName"/>
 					</div>
+					<input name="token" type="hidden" th:value="${session.token}"/>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">

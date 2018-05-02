@@ -12,7 +12,7 @@
 		<result column="title" property="title"/>
 		<result column="role_id" property="roleId"/>
 	</resultMap>
-	<insert id="registerApplicant" parameterType="sysUser">
+	<insert id="register" parameterType="sysUser">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -43,6 +43,9 @@
 	        </if>
 	        <if test="mail != null">
 	            phone = #{phone},
+	        </if>
+	        <if test="title != null">
+	            title = #{title},
 	        </if>
 		</set>
 		WHERE id  = #{id}
@@ -87,4 +90,7 @@
 		SELECT * FROM sys_user WHERE role_id = 2
 		and id in <include refid="insql"/>
 	</select>
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM sys_user WHERE id = #{id}
+	</delete>
 </mapper>

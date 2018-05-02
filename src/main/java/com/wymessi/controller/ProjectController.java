@@ -26,7 +26,9 @@ import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.ProjectService;
 import com.wymessi.service.UserService;
+import com.wymessi.utils.Md5Utils;
 import com.wymessi.utils.Result;
+import com.wymessi.utils.UUIDUtils;
 
 @Controller
 @RequestMapping("/project")
@@ -49,18 +51,18 @@ public class ProjectController {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-
+		session.setAttribute("token", UUIDUtils.generateUUIDString());
 		return "applicant/upload";
 	}
 	
 	/**
-	 * 专家管理页面
+	 * 用户管理页面
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/expertPage")
-	public String expertPage(HttpSession session, HttpServletRequest request) throws Exception {
+	@RequestMapping("/userPage")
+	public String userPage(HttpSession session, HttpServletRequest request) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
@@ -80,6 +82,61 @@ public class ProjectController {
 			break;
 		}
 
+		return path;
+	}
+	
+	/**
+	 * 添加用户页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/addUserPage")
+	public String addUserPage(HttpSession session, Model model, String roleId) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		model.addAttribute("roleId", roleId);
+		session.setAttribute("token", UUIDUtils.generateUUIDString());
+		return "system/userManage/addUser";
+	}
+	
+	/**
+	 * 添加用户
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/addUser")
+	public String addUser(HttpSession session, Model model, String role, SysUser user, String token) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		String path = null;
+		switch (role) {
+		case "1":
+			path = "system/userManage/applicant";
+			break;
+		case "2":
+			path = "system/userManage/expert";
+			break;
+		case "3":
+			path = "system/userManage/system";
+			break;
+		default:
+			break;
+		}
+		if (session.getAttribute("token") == null) {
+			model.addAttribute("message", "请勿重复提交表单");
+			return path;
+		}
+		if (session.getAttribute("token").equals(token)) {
+			String md5Password = Md5Utils.md5(user.getPassword()); // 密码采用MD5加密
+			user.setPassword(md5Password);
+			userService.register(user);
+			model.addAttribute("message", "添加成功");
+			session.removeAttribute("token");
+		}
 		return path;
 	}
 	
@@ -136,27 +193,39 @@ public class ProjectController {
 	 * @param session
 	 * @param project
 	 * @param tagsinput
+	 * @param token 防止表单重复重复
 	 *            领域标签用逗号隔开
 	 * @return
 	 */
 	@RequestMapping("/upload")
-	public String upload(Model model, MultipartFile file, HttpSession session, Project project, String tagsinput) {
+	public String upload(Model model, MultipartFile file, HttpSession session, Project project, String tagsinput, String token) {
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-		// 生成申请记录
-		GenerateApplyParam param = new GenerateApplyParam();
-		param.setModel(model);
-		param.setFile(file);
-		param.setProject(project);
-		param.setSysUser(user);
-		param.setTagsinput(tagsinput);
-		projectService.generateApply(param);
-
+		if (session.getAttribute("token") == null) {
+			model.addAttribute("message", "请勿重复提交表单");
+			return "applicant/upload";
+		}
+		if (session.getAttribute("token").equals(token)) {
+			// 生成申请记录
+			GenerateApplyParam param = new GenerateApplyParam();
+			param.setModel(model);
+			param.setFile(file);
+			param.setProject(project);
+			param.setSysUser(user);
+			param.setTagsinput(tagsinput);
+			projectService.generateApply(param);
+			session.removeAttribute("token");
+		}
 		return "applicant/upload";
 	}
 
+	/**
+	 * 删除项目申请记录
+	 * @param session
+	 * @param id
+	 */
 	@RequestMapping("/delete")
 	public void delete(HttpSession session, Long id) {
 		SysUser user = (SysUser) session.getAttribute("user");

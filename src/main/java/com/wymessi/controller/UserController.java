@@ -21,6 +21,7 @@ import com.wymessi.po.SysUser;
 import com.wymessi.service.UserService;
 import com.wymessi.utils.Md5Utils;
 import com.wymessi.utils.Result;
+import com.wymessi.utils.UUIDUtils;
 
 @Controller
 @RequestMapping("/user")
@@ -35,7 +36,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/registerPage")
-	public String registerPage() {
+	public String registerPage(Model model, String roleId) {
 		return "applicant/register";
 	}
 
@@ -49,7 +50,7 @@ public class UserController {
 	public String register(HttpServletRequest request, Model model, SysUser user) throws Exception {
 		String md5Password = Md5Utils.md5(user.getPassword()); // 密码采用MD5加密
 		user.setPassword(md5Password);
-		userService.registerApplicant(user);
+		userService.register(user);
 		model.addAttribute("message", "注册成功");
 		model.addAttribute("href", "/prs/");
 		return "applicant/register";
@@ -98,6 +99,7 @@ public class UserController {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
+		session.setAttribute("token", UUIDUtils.generateUUIDString());
 		String path = null;
 		switch (role) {
 		case "1":
@@ -165,7 +167,8 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/update")
 	public Result<String> update(HttpSession session, SysUser user) throws Exception {
-		if (session.getAttribute("user") == null) {
+		SysUser userSession = (SysUser) session.getAttribute("user");
+		if (userSession == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
 		Result<String> result = new Result<String>();
@@ -177,11 +180,31 @@ public class UserController {
 		}
 		
 		//由于个人信息都是从session当中取，故更改信息后需重新设置session,否则页面更改完刷新页面后，信息又恢复原样，只有重新登陆才能正确显示
-		SysUser newUser = userService.getUserById(user.getId());
-		session.setAttribute("user", newUser);
+		if (userSession.getId() == (user.getId())) {
+			SysUser newUser = userService.getUserById(user.getId());
+			session.setAttribute("user", newUser);
+		}
 		return result;
 	}
 	
+	/**
+	 * 删除用户个人信息
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/delete")
+	public void delete(HttpSession session, Long id) {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		// 删除用戶
+		userService.deleteById(id);
+		if (id.equals(user.getId())){
+			session.invalidate();
+		}
+	}	
 	/**
 	 * 将用户基本信息以json的形式返回
 	 * 

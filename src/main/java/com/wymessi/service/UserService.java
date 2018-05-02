@@ -12,10 +12,10 @@ import com.wymessi.po.SysUser;
 public interface UserService {
 
 	/**
-	 * 项目申请者注册
+	 * 注册
 	 * @param applicant
 	 */
-	void registerApplicant(SysUser sysUser);
+	void register(SysUser sysUser);
 
 	/**
 	 * 用户登陆
@@ -64,4 +64,10 @@ public interface UserService {
 	 * @return
 	 */
 	List<SysUser> listExpertByIds(List<Long> idList);
+
+	/**
+	 * 根据id删除用户
+	 * @param id
+	 */
+	void deleteById(Long id);
 }

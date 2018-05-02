@@ -10,11 +10,11 @@ import com.wymessi.po.SysUser;
 public interface UserDao {
 
 	/**
-	 * 项目申请者注册
+	 * 注册
 	 * 
 	 * @param applicant
 	 */
-	void registerApplicant(SysUser sysUser);
+	void register(SysUser sysUser);
 
 	/**
 	 * 用户登陆
@@ -63,4 +63,10 @@ public interface UserDao {
 	 * @return
 	 */
 	List<SysUser> listExpertByIds(@Param("list")List<Long> idList);
+	
+	/**
+	 * 根据id删除用户
+	 * @param id
+	 */
+	void deleteById(Long id);
 }

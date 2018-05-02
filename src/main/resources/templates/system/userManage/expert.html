@@ -35,13 +35,13 @@
 					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;">用户管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=1}">申请者管理</a>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=1}">申请者管理</a>
 							</dd>
 							<dd>
-								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=2}">评审专家管理</a>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=2}">评审专家管理</a>
 							</dd>
 							<dd>
-								<a class="" href="javascript:;" th:href="@{/project/expertPage?role=3}">工作人员管理</a>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=3}">工作人员管理</a>
 							</dd>
 						</dl></li>
 						<li class="layui-nav-item layui-nav-itemed"><a class=""
@@ -80,13 +80,13 @@
 			      <th lay-data="{field:'mail', edit: 'text', minWidth: 120}">邮箱</th>
 			      <th lay-data="{field:'sex', width:80, edit: 'text'}">性别</th>
 			      <th lay-data="{field:'phone', edit: 'text', minWidth: 100}">手机号</th>
-			      <th lay-data="{field:'title', edit: 'text', minWidth: 100}">职称</th>
+			      <th lay-data="{field:'title', edit: 'text', edit: 'text',minWidth: 100}">职称</th>
 			      <th lay-data="{fixed: 'right', width: 160, align:'center', toolbar: '#barDemo'}">操作</th>
 			    </tr>
 			  </thead>
 			</table>
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
 				</script>
 			</div>
 		</div>
@@ -97,7 +97,7 @@
 	</div>
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 
-	<script>
+	<script th:inline="javascript">
 	/*<![CDATA[*/
 		//JavaScript代码区域
 		layui.use([ 'jquery', 'layer' ,'form' ,'table', 'laydate','element'], function() {
@@ -107,13 +107,21 @@
 			table = layui.table,
 			laydate = layui.laydate,
 			element = layui.element;
-			
+			var message = [[${message}]];
+			if (message != null){
+				layer.msg(message)
+			}
 			//监听工具条
 			  table.on('tool(baseinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'del'){
-			    	
+			    	layer.confirm('真的删除行么', function(index){
+				        obj.del(); //删除对应行（tr）的DOM结构
+				        layer.close(index);
+				        //向服务端发送删除指令
+				        $.get("/prs/user/delete", { id: data.id} );
+				      });
 			    } 
 			  });
 			//监听单元格编辑
@@ -146,7 +154,8 @@
 			            	 id:data.id,
 			            	 sex : data.sex,
 			            	 mail : data.mail,
-			            	 phone : data.phone
+			            	 phone : data.phone,
+			            	 title : data.title
 			             },
 			             dataType: "json",
 			             success: function(data){
@@ -165,6 +174,9 @@
 					     curr: 1 //重新从第 1 页开始
 					   }
 					 });
+				});
+			  $('#add').click(function(){
+				  window.location.href="/prs/project/addUserPage?roleId=2";
 				});
 			  });
 		/* ]]> */

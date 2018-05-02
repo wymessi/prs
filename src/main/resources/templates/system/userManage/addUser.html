@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>PRS-注册</title>
+<title>PRS-添加用户</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../../static/css/register.css"
@@ -20,14 +20,28 @@
 	<div class="layui-col-md12">
 		<div id="register-wrap">
 			<div class="register">
-				<form class="layui-form layui-bg-gray" method="POST" th:action="@{/user/register}">
+				<form class="layui-form layui-bg-gray" method="POST" th:action="@{/project/addUser}">
 					<div class="layui-form-item">
 						<label class="layui-form-label">系统角色</label>
-						<div class="layui-input-inline">
+						<div th:if="${roleId} eq 1" class="layui-input-inline">
 							<select name="roleId" lay-verify="role">
 								<option value="3" disabled="disabled">系统工作人员</option>
 								<option value="2" disabled="disabled">评审专家</option>
 								<option value="1" selected="selected">项目申请者</option>
+							</select>
+						</div>
+						<div th:if="${roleId} eq 2" class="layui-input-inline">
+							<select name="roleId" lay-verify="role">
+								<option value="3" disabled="disabled">系统工作人员</option>
+								<option value="2" selected="selected">评审专家</option>
+								<option value="1" disabled="disabled">项目申请者</option>
+							</select>
+						</div>
+						<div th:if="${roleId} eq 3" class="layui-input-inline">
+							<select name="roleId" lay-verify="role">
+								<option value="3" selected="selected">系统工作人员</option>
+								<option value="2" disabled="disabled">评审专家</option>
+								<option value="1" disabled="disabled">项目申请者</option>
 							</select>
 						</div>
 					</div>
@@ -67,12 +81,21 @@
 								placeholder="请输入邮箱" autocomplete="off" class="layui-input"/>
 						</div>
 					</div>
+					<div th:if="${roleId} eq 2" class="layui-form-item">
+						<label class="layui-form-label">职称</label>
+						<div class="layui-input-inline">
+							<input id="title" type="text" name="title" lay-verify="require"
+								placeholder="请输入职称" autocomplete="off" class="layui-input"/>
+						</div>
+					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">单选框</label>
 						<div class="layui-input-block">
 							<input id="sex" type="radio" name="sex" value="男" title="男"  checked="checked"/> <input
 								type="radio" name="sex" value="女" title="女"/>
 						</div>
+						<input name="role" type="hidden" th:value="${roleId}"/>
+						<input name="token" type="hidden" th:value="${session.token}"/>
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">

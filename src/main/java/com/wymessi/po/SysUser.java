@@ -81,5 +81,27 @@ public class SysUser {
 		this.roleId = roleId;
 	}
 
+	/*@Override
+	public int hashCode() {
+		return (int) (this.username.hashCode()*18 + this.password.hashCode()*18 + this.roleId * 18);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {  
+            return false;  
+        }  
+        if (obj == this) {  
+            return true;  
+        }  
+        if (!(obj instanceof Field)) {  
+            return false;  
+        }  
+        SysUser user = (SysUser) obj;  
+        if (this.username.equals(user.getUsername()) && this.password.equals(user.getPassword()) && this.roleId == user.getRoleId()) {  
+            return true;  
+        }  
+        return false;  
+	}*/
 	
 }

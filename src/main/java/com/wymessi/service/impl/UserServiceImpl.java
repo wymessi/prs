@@ -26,14 +26,14 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	/**
-	 * 项目申请者注册
+	 * 注册
 	 * 
 	 * @param applicant
 	 */
 	@Override
-	public void registerApplicant(SysUser sysUser) {
+	public void register(SysUser sysUser) {
 		if (sysUser != null)
-			userDao.registerApplicant(sysUser);
+			userDao.register(sysUser);
 	}
 
 	/**
@@ -133,5 +133,16 @@ public class UserServiceImpl implements UserService {
 		}
 		experts = userDao.listExpertByIds(idList);
 		return experts;
+	}
+	
+	/**
+	 * 根据id删除用户
+	 * @param id
+	 */
+	@Override
+	public void deleteById(Long id) {
+		if (id != null ){
+			userDao.deleteById(id);
+		}
 	}
 }

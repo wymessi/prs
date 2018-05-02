@@ -56,7 +56,7 @@
 					<div class="layui-form-item">
 						<div class="layui-input-block">
 							<button class="layui-btn" lay-submit="submit" lay-filter="login">登录</button>
-							<a class="layui-btn" href="register.html" th:href="@{/user/registerPage}">注册</a>
+							<a class="layui-btn" href="register.html" th:href="@{/user/registerPage?roleId=1}">注册</a>
 						</div>
 					</div>
 					<input type="hidden" th:value="${session.token}" name="token"/>
