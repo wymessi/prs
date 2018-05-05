@@ -12,6 +12,7 @@ import com.wymessi.dao.FieldDao;
 import com.wymessi.exception.CustomException;
 import com.wymessi.param.FieldsListParam;
 import com.wymessi.po.Field;
+import com.wymessi.po.SysUser;
 import com.wymessi.service.FieldService;
 import com.wymessi.utils.ListUtils;
 
@@ -33,8 +34,11 @@ public class FieldServiceImpl implements FieldService {
 	 * @param field
 	 */
 	@Override
-	public void insert(Field field) {
+	public void insert(Field field,SysUser user) {
 		if (field != null) {
+			field.setCreateTime(new Date());
+			field.setLastUpdateTime(new Date());
+			field.setCreateUserId(user.getId());
 			fieldDao.insert(field);
 		}
 	}
@@ -103,4 +107,40 @@ public class FieldServiceImpl implements FieldService {
 		return null;
 	}
 
+	/**
+	 * 修改领域标签信息
+	 * 
+	 */
+	@Override
+	public int update(Field field) {
+		if (field != null) {
+			return fieldDao.update(field);
+		}
+		return 0;
+	}
+
+	/**
+	 * 根据ID查询
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Field getById(Long id) {
+		if (id == null) {
+			return null;
+		}
+		Field field = fieldDao.getById(id);
+		return field;
+	}
+
+	/**
+	 * 根据id删除领域
+	 * @param id
+	 */
+	@Override
+	public void deleteById(Long id) {
+		if (id != null ){
+			fieldDao.deleteById(id);
+		}
+	}
 }

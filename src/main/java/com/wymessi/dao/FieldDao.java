@@ -41,4 +41,22 @@ public interface FieldDao {
 	 */
 	List<Field> listField(FieldsListParam param);
 	
+	/**
+	 * 修改领域标签信息
+	 * 
+	 */
+	int update(Field field);
+	
+	/**
+	 * 根据ID查询
+	 * @param id
+	 * @return
+	 */
+	Field getById(Long id);
+	
+	/**
+	 * 根据id删除领域
+	 * @param id
+	 */
+	public void deleteById(Long id);
 }

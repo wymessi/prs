@@ -264,8 +264,10 @@ public class UserController {
 		}
 		Map<String,Object> map = new HashMap<String, Object>();
 		List<Long> idList = new ArrayList<>();
-		idList.add(2l);
 		idList.add(3l);
+		idList.add(9l);
+		idList.add(14l);
+		idList.add(16l);
 		List<SysUser> users = userService.listExpertByIds(idList);
 
 		map.put("code", 0);

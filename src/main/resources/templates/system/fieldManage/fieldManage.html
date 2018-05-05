@@ -98,7 +98,7 @@
 	</div>
 	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 
-	<script>
+	<script th:inline="javascript">
 	/*<![CDATA[*/
 		//JavaScript代码区域
 		layui.use([ 'jquery', 'layer' ,'form' ,'table', 'laydate','element'], function() {
@@ -109,12 +109,22 @@
 			laydate = layui.laydate,
 			element = layui.element;
 			
+			var message = [[${message}]];
+			if (message != null){
+				layer.msg(message)
+			}
+			
 			//监听工具条
 			  table.on('tool(fieldinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'del'){
-			    	
+			    	layer.confirm('真的删除行么', function(index){
+				        obj.del(); //删除对应行（tr）的DOM结构
+				        layer.close(index);
+				        //向服务端发送删除指令
+				        $.get("/prs/field/delete", { id: data.id} );
+				      });
 			    } 
 			  });
 			//监听单元格编辑
@@ -132,9 +142,7 @@
 			             url: "/prs/field/update",
 			             data: {
 			            	 id:data.id,
-			            	 sex : data.sex,
-			            	 mail : data.mail,
-			            	 phone : data.phone
+			            	 fieldName : data.fieldName
 			             },
 			             dataType: "json",
 			             success: function(data){
@@ -152,6 +160,9 @@
 					     curr: 1 //重新从第 1 页开始
 					   }
 					 });
+				});
+			  $('#add').click(function(){
+				  window.location.href="/prs/field/addFieldPage";
 				});
 			  });
 		/* ]]> */
