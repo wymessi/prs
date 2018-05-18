@@ -4,12 +4,15 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>PRS-申请者管理</title>
+<title>PRS-项目分组管理</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../../static/css/allocate.css"
 	th:href="@{/css/allocate.css}" />
 <style type="text/css">
+#tableInfo{
+	width: 1088px;
+}
 </style>
 </head>
 <body class="layui-layout-body">
@@ -55,40 +58,40 @@
 
 		<div class="layui-body">
 			<span class="layui-breadcrumb" lay-separator="/">
-			  <a href=""><cite>用户管理</cite></a>
-			  <a href="">项目申请者管理</a>
+			  <a href=""><cite>项目分组管理</cite></a>
 			</span>
-			<blockquote class="layui-elem-quote">可添加、删除、修改、查询专家相关信息</blockquote>
+			<blockquote class="layui-elem-quote">可修改、查询项目分组信息</blockquote>
 			<form class="layui-form" method="POST">
 				<div class="layui-inline">
-					<label class="layui-form-label">姓名</label>
+					<label class="layui-form-label">项目分组名</label>
 					<div class="layui-input-inline">
-						<input id="username" type="text" name="username" 
-							placeholder="根据姓名模糊搜索" autocomplete="off"
+						<input id="groupName" type="text" name="groupName" 
+							placeholder="根据分组名模糊搜索" autocomplete="off"
 							class="layui-input"/>
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label"></label>
 					<a id="select" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe615;</i>查询</a>
-					<a id="insert" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe608;</i>添加</a>
+					<a id="add" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe608;</i>添加</a>
 				</div>
 			</form>
 			<div id="tableInfo">
-				<table class="layui-table" lay-data="{url:'/prs/user/userBaseInfo.json?role=1', id:'baseinfo'}" lay-filter="baseinfo">
+				<table class="layui-table" lay-data="{url:'/prs/group/groups.json', id:'groupinfo'}" lay-filter="groupinfo">
 			  <thead>
-			    <tr style="width:1048">
-			      <th lay-data="{field:'id', width:80, sort: true}">ID</th>
-			      <th lay-data="{field:'username', width:120, sort: true}">用户名</th>
-			      <th lay-data="{field:'mail', edit: 'text', minWidth: 120}">邮箱</th>
-			      <th lay-data="{field:'sex', width:80, edit: 'text'}">性别</th>
-			      <th lay-data="{field:'phone', edit: 'text', minWidth: 100}">手机号</th>
-			      <th lay-data="{fixed: 'right', width: 160, align:'center', toolbar: '#barDemo'}">操作</th>
+			    <tr>
+			      <th lay-data="{field:'id', width:100, sort: true}">ID</th>
+			      <th lay-data="{field:'groupName',edit: 'text' ,width:140}">项目分组名</th>
+			      <th lay-data="{field:'createUserName', width: 140}">创建人</th>
+			      <th lay-data="{field:'status', width: 120}">状态</th>
+			      <th lay-data="{field:'createTime', width:200, sort: true}">创建时间</th>
+			      <th lay-data="{field:'lastUpdateTime', width:200, sort: true}">最后更新时间</th>
+			      <th lay-data="{fixed: 'right', width: 180, align:'center', toolbar: '#barDemo'}">操作</th>
 			    </tr>
 			  </thead>
 			</table>
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="addProject"><i style="padding-right: 4px;" class="layui-icon">&#xe608;</i>添加项目</a>
 				</script>
 			</div>
 		</div>
@@ -109,54 +112,38 @@
 			table = layui.table,
 			laydate = layui.laydate,
 			element = layui.element;
+			
 			var message = [[${message}]];
 			if (message != null){
 				layer.msg(message)
 			}
+			
 			//监听工具条
-			  table.on('tool(baseinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  table.on('tool(groupinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
-			    if(layEvent === 'del'){
-			    	layer.confirm('真的删除行么', function(index){
-				        obj.del(); //删除对应行（tr）的DOM结构
-				        layer.close(index);
-				        //向服务端发送删除指令
-				        $.get("/prs/user/delete", { id: data.id} );
-				      });
+			    if(layEvent === 'addProject'){
+			    	var id = data.id;
+			    	window.location.href="/prs/group/addProjectPage?groupId="+id;
 			    } 
 			  });
+			
 			//监听单元格编辑
-			  table.on('edit(baseinfo)', function(obj){
+			  table.on('edit(groupinfo)', function(obj){
 			    var value = obj.value //得到修改后的值
 			    ,data = obj.data //得到所在行所有键值
 			    ,field = obj.field; //得到字段
-			    var flag = true;
-			    var mailRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-			    var phoneRegex = /^1\d{10}$/;
 			    /* layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value); */
 			    if (value == null || value == ''){
 			    	layer.msg("字段[" + field + "]值不能为空！！！");
 			    	flag = false;
-			    } else if (field == 'sex' && (value != '男'&&value != '女')){
-		    		layer.msg("字段[" + field + "]只能是男或女！！！");
-		    		flag = false;
-			    } else if (field == 'mail' && !(mailRegex).test(value)){
-		    	    layer.msg("邮箱格式不合法！！");
-		    	    flag = false;
-			    } else if (field == 'phone' && !(phoneRegex).test(value)) {
-		    	    layer.msg("手机号格式不合法！！");
-		    	    flag = false;
-			    }
-			    if (flag){
+			    } else {
 			    	$.ajax({
 			             type: "POST",
-			             url: "/prs/user/update",
+			             url: "/prs/group/update",
 			             data: {
 			            	 id:data.id,
-			            	 sex : data.sex,
-			            	 mail : data.mail,
-			            	 phone : data.phone
+			            	 groupName : data.groupName
 			             },
 			             dataType: "json",
 			             success: function(data){
@@ -165,20 +152,18 @@
 			         });
 			    }
 			  });
-			  $('#insert').click(function(){
-					
-					window.location.href="/prs/project/addUserPage?roleId=1";
-				});
 			  $('#select').click(function(){
-				  table.reload("baseinfo",{
+				   table.reload("groupinfo",{
 					   where: { //设定异步数据接口的额外参数，任意设
-						   username: $('#username').val()
-						   ,role: '1'
+						   groupName: $('#groupName').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始
 					   }
 					 });
+				});
+			  $('#add').click(function(){
+				  window.location.href="/prs/group/addGroupPage";
 				});
 			  });
 		/* ]]> */

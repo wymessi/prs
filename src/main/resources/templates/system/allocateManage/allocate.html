@@ -32,6 +32,9 @@
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;" th:href="@{/group/groupManagePage}">项目分组管理</a>
+					</li>
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
 						href="javascript:;" th:href="@{/project/allocateManagePage}">项目分配管理</a></li>
 					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" th:href="@{/project/managePage}">项目管理</a></li>
@@ -57,16 +60,19 @@
 			<span class="layui-breadcrumb" lay-separator="/">
 			  <a href=""><cite>项目分配</cite></a>
 			</span>
-			<blockquote class="layui-elem-quote">以下显示与申请项目所属领域匹配度最高的专家们</blockquote>
+			<blockquote class="layui-elem-quote">以下显示与项目分组中项目所属领域匹配度最高的专家们</blockquote>
 			<div id="tableInfo">
 				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="expertinfo" lay-filter="expertinfotable"></table>
 				<!--  <script type="text/html" id="barDemo">
   					<a class="layui-btn layui-btn-xs" lay-event="detail"><i style="padding-right: 4px;" class="layui-icon">&#xe705;</i>查看所属领域</a>
 				</script> -->
+				<script type="text/html" id="barDemo">
+  					<a class="layui-btn layui-btn-xs" lay-event="allocate"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>分配</a>
+				</script>
 			</div>
-			<div class="layui-inline">
+			<!-- <div class="layui-inline">
 				<a id="allocate" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>一键分配</a>
-			</div>
+			</div> -->
 		</div>
 		<div class="layui-footer">
 			<!-- 底部固定区域 -->
@@ -85,26 +91,25 @@
 			table = layui.table,
 			laydate = layui.laydate,
 			element = layui.element;
-			var projectId = [[${projectId}]];
-			var applicantId = [[${applicantId}]];
+			var groupId = [[${groupId}]];
 			 //执行一个 table 实例
 			   var tableIns = table.render({
 			    elem: '#expertinfo'
-			    ,url: '/prs/user/expert.json?projectId='+projectId+'&&applicantId='+applicantId
-			    ,width: 776
+			    ,url: '/prs/user/expert.json'
+			    ,width: 900
 			    ,cols: [[ //表头
-			       {type:'checkbox'}
-			      ,{field: 'id', title: 'ID', width:80}
+			       {field: 'id', title: 'ID', width:80}
 			      ,{field: 'username', title: '专家姓名', width:130}
 			      ,{field: 'mail', title: '邮箱', width:150}
 			      ,{field: 'sex', title: '性别', width:80} 
 			      ,{field: 'phone', title: '手机号', width: 140}
 			      ,{field: 'title', title: '职称', width: 140}
-			     /*  ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'} */
+			     ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'}
 			    ]]
 			  });
 			  $('#allocate').click(function(){
-				   
+				  var id = data.id;
+			      window.location.href="/prs/group/allocate?expertId="+id+"&&groupId="+groupId;
 				});
 			 
 		});

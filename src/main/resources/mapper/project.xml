@@ -107,6 +107,9 @@
 	        <if test="lastUpdateTime != null">
 	            last_update_time = #{lastUpdateTime},
 	        </if>
+	        <if test="groupId != null">
+	            group_id = #{groupId},
+	        </if>
 		</set>
 		WHERE id  = #{id}
 	</update>

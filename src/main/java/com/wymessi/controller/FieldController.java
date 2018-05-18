@@ -119,7 +119,7 @@ public class FieldController {
 		Result<String> result = new Result<String>();
 		Field field = fieldService.getById(f.getId());
 		if (field == null) {
-			result.setData("该申请记录不存在，请刷新页面重新查看");
+			result.setData("该领域标签不存在，请刷新页面重新查看");
 			return result;
 		}
 		field.setFieldName(f.getFieldName());
@@ -157,7 +157,7 @@ public class FieldController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addField")
-	public String addUser(HttpSession session, Model model, Field field, String token) throws Exception {
+	public String addField(HttpSession session, Model model, Field field, String token) throws Exception {
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");

@@ -9,6 +9,11 @@
 	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../../static/css/allocate.css"
 	th:href="@{/css/allocate.css}" />
+<style type="text/css">
+#tableInfo{
+	width: 1088px;
+}
+</style>
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -27,6 +32,9 @@
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;" th:href="@{/group/groupManagePage}">项目分组管理</a>
+					</li>
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
 						href="javascript:;" th:href="@{/project/allocateManagePage}">项目分配管理</a></li>
 					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" th:href="@{/project/managePage}">项目管理</a></li>
@@ -52,40 +60,39 @@
 			<span class="layui-breadcrumb" lay-separator="/">
 			  <a href=""><cite>项目分配管理</cite></a>
 			</span>
-			<blockquote class="layui-elem-quote">系统所有未分配项目</blockquote>
+			<blockquote class="layui-elem-quote">系统所有未分配专家的分组</blockquote>
 			<form class="layui-form" method="POST">
-				<div class="layui-inline">
-					<label class="layui-form-label">项目名</label>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+					<label class="layui-form-label">项目分组名</label>
 					<div class="layui-input-inline">
-						<input id="projectName" type="text" name="projectName" 
-							placeholder="根据项目名模糊搜索" autocomplete="off"
+						<input id="groupName" type="text" name="groupName" 
+							placeholder="根据分组名模糊搜索" autocomplete="off"
 							class="layui-input"/>
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">创建人</label>
-					<div class="layui-input-inline">
-						<input id="username" type="text" name="username" 
-							placeholder="根据姓名模糊搜索" autocomplete="off"
-							class="layui-input"/>
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">创建时间</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" id="createTime" placeholder="开始时间~结束时间"/>
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label"></label>
 					<a id="select" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe615;</i>查询</a>
 				</div>
+				</div>
 			</form>
 			<div id="tableInfo">
-				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="applyinfo" lay-filter="applyinfotable"></table>
-	
+				<table class="layui-table" lay-data="{url:'/prs/group/groups.json', id:'groupinfo'}" lay-filter="groupinfo">
+			  <thead>
+			    <tr>
+			      <th lay-data="{field:'id', width:100, sort: true}">ID</th>
+			      <th lay-data="{field:'groupName',edit: 'text' ,width:140}">项目分组名</th>
+			      <th lay-data="{field:'createUserName', width: 140}">创建人</th>
+			      <th lay-data="{field:'status', width: 120}">状态</th>
+			      <th lay-data="{field:'createTime', width:200, sort: true}">创建时间</th>
+			      <th lay-data="{field:'lastUpdateTime', width:200, sort: true}">最后更新时间</th>
+			      <th lay-data="{fixed: 'right', width: 180, align:'center', toolbar: '#barDemo'}">操作</th>
+			    </tr>
+			  </thead>
+			</table>
 				<script type="text/html" id="barDemo">
-  					<a class="layui-btn layui-btn-xs" lay-event="allocate"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>分配</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="allocate"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>选择专家</a>
 				</script>
 			</div>
 		</div>
@@ -107,37 +114,10 @@
 			laydate = layui.laydate,
 			element = layui.element;
 			
-			 //日期时间范围
-			  laydate.render({
-			    elem: '#createTime'
-			    ,type: 'datetime'
-			    ,range: '~'
-			    ,format: 'yyyy-MM-dd HH:mm:ss'
-			  });			
-			 //执行一个 table 实例
-			   var tableIns = table.render({
-			    elem: '#applyinfo'
-			    ,url: '/prs/project/projects.json?status=WAIT_ALLOCATE'
-			    ,width: 1040
-			    ,cols: [[ //表头
-			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
-			      ,{field: 'projectName', title: '项目名', width:130, edit:true}
-			      ,{field: 'description', title: '摘要', width:150, edit:true}
-			      ,{field: 'status', title: '评审状态', width:85} 
-			      ,{field: 'createUserName', title: '创建人', width: 85}
-			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
-			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
-			      ,{fixed: 'right', title:'操作', width: 130, align:'center', toolbar: '#barDemo'}
-			    ]]
-			   ,page: true
-			  });
-			  $('#select').click(function(){
-				   tableIns.reload({
+			$('#select').click(function(){
+				   table.reload("groupinfo",{
 					   where: { //设定异步数据接口的额外参数，任意设
-						   projectName: $('#projectName').val()
-						   ,status: "WAIT_ALLOCATE"
-						   ,createTime: $('#createTime').val()
-						   ,username: $('#username').val()
+						   groupName: $('#groupName').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始
@@ -146,41 +126,15 @@
 				});
 			 
 			//监听工具条
-			  table.on('tool(applyinfotable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  table.on('tool(groupinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'allocate'){
 			    	var id = data.id;
-			    	var applicantId = data.createUserId;
-			    	window.location.href="/prs/project/allocatePage?id="+id+"&&applicantId="+applicantId;
-			    	/* $.get("/prs/project/allocatePage", { id: data.id, createUserId:data.createUserId} ); */
+			    	window.location.href="/prs/project/allocatePage?id="+id;
 			    }
 			  });
-			//监听单元格编辑
-			  table.on('edit(applyinfotable)', function(obj){
-			    var value = obj.value //得到修改后的值
-			    ,data = obj.data //得到所在行所有键值
-			    ,field = obj.field; //得到字段
-			    /* layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ data.projectName); */
-			    if (value == null || value == ''){
-			    	layer.msg("字段[" + field + "]值不能为空！！！");
-			    } else {
-			    	$.ajax({
-			             type: "POST",
-			             url: "/prs/project/update",
-			             data: {
-			            	 id:data.id,
-			            	 projectName:data.projectName,
-			            	 description:data.description
-			             },
-			             dataType: "json",
-			             success: function(data){
-			                     layer.msg(data.data);   
-			             }
-			         });
-			    }
-			    
-			  });
+			
 		});
 		/* ]]> */
 	</script>

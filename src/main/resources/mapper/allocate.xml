@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wymessi.dao.AllocateDao">
+
+	<resultMap type="allocate" id="allocateMap">
+		<id column="id" property="id" />
+		<result column="allocate_user_id" property="allocatUserId" />
+		<result column="group_id" property="groupId" />
+		<result column="allocate_time" property="allocateTime" />
+		<result column="expert_id" property="createUserId" />
+	</resultMap>
+	<insert id="insert" parameterType="group">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO project_group(id,allocate_user_id,group_id,allocate_time,expert_id)
+		VALUES(#{id},#{allocatUserId},#{groupId},#{allocateTime},#{createUserId})
+	</insert>
+	
+	
+</mapper>

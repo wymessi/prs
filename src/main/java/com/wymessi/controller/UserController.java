@@ -109,7 +109,7 @@ public class UserController {
 			path = "expert/baseinfo";
 			break;
 		case "3":
-			path = "system/allocateManage/allocateManage";
+			path = "system/groupManage/groupManage";
 			break;
 		default:
 			break;
@@ -257,7 +257,7 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/expert.json")
-	public Map<String,Object> getExpertJson(HttpSession session, HttpServletRequest request, String projectId, String applicantId) throws Exception {
+	public Map<String,Object> getExpertJson(HttpSession session, HttpServletRequest request) throws Exception {
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");

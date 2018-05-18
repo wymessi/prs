@@ -38,6 +38,9 @@
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;" th:href="@{/group/groupManagePage}">项目分组管理</a>
+					</li>
 					<li class="layui-nav-item layui-nav-itemed"><a class=""
 						href="javascript:;" th:href="@{/project/allocateManagePage}">项目分配管理</a></li>
 					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" th:href="@{/project/managePage}">项目管理</a></li>
@@ -86,6 +89,7 @@
 					<div class="layui-input-inline">
 						<select id="status" name="status">
 							<option value=""></option>
+							<option value="WAIT_GROUP">待分组</option>
 							<option value="WAIT_ALLOCATE">待分配</option>
 							<option value="WAIT_REVIEW">待评审</option>
 							<option value="IN_REVIEW">评审中</option>

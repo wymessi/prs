@@ -69,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
 			e.printStackTrace();
 		}
 		// 生成项目申请记录
-		param.getProject().setStatus(Project.PROJECT_REVIEW_STATUS_WAIT_ALLOCATE);
+		param.getProject().setStatus(Project.PROJECT_REVIEW_STATUS_WAIT_GROUP);
 		param.getProject().setFileSavePath(filePath);
 		param.getProject().setCreateUserId(param.getSysUser().getId());
 		param.getProject().setCreateTime(new Date());

@@ -10,7 +10,8 @@ import java.util.Date;
  */
 public class Project {
 
-	//项目评审状态 ：(待分配，待评审，评审中，评审完成)
+	//项目评审状态 ：(待分组,待分配，待评审，评审中，评审完成)
+	public static final String PROJECT_REVIEW_STATUS_WAIT_GROUP = "WAIT_GROUP";
 	public static final String PROJECT_REVIEW_STATUS_WAIT_ALLOCATE = "WAIT_ALLOCATE";
     public static final String PROJECT_REVIEW_STATUS_WAIT_REVIEW = "WAIT_REVIEW";
     public static final String PROJECT_REVIEW_STATUS_IN_REVIEW = "IN_REVIEW";
@@ -26,7 +27,8 @@ public class Project {
 	private Date createTime; // 申请创建时间
 	private Date lastUpdateTime; // 最后更改时间
 	private SysUser user; // 项目申请者持久类
-
+	private long groupId;
+	
 	public long getId() {
 		return id;
 	}
@@ -106,4 +108,13 @@ public class Project {
 	public void setUser(SysUser user) {
 		this.user = user;
 	}
+
+	public long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(long groupId) {
+		this.groupId = groupId;
+	}
+	
 }

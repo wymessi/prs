@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-添加分组</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/register.css"
+	th:href="@{/css/register.css}" />
+<style type="text/css">
+.register{
+	width:400px;
+	height:300px;
+	background: #F0F0F0;
+	border-radius: 4px; 
+	margin: 20px auto;
+	margin-bottom:0px;
+	padding-top:180px;
+}
+</style>
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">科研项目评审系统</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+		</div>
+	</div>
+	<div class="layui-col-md12">
+		<div id="register-wrap">
+			<div class="register">
+				<form class="layui-form layui-bg-gray" method="POST" th:action="@{/group/addGroup}">
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label">分组名</label>
+						<div class="layui-input-inline">
+							<input id="groupName" type="text" name="groupName"
+								lay-verify="required" placeholder="请输入分组名" autocomplete="off"
+								class="layui-input"/>
+								<input name="token" type="hidden" th:value="${session.token}"/>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit="submit" lay-filter="appRegister">添加</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="layui-col-md12">
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p>© All Rights Reserve By PRS</p>
+		</div>
+	</div>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		//JavaScript代码区域
+		layui.use(['form','jquery','layer'], function() {
+			var form = layui.form
+			,$ = layui.$, layer = layui.layer;
+			
+ 			//监听提交
+			form.on('submit(appRegister)', function(data) {
+				  
+			}); 
+		});
+		/* ]]> */	
+	</script>
+</body>
+</html>

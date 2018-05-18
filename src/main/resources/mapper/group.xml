@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wymessi.dao.GroupDao">
+
+	<resultMap type="group" id="groupMap">
+		<id column="id" property="id" />
+		<result column="group_name" property="groupName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_update_time" property="lastUpdateTime" />
+		<result column="create_user_id" property="createUserId" />
+		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser"/>
+	</resultMap>
+	<insert id="insert" parameterType="group">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO project_group(id,group_name,create_time,create_user_id,last_update_time)
+		VALUES(#{id},#{groupName},#{createTime},#{createUserId},#{lastUpdateTime})
+	</insert>
+	
+	<sql id="insql">
+	     <foreach collection="list" item="item" separator="," open="(" close=")">
+	         #{item}
+	     </foreach>
+    </sql>
+    
+    <select id="listGroup" resultMap="groupMap">
+		SELECT * FROM project_group 
+		<where>
+			<if test="groupName != null">
+	            and group_name LIKE CONCAT('%',#{groupName},'%')
+	        </if>
+        </where>
+        LIMIT #{offset},#{limit}
+	</select>
+	<select id="getCreateUser" resultType="sysUser" parameterType="long">
+		SELECT * FROM sys_user WHERE id = #{create_user_id}
+	</select>
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM project_group 
+		<where>
+			<if test="groupName != null">
+	            and group_name LIKE CONCAT('%',#{groupName},'%')
+	        </if>
+        </where>
+	</select>
+	<select id="getById" resultMap="groupMap">
+		SELECT * FROM project_group where id = #{id}
+	</select>
+	<update id="update" parameterType="group">
+		UPDATE project_group
+		<set>
+			<if test="groupName != null">
+	            group_name = #{groupName},
+	        </if>
+	        <if test="createUserId != null">
+	            create_user_id = #{createUserId},
+	        </if>
+	        <if test="createTime != null">
+	            create_time = #{createTime},
+	        </if>
+	        <if test="lastUpdateTime != null">
+	            last_update_time = #{lastUpdateTime},
+	        </if>
+		</set>
+		WHERE id  = #{id}
+	</update>
+</mapper>

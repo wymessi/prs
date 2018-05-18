@@ -162,12 +162,11 @@ public class ProjectController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/allocatePage")
-	public String allocatePage(Model model, HttpSession session,Long id, Long applicantId) throws Exception {
+	public String allocatePage(Model model, HttpSession session,Long id) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-		model.addAttribute("projectId",id);
-		model.addAttribute("applicantId",applicantId);
+		model.addAttribute("groupId",id);
 		return "system/allocateManage/allocate";
 	}
 	
@@ -356,6 +355,9 @@ public class ProjectController {
 	private void formatProject(List<Project> projects) {
 		for (Project project : projects) {
 			project.setCreateUserName(project.getUser().getUsername());
+			if (Project.PROJECT_REVIEW_STATUS_WAIT_GROUP.equals(project.getStatus())) {
+				project.setStatus("待分组");
+			}
 			if (Project.PROJECT_REVIEW_STATUS_WAIT_ALLOCATE.equals(project.getStatus())) {
 				project.setStatus("待分配");
 			}
