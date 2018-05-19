@@ -143,4 +143,18 @@ public class FieldServiceImpl implements FieldService {
 			fieldDao.deleteById(id);
 		}
 	}
+
+	/**
+	 * 根据ID列表查询
+	 * @param fieldIds
+	 * @return
+	 */
+	@Override
+	public List<Field> listByIds(List<Long> fieldIds) {
+		if (!CollectionUtils.isEmpty(fieldIds)){
+			List<Field> fields = fieldDao.listByIds(fieldIds);
+			return fields;
+		}
+		return null;
+	}
 }

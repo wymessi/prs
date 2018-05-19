@@ -75,7 +75,7 @@
 				<div class="layui-form-item">
 					<div class="layui-input-block">
 						<input id="fields" name="tagsinput"
-							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域,输入文字并回车确定"/>
+							class="tagsinput tagsinput-typeahead input-lg" type="text" placeholder="请输入项目所属领域,输入文字并回车确定" lay-verify="fields"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -133,6 +133,11 @@
 				projectName : function(value, item) { //value：表单的值、item：表单的DOM对象
 					if (value == null || value == "") {
 						return "申请项目名不能为空";
+					}
+				},
+				fields : function(value, item) { //value：表单的值、item：表单的DOM对象
+					if (value == null || value == "") {
+						return "项目所属领域不能为空";
 					}
 				},
 				description : function(value, item) { //value：表单的值、item：表单的DOM对象

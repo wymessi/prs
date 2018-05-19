@@ -18,12 +18,12 @@ import com.alibaba.druid.util.StringUtils;
 import com.wymessi.exception.CustomException;
 import com.wymessi.param.GroupAllocateParam;
 import com.wymessi.param.GroupListParam;
-import com.wymessi.po.Allocate;
 import com.wymessi.po.Group;
 import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.GroupService;
 import com.wymessi.service.ProjectService;
+import com.wymessi.utils.CustomDateUtils;
 import com.wymessi.utils.Result;
 import com.wymessi.utils.UUIDUtils;
 
@@ -93,7 +93,7 @@ public class GroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addProject")
-	public String addProjectPage(HttpSession session,Long groupId,Model model, Long projectId)  throws Exception {
+	public String addProject(HttpSession session,Long groupId,Model model, Long projectId)  throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
@@ -105,6 +105,11 @@ public class GroupController {
 		project.setStatus(Project.PROJECT_REVIEW_STATUS_WAIT_ALLOCATE);
 		project.setLastUpdateTime(new Date());
 		projectService.update(project);
+		
+		Group group = groupService.getById(groupId);
+		group.setStatus(Group.PROJECT_GROUP_STATUS_WAIT_ALLOCATE);
+		groupService.update(group);
+		
 		model.addAttribute("message", "添加至分组成功");
 		model.addAttribute("groupId", groupId);
 		return "system/groupManage/addProject";
@@ -119,15 +124,21 @@ public class GroupController {
 	 */
 	@ResponseBody
 	@RequestMapping("/groups.json")
-	public Map<String, Object> getFieldsJson(HttpSession session, HttpServletRequest request) {
+	public Map<String, Object> getGroupsJson(HttpSession session, HttpServletRequest request) {
 		String groupName = request.getParameter("groupName");
+		String status = request.getParameter("status");
+		String createTime = request.getParameter("createTime");
 		int limit = Integer.valueOf(request.getParameter("limit"));
 		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
 		// 生成查询参数
 		GroupListParam param = new GroupListParam();
 		if (!StringUtils.isEmpty(groupName))
 			param.setGroupName(groupName.trim());
+		if (!StringUtils.isEmpty(status))
+			param.setStatus(status.trim());
 		// 设置正确的日期格式
+		if (!StringUtils.isEmpty(createTime))
+			CustomDateUtils.setTimeRange(param, createTime);
 		param.setOffset(offset);
 		param.setLimit(limit);
 
@@ -150,6 +161,9 @@ public class GroupController {
 	private void formatGroup(List<Group> groups) {
 		for (Group group : groups) {
 			group.setCreateUserName(group.getUser().getUsername());
+			if (Group.PROJECT_GROUP_STATUS_WAIT_ADD_PROJECT.equals(group.getStatus())) {
+				group.setStatus("待添加项目");
+			}
 			if (Group.PROJECT_GROUP_STATUS_WAIT_ALLOCATE.equals(group.getStatus())) {
 				group.setStatus("待分配专家");
 			}
@@ -160,7 +174,7 @@ public class GroupController {
 	}
 
 	/**
-	 * 修改领域标签信息
+	 * 修改項目分組信息
 	 * 
 	 * @return
 	 * @throws Exception
@@ -190,7 +204,7 @@ public class GroupController {
 	}
 	
 	/**
-	 * 删除fenzu信息
+	 * 删除分組信息
 	 * 
 	 * @return
 	 * @throws Exception

@@ -7,15 +7,15 @@
 		<result column="allocate_user_id" property="allocatUserId" />
 		<result column="group_id" property="groupId" />
 		<result column="allocate_time" property="allocateTime" />
-		<result column="expert_id" property="createUserId" />
+		<result column="expert_id" property="expertId" />
 	</resultMap>
-	<insert id="insert" parameterType="group">
+	<insert id="insert" parameterType="allocate">
 		<selectKey resultType="java.lang.Long" keyProperty="id"
 			order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
-		INSERT INTO project_group(id,allocate_user_id,group_id,allocate_time,expert_id)
-		VALUES(#{id},#{allocatUserId},#{groupId},#{allocateTime},#{createUserId})
+		INSERT INTO allocate(id,allocate_user_id,group_id,allocate_time,expert_id)
+		VALUES(#{id},#{allocateUserId},#{groupId},#{allocateTime},#{expertId})
 	</insert>
 	
 	

@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.util.StringUtils;
 import com.wymessi.exception.CustomException;
 import com.wymessi.param.FieldsListParam;
+import com.wymessi.po.EntityField;
 import com.wymessi.po.Field;
 import com.wymessi.po.SysUser;
+import com.wymessi.service.EntityFieldMappingService;
 import com.wymessi.service.FieldService;
+import com.wymessi.utils.CustomDateUtils;
 import com.wymessi.utils.Result;
 import com.wymessi.utils.UUIDUtils;
 
@@ -30,6 +33,8 @@ public class FieldController {
 	@Autowired
 	private FieldService fieldService;
 
+	@Autowired
+	private EntityFieldMappingService entityFieldMappingService;
 	/**
 	 * 领域标签管理页面
 	 * 
@@ -71,6 +76,7 @@ public class FieldController {
 	@RequestMapping("/fields.json")
 	public Map<String, Object> getFieldsJson(HttpSession session, HttpServletRequest request) {
 		String fieldName = request.getParameter("fieldName");
+		String createTime = request.getParameter("createTime");
 		int limit = Integer.valueOf(request.getParameter("limit"));
 		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
 		// 生成查询参数
@@ -78,6 +84,8 @@ public class FieldController {
 		if (!StringUtils.isEmpty(fieldName))
 			param.setFieldName(fieldName.trim());
 		// 设置正确的日期格式
+		if (!StringUtils.isEmpty(createTime))
+			CustomDateUtils.setTimeRange(param, createTime);
 		param.setOffset(offset);
 		param.setLimit(limit);
 
@@ -174,4 +182,43 @@ public class FieldController {
 		return "system/fieldManage/fieldManage";
 	}
 	
+	/**
+	 * 为专家添加擅长领域页面
+	 * @param session
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/allocateFieldPage")
+	public String allocateFieldPage(HttpSession session, Model model, Long id) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		model.addAttribute("expertId", id);
+		return "system/userManage/allocateField";
+	}
+	/**
+	 * 为专家添加擅长领域
+	 * @param session
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/allocateField")
+	public String allocateField(HttpSession session, Model model, Long expertId, Long fieldId) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		EntityField entityField = new EntityField();
+		entityField.setEntityId(expertId);
+		entityField.setFieldId(fieldId);
+		entityField.setEntityType(EntityField.ENTITY_TYPE_EXPERT);
+		entityFieldMappingService.insert(entityField);
+		model.addAttribute("message", "添加领域成功");
+		return "system/userManage/allocateField";
+	}
 }

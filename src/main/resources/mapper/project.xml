@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wymessi.dao.ProjectDao">
 
-	<resultMap type="project" id="projectrMap">
+	<resultMap type="project" id="projectMap">
 		<id column="id" property="id" />
 		<result column="project_name" property="projectName" />
 		<result column="description" property="description" />
@@ -30,7 +30,7 @@
 		VALUES(#{id},#{projectName},#{description},#{status},#{fileSavePath},#{createTime},#{lastUpdateTime},#{createUserId})
 	</insert>
 	
-	<select id="listProject" resultMap="projectrMap">
+	<select id="listProject" resultMap="projectMap">
 		SELECT * FROM project 
 		<where>
 			<if test="projectName != null">
@@ -80,7 +80,7 @@
 	        </if>
         </where>
 	</select>
-	<select id="getProjectById" resultMap="projectrMap" parameterType="long">
+	<select id="getProjectById" resultMap="projectMap" parameterType="long">
 		SELECT * FROM project WHERE id = #{id}
 	</select>
 	<update id="update" parameterType="project">
@@ -116,4 +116,15 @@
 	<delete id="deleteById" parameterType="long">
 		DELETE FROM project WHERE id = #{id}
 	</delete>
+	<select id="listByGroupId"  parameterType="long" resultMap="projectMap">
+		SELECT * FROM project WHERE group_id = #{groupId}
+	</select>
+	
+	<update id="updateStatusByIds">
+		UPDATE project SET status = #{status}, last_update_time = now()
+		WHERE id in 
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 </mapper>

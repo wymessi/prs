@@ -4,12 +4,15 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>PRS-专家管理</title>
+<title>PRS-为专家分配领域</title>
 <link rel="stylesheet" href="../../static/layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}" />
 <link rel="stylesheet" href="../../static/css/allocate.css"
 	th:href="@{/css/allocate.css}" />
 <style type="text/css">
+#tableInfo{
+	width: 1008px;
+}
 </style>
 </head>
 <body class="layui-layout-body">
@@ -56,42 +59,45 @@
 		<div class="layui-body">
 			<span class="layui-breadcrumb" lay-separator="/">
 			  <a href=""><cite>用户管理</cite></a>
-			  <a href="">专家管理</a>
+			  <a href=""><cite>专家管理</cite></a>
+			  <a href="">为专家分配领域</a>
 			</span>
-			<blockquote class="layui-elem-quote">可添加、删除、修改、查询专家相关信息</blockquote>
+			<blockquote class="layui-elem-quote">系统工作人员为专家分配其擅长领域</blockquote>
 			<form class="layui-form" method="POST">
 				<div class="layui-inline">
-					<label class="layui-form-label">姓名</label>
+					<label class="layui-form-label">标签名</label>
 					<div class="layui-input-inline">
-						<input id="username" type="text" name="username" 
-							placeholder="根据姓名模糊搜索" autocomplete="off"
+						<input id="fieldName" type="text" name="fieldName" 
+							placeholder="根据领域名模糊搜索" autocomplete="off"
 							class="layui-input"/>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">创建时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="createTime" placeholder="开始时间~结束时间"/>
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label"></label>
 					<a id="select" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe615;</i>查询</a>
-					<a id="add" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe608;</i>添加</a>
 				</div>
 			</form>
 			<div id="tableInfo">
-				<table class="layui-table" lay-data="{url:'/prs/user/userBaseInfo.json?role=2', id:'baseinfo'}" lay-filter="baseinfo">
+				<table class="layui-table" lay-data="{url:'/prs/field/fields.json', id:'fieldinfo'}" lay-filter="fieldinfo">
 			  <thead>
-			    <tr style="width:1188">
-			      <th lay-data="{field:'id', width:80, sort: true}">ID</th>
-			      <th lay-data="{field:'username', width:120, sort: true}">用户名</th>
-			      <th lay-data="{field:'mail', edit: 'text', minWidth: 120}">邮箱</th>
-			      <th lay-data="{field:'sex', width:80, edit: 'text'}">性别</th>
-			      <th lay-data="{field:'phone', edit: 'text', minWidth: 100}">手机号</th>
-			      <th lay-data="{field:'title', edit: 'text', edit: 'text',minWidth: 100}">职称</th>
-			      <th lay-data="{fixed: 'right', width: 300, align:'center', toolbar: '#barDemo'}">操作</th>
+			    <tr>
+			      <th lay-data="{field:'id', width:100, sort: true}">ID</th>
+			      <th lay-data="{field:'fieldName',edit: 'text' ,width:140}">领域名</th>
+			      <th lay-data="{field:'createUserName', width: 140}">创建人</th>
+			      <th lay-data="{field:'createTime', width:220, sort: true}">创建时间</th>
+			      <th lay-data="{field:'lastUpdateTime', width:220, sort: true}">最后更新时间</th>
+			      <th lay-data="{fixed: 'right', width: 180, align:'center', toolbar: '#barDemo'}">操作</th>
 			    </tr>
 			  </thead>
 			</table>
 				<script type="text/html" id="barDemo">
-					<a class="layui-btn layui-btn-xs" lay-event="allocateField"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>添加擅长领域</a>
-					<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="field"><i style="padding-right: 4px;" class="layui-icon">&#xe60b;</i>擅长领域</a>
-					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
+  					<a class="layui-btn layui-btn-xs" lay-event="allocate"><i style="padding-right: 4px;" class="layui-icon">&#xe609;</i>添加此领域</a>
 				</script>
 			</div>
 		</div>
@@ -112,12 +118,20 @@
 			table = layui.table,
 			laydate = layui.laydate,
 			element = layui.element;
+			
 			var message = [[${message}]];
 			if (message != null){
 				layer.msg(message)
 			}
+			//日期时间范围
+			  laydate.render({
+			    elem: '#createTime'
+			    ,type: 'datetime'
+			    ,range: '~'
+			    ,format: 'yyyy-MM-dd HH:mm:ss'
+			  });	
 			//监听工具条
-			  table.on('tool(baseinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  table.on('tool(fieldinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
 			    ,layEvent = obj.event; //获得 lay-event 对应的值
 			    if(layEvent === 'del'){
@@ -125,65 +139,36 @@
 				        obj.del(); //删除对应行（tr）的DOM结构
 				        layer.close(index);
 				        //向服务端发送删除指令
-				        $.get("/prs/user/delete", { id: data.id} );
+				        $.get("/prs/field/delete", { id: data.id} );
 				      });
 			    }
-			    if(layEvent === 'allocateField'){
-			    	var expertId = data.id;
-			    	window.location.href="/prs/field/allocateFieldPage?id="+expertId;
-			    }
-			    if(layEvent === 'field'){
-			    	$.ajax({
-			             type: "POST",
-			             url: "/prs/entityField/relateField",
-			             data: {
-			            	 id:data.id,
-			            	 entityType:"EXPERT"
-			             },
-			             dataType: "json",
-			             success: function(data){
-			            	 layer.open({
-			            		  type: 0,
-			            		  title: '专家擅长领域',
-			            		  content: data.data //这里content是一个普通的String
-			            		});
-			                // layer.msg(data.data);   
-			             }
-			         });
-			  }
+			    if(layEvent === 'allocate'){
+			    	layer.confirm('确定为专家添加该领域吗', function(index){
+				        obj.del(); //删除对应行（tr）的DOM结构
+				        layer.close(index);
+				        //向服务端发送指令
+				        var expertId = [[${expertId}]];
+				        //$.get("/prs/field/allocateField", { fieldId: data.id,expertId:expertId} );
+				        window.location.href="/prs/field/allocateField?fieldId="+data.id+"&&expertId="+expertId;
+				      });
+			    } 
 			  });
 			//监听单元格编辑
-			  table.on('edit(baseinfo)', function(obj){
+			  table.on('edit(fieldinfo)', function(obj){
 			    var value = obj.value //得到修改后的值
 			    ,data = obj.data //得到所在行所有键值
 			    ,field = obj.field; //得到字段
-			    var flag = true;
-			    var mailRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-			    var phoneRegex = /^1\d{10}$/;
 			    /* layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value); */
 			    if (value == null || value == ''){
 			    	layer.msg("字段[" + field + "]值不能为空！！！");
 			    	flag = false;
-			    } else if (field == 'sex' && (value != '男'&&value != '女')){
-		    		layer.msg("字段[" + field + "]只能是男或女！！！");
-		    		flag = false;
-			    } else if (field == 'mail' && !(mailRegex).test(value)){
-		    	    layer.msg("邮箱格式不合法！！");
-		    	    flag = false;
-			    } else if (field == 'phone' && !(phoneRegex).test(value)) {
-		    	    layer.msg("手机号格式不合法！！");
-		    	    flag = false;
-			    }
-			    if (flag){
+			    } else {
 			    	$.ajax({
 			             type: "POST",
-			             url: "/prs/user/update",
+			             url: "/prs/field/update",
 			             data: {
 			            	 id:data.id,
-			            	 sex : data.sex,
-			            	 mail : data.mail,
-			            	 phone : data.phone,
-			            	 title : data.title
+			            	 fieldName : data.fieldName
 			             },
 			             dataType: "json",
 			             success: function(data){
@@ -193,10 +178,10 @@
 			    }
 			  });
 			  $('#select').click(function(){
-				   table.reload("baseinfo",{
+				   table.reload("fieldinfo",{
 					   where: { //设定异步数据接口的额外参数，任意设
-						   username: $('#username').val()
-						   ,role: '2'
+						   fieldName: $('#fieldName').val(),
+						   createTime: $('#createTime').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始
@@ -204,7 +189,7 @@
 					 });
 				});
 			  $('#add').click(function(){
-				  window.location.href="/prs/project/addUserPage?roleId=2";
+				  window.location.href="/prs/field/addFieldPage";
 				});
 			  });
 		/* ]]> */

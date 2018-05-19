@@ -1,5 +1,7 @@
 package com.wymessi.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,29 @@ public class EntityFieldMappingServiceImpl implements EntityFieldMappingService 
 	@Autowired
 	private EntityFieldMappingDao entityFieldMappingDao;
 	
+	/**
+	 * 添加关联
+	 * @param entityField
+	 */
 	@Override
 	public void insert(EntityField entityField) {
 		if (entityField != null) {
 			entityFieldMappingDao.insert(entityField);
 		}
+	}
+
+	/**
+	 * 根据projectId查询
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public List<EntityField> listByEntityId(Long id, String entityType) {
+		if (id != null) {
+			List<EntityField> entityFields = entityFieldMappingDao.listByEntityId(id,entityType);
+			return entityFields;
+		}
+		return null;
 	}
 
 }

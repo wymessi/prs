@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.wymessi.dao.FieldDao;
 import com.wymessi.dao.ProjectDao;
@@ -176,6 +177,31 @@ public class ProjectServiceImpl implements ProjectService {
 	public void deleteById(Long id) {
 		if (id != null ){
 			projectDao.deleteById(id);
+		}
+	}
+
+	/**
+	 * 查找分组下的所有项目
+	 * @param groupId
+	 * @return
+	 */
+	@Override
+	public List<Project> listByGroupId(Long groupId) {
+		if (groupId != null ){
+			List<Project> projects = projectDao.listByGroupId(groupId);
+			return projects;
+		}
+		return null;
+	}
+
+	/**
+	 * 根据列表id更新状态，避免循环单次更新以提高效率
+	 * @param projectIds
+	 */
+	@Override
+	public void updateStatusByIds(List<Long> projectIds, String status) {
+		if(!CollectionUtils.isEmpty(projectIds)){
+			projectDao.updateStatusByIds(projectIds, status);
 		}
 	}
 }

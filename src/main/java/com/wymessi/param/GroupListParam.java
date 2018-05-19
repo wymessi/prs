@@ -1,29 +1,24 @@
 package com.wymessi.param;
 
-public class GroupListParam {
+public class GroupListParam extends CustomParam{
 
-	private String GroupName;
 	
-	//分页
-	private int offset;
-	private int limit;
-	public String getGroupName() {
-		return GroupName;
-	}
-	public int getOffset() {
-		return offset;
-	}
-	public int getLimit() {
-		return limit;
-	}
+	private String GroupName;
+	private String status;
+	
+	
 	public void setGroupName(String groupName) {
 		GroupName = groupName;
 	}
-	public void setOffset(int offset) {
-		this.offset = offset;
+	public String getGroupName() {
+		return GroupName;
 	}
-	public void setLimit(int limit) {
-		this.limit = limit;
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

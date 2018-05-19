@@ -9,6 +9,7 @@ import java.util.Date;
 public class Group {
 	
 	public static final String PROJECT_GROUP_STATUS_WAIT_ALLOCATE = "WAIT_ALLOCATE";
+	public static final String PROJECT_GROUP_STATUS_WAIT_ADD_PROJECT = "WAIT_ADD_PROJECT";
 	public static final String PROJECT_GROUP_STATUS_ALLOCATE_DONE = "ALLOCATE_DONE";
 	
 	private long id;

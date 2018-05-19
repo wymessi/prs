@@ -22,4 +22,8 @@
 	         #{item}
 	     </foreach>
     </sql>
+    
+    <select id="listByEntityId" resultMap="entityFieldMap">
+    	SELECT * FROM entity_field WHERE entity_id = #{id} AND entity_type = #{entityType}
+    </select>
 </mapper>

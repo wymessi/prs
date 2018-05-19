@@ -1,5 +1,7 @@
 package com.wymessi.service;
 
+import java.util.List;
+
 import com.wymessi.po.EntityField;
 
 /**
@@ -14,6 +16,13 @@ public interface EntityFieldMappingService {
 	 * @param entityField
 	 */
 	void insert(EntityField entityField);
+
+	/**
+	 * 根据projectId查询
+	 * @param id
+	 * @return
+	 */
+	List<EntityField> listByEntityId(Long id,String entityType);
 
 	
 }

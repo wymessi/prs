@@ -1,11 +1,13 @@
 package com.wymessi.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.wymessi.dao.GroupDao;
 import com.wymessi.param.GroupAllocateParam;
@@ -47,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
 			group.setCreateTime(new Date());
 			group.setLastUpdateTime(new Date());
 			group.setCreateUserId(user.getId());
-			group.setStatus(Group.PROJECT_GROUP_STATUS_WAIT_ALLOCATE);
+			group.setStatus(Group.PROJECT_GROUP_STATUS_WAIT_ADD_PROJECT);
 			groupDao.insert(group);
 		}
 	}
@@ -116,9 +118,18 @@ public class GroupServiceImpl implements GroupService {
 		
 		Group group = getById(param.getGroupId());
 		group.setStatus(Group.PROJECT_GROUP_STATUS_ALLOCATE_DONE);
+		group.setLastUpdateTime(new Date());
 		update(group);
 		
-		List<Project> projects = projectService.ListByGroupId(param.getGroupId());
+		List<Project> projects = projectService.listByGroupId(param.getGroupId());
+		List<Long> projectIds = new ArrayList<Long>();
+		
+		if (!CollectionUtils.isEmpty(projects)) {
+			for (Project project : projects) {
+				projectIds.add(project.getId());
+			}
+			projectService.updateStatusByIds(projectIds, Project.PROJECT_REVIEW_STATUS_WAIT_REVIEW);
+		}
 	}
 
 	

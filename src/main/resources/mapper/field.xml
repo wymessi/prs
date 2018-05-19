@@ -43,6 +43,12 @@
 			<if test="fieldName != null">
 	            and field_name LIKE CONCAT('%',#{fieldName},'%')
 	        </if>
+	        <if test="startTime != null">
+	            and create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and create_time &lt; #{endTime}
+	        </if>
         </where>
         LIMIT #{offset},#{limit}
 	</select>
@@ -54,6 +60,12 @@
 		<where>
 			<if test="fieldName != null">
 	            and field_name LIKE CONCAT('%',#{fieldName},'%')
+	        </if>
+	        <if test="startTime != null">
+	            and create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and create_time &lt; #{endTime}
 	        </if>
         </where>
 	</select>
@@ -81,4 +93,7 @@
 	<delete id="deleteById" parameterType="long">
 		DELETE FROM field WHERE id = #{id}
 	</delete>
+	<select id="listByIds" resultMap="fieldMap">
+		SELECT * FROM field where id in <include refid="insql"/>
+	</select>
 </mapper>

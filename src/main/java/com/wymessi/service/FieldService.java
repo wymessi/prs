@@ -62,5 +62,12 @@ public interface FieldService {
 	 * @param id
 	 */
 	public void deleteById(Long id);
+
+	/**
+	 * 根据ID列表查询
+	 * @param fieldIds
+	 * @return
+	 */
+	List<Field> listByIds(List<Long> fieldIds);
 	
 }

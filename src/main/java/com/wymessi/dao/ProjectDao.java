@@ -2,6 +2,8 @@ package com.wymessi.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.Project;
 
@@ -46,4 +48,17 @@ public interface ProjectDao {
 	 * @param id
 	 */
 	void deleteById(Long id);
+	
+	/**
+	 * 查找分组下的所有项目
+	 * @param groupId
+	 * @return
+	 */
+	List<Project> listByGroupId(Long groupId);
+
+	/**
+	 * 根据列表id更新状态，避免循环单次更新以提高效率
+	 * @param projectIds
+	 */
+	void updateStatusByIds(@Param("list")List<Long> projectIds, @Param("status")String status);
 }

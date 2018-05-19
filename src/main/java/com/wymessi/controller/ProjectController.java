@@ -1,6 +1,5 @@
 package com.wymessi.controller;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +24,7 @@ import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.ProjectService;
 import com.wymessi.service.UserService;
+import com.wymessi.utils.CustomDateUtils;
 import com.wymessi.utils.Md5Utils;
 import com.wymessi.utils.Result;
 import com.wymessi.utils.UUIDUtils;
@@ -306,7 +305,7 @@ public class ProjectController {
 		
 		// 设置正确的日期格式
 		if (!StringUtils.isEmpty(createTime))
-			setTimeRange(param, createTime);
+			CustomDateUtils.setTimeRange(param, createTime);
 		param.setOffset(offset);
 		param.setLimit(limit);
 
@@ -320,31 +319,6 @@ public class ProjectController {
 		map.put("msg", "");
 		map.put("data", projects);
 		return map;
-	}
-
-	/**
-	 * 设置正确的日期格式
-	 * 
-	 * @param param
-	 * @param startToEndTime
-	 * @throws ParseException
-	 */
-	private void setTimeRange(ProjectListParam param, String startToEndTime) {
-		String[] strs = startToEndTime.split("~");
-		for (String string : strs) {
-			Date date = null;
-			try {
-				date = DateUtils.parseDate(string.trim(), "yyyy-MM-dd HH:mm:ss");
-			} catch (ParseException e) {
-				throw new RuntimeException("时间转化异常");
-			}
-			if (param.getStartTime() == null) {
-				param.setStartTime(date);
-			} else {
-				param.setEndTime(date);
-			}
-
-		}
 	}
 
 	/**

@@ -66,4 +66,17 @@ public interface ProjectService {
 	 */
 	void deleteById(Long id);
 
+	/**
+	 * 查找分组下的所有项目
+	 * @param groupId
+	 * @return
+	 */
+	List<Project> listByGroupId(Long groupId);
+
+	/**
+	 * 根据列表id更新状态，避免循环单次更新以提高效率
+	 * @param projectIds
+	 */
+	void updateStatusByIds(List<Long> projectIds, String status);
+
 }

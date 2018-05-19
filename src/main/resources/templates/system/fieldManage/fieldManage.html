@@ -71,6 +71,12 @@
 					</div>
 				</div>
 				<div class="layui-inline">
+					<label class="layui-form-label">创建时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="createTime" placeholder="开始时间~结束时间"/>
+					</div>
+				</div>
+				<div class="layui-inline">
 					<label class="layui-form-label"></label>
 					<a id="select" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe615;</i>查询</a>
 					<a id="add" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe608;</i>添加</a>
@@ -116,7 +122,13 @@
 			if (message != null){
 				layer.msg(message)
 			}
-			
+			//日期时间范围
+			  laydate.render({
+			    elem: '#createTime'
+			    ,type: 'datetime'
+			    ,range: '~'
+			    ,format: 'yyyy-MM-dd HH:mm:ss'
+			  });	
 			//监听工具条
 			  table.on('tool(fieldinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			    var data = obj.data //获得当前行数据
@@ -157,7 +169,8 @@
 			  $('#select').click(function(){
 				   table.reload("fieldinfo",{
 					   where: { //设定异步数据接口的额外参数，任意设
-						   fieldName: $('#fieldName').val()
+						   fieldName: $('#fieldName').val(),
+						   createTime: $('#createTime').val()
 					   }
 					   ,page: {
 					     curr: 1 //重新从第 1 页开始

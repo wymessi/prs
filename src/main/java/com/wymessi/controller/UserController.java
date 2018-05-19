@@ -106,7 +106,7 @@ public class UserController {
 			path = "applicant/upload";
 			break;
 		case "2":
-			path = "expert/baseinfo";
+			path = "expert/review";
 			break;
 		case "3":
 			path = "system/groupManage/groupManage";

@@ -59,4 +59,11 @@ public interface FieldDao {
 	 * @param id
 	 */
 	public void deleteById(Long id);
+
+	/**
+	 * 根据ID列表查询
+	 * @param fieldIds
+	 * @return
+	 */
+	List<Field> listByIds(@Param("list")List<Long> fieldIds);
 }

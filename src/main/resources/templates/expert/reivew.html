@@ -113,8 +113,7 @@
 	
 				<script type="text/html" id="barDemo">
   					<a class="layui-btn layui-btn-xs" lay-event="detail"><i style="padding-right: 4px;" class="layui-icon">&#xe705;</i>查看结果</a>
-					<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="field"><i style="padding-right: 4px;" class="layui-icon">&#xe60b;</i>所属领域</a>
-  				    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
+  					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i style="padding-right: 4px;" class="layui-icon">&#xe640;</i>删除</a>
 				</script>
 			</div>
 		</div>
@@ -155,7 +154,7 @@
 			      ,{field: 'createUserName', title: '创建人', width: 85}
 			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
 			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
-			      ,{fixed: 'right', title:'操作', width: 260, align:'center', toolbar: '#barDemo'}
+			      ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'}
 			    ]]
 			   ,page: true
 			  });
@@ -202,25 +201,7 @@
 			        //向服务端发送删除指令
 			        $.get("/prs/project/delete", { id: data.id} );
 			      });
-			    }else if(layEvent === 'field'){
-			    	$.ajax({
-			             type: "POST",
-			             url: "/prs/entityField/relateField",
-			             data: {
-			            	 id:data.id,
-			            	 entityType:"PROJECT"
-			             },
-			             dataType: "json",
-			             success: function(data){
-			            	 layer.open({
-			            		  type: 0,
-			            		  title: '项目所属领域',
-			            		  content: data.data //这里content是一个普通的String
-			            		});
-			                // layer.msg(data.data);   
-			             }
-			         });
-			  }
+			    }
 			  });
 			//监听单元格编辑
 			  table.on('edit(applyinfotable)', function(obj){
