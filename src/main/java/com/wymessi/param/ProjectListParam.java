@@ -11,6 +11,7 @@ public class ProjectListParam  extends CustomParam{
 	private String projectName;
 	private String status;
 	private List<Long> createUserIds;
+	private List<Long> groupIds;
 	
 	public String getProjectName() {
 		return projectName;
@@ -34,6 +35,14 @@ public class ProjectListParam  extends CustomParam{
 
 	public void setCreateUserIds(List<Long> createUserIds) {
 		this.createUserIds = createUserIds;
+	}
+
+	public List<Long> getGroupIds() {
+		return groupIds;
+	}
+
+	public void setGroupIds(List<Long> groupIds) {
+		this.groupIds = groupIds;
 	}
 
 }

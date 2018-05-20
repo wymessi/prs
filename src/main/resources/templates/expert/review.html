@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-项目评审</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/allocate.css"
+	th:href="@{/css/allocate.css}" />
+<style type="text/css">
+.layui-inline{
+	margin-top: 10px;
+}
+#tableInfo{
+	width:1000px;
+	position: absolute;
+	top:250px;
+	left:40px;
+}
+</style>
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">科研项目评审系统</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="" th:href="@{/user/baseinfoPage?role=2}">基本信息</a>
+						</dd>
+						<dd>
+							<a href="" th:href="@{/review/reviewInfoPage}">我的评审</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/review/reviewPage}">项目评审</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="" th:href="@{/user/baseinfoPage?role=2}">基本信息</a>
+							</dd>
+							<dd>
+								<a href="" th:href="@{/review/reviewInfoPage}">我的评审</a>
+							</dd>
+						</dl></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<span class="layui-breadcrumb" lay-separator="/">
+			  <a href=""><cite>项目评审</cite></a>
+			</span>
+			<blockquote class="layui-elem-quote">专家被分配的所有需要评审的项目</blockquote>
+			<form class="layui-form" method="POST">
+				<div class="layui-inline">
+					<label class="layui-form-label">项目名</label>
+					<div class="layui-input-inline">
+						<input id="projectName" type="text" name="projectName" 
+							placeholder="根据项目名模糊搜索" autocomplete="off"
+							class="layui-input"/>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">创建人</label>
+					<div class="layui-input-inline">
+						<input id="username" type="text" name="username" 
+							placeholder="根据姓名模糊搜索" autocomplete="off"
+							class="layui-input"/>
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">创建时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="createTime" placeholder="开始时间~结束时间"/>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label"></label>
+					<a id="select" class="layui-btn"><i style="padding-right: 4px;" class="layui-icon">&#xe615;</i>查询</a>
+				</div>
+			</form>
+			<div id="tableInfo">
+				<table class="layui-hide" lay-data="{id: 'reloadId'}" id="reviewinfo" lay-filter="reviewInfotable"></table>
+	
+				<script type="text/html" id="barDemo">
+  					<a class="layui-btn layui-btn-xs" lay-event="download"><i style="padding-right: 4px;" class="layui-icon">&#xe601;</i>下载项目</a>
+  					<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="review"><i style="padding-right: 4px;" class="layui-icon">&#xe642;</i>打分</a>
+				</script>
+			</div>
+		</div>
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p style="text-align: center;">© All Rights Reserve By PRS</p>
+		</div>
+	</div>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		//JavaScript代码区域
+		layui.use([ 'jquery', 'layer' ,'form' ,'table', 'laydate','element'], function() {
+			var $ = layui.$, 
+			layer = layui.layer,
+			form = layui.element,
+			table = layui.table,
+			laydate = layui.laydate,
+			element = layui.element;
+			var message = [[${message}]];
+			if (message != null){
+				layer.msg(message)
+			}
+			 //日期时间范围
+			  laydate.render({
+			    elem: '#createTime'
+			    ,type: 'datetime'
+			    ,range: '~'
+			    ,format: 'yyyy-MM-dd HH:mm:ss'
+			  });			
+			 //执行一个 table 实例
+			   var tableIns = table.render({
+			    elem: '#reviewinfo'
+			    ,url: '/prs/project/projects.json?status=WAIT_REVIEW&&isExpert=isExpert'
+			    ,width: 1090
+			    ,cols: [[ //表头
+			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
+			      ,{field: 'projectName', title: '项目名', width:130, edit:true}
+			      ,{field: 'description', title: '摘要', width:150, edit:true}
+			      ,{field: 'status', title: '评审状态', width:85} 
+			      ,{field: 'createUserName', title: '创建人', width: 85}
+			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
+			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
+			      ,{fixed: 'right', title:'操作', width: 180, align:'center', toolbar: '#barDemo'}
+			    ]]
+			   ,page: true
+			  });
+			  $('#select').click(function(){
+				   tableIns.reload({
+					   where: { //设定异步数据接口的额外参数，任意设
+						   projectName: $('#projectName').val()
+						   ,createTime: $('#createTime').val()
+						   ,username: $('#username').val()
+						   ,isExpert:"isExpert"
+					   }
+					   ,page: {
+					     curr: 1 //重新从第 1 页开始
+					   }
+					 });
+				});
+			 
+			//监听工具条
+			  table.on('tool(reviewInfotable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			    var data = obj.data //获得当前行数据
+			    ,layEvent = obj.event; //获得 lay-event 对应的值
+			    if(layEvent === 'download'){
+			    	/* $.ajax({
+			             type: "POST",
+			             url: "/prs/review/download",
+			             data: {
+			            	 id:data.id
+			             },
+			             dataType: "json",
+			             success: function(data){
+			            	 layer.open({
+			            		  type: 0,
+			            		  title: '专家擅长领域',
+			            		  content: data.data //这里content是一个普通的String
+			            		});
+			                // layer.msg(data.data);   
+			             }
+			         }); */
+			    	var projectId = data.id;
+			    	window.location.href="/prs/review/download?id="+projectId;
+			    } 
+				if(layEvent === 'review'){
+			      
+			    }
+			  });
+			
+		});
+		/* ]]> */
+	</script>
+
+</body>
+</html>

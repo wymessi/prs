@@ -44,7 +44,7 @@ public class GroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/groupManagePage")
-	public String fieldPage(HttpSession session) throws Exception {
+	public String groupManagePage(HttpSession session) throws Exception {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}

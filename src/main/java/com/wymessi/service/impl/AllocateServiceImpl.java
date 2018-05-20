@@ -1,5 +1,7 @@
 package com.wymessi.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,15 @@ public class AllocateServiceImpl implements AllocateService {
 			return;
 		}
 		allocateDao.insert(allocate);
+	}
+
+	@Override
+	public List<Allocate> listByExpertId(Long id) {
+		if (id != null) {
+			List<Allocate> allocates = allocateDao.listByExpertId(id);
+			return allocates;
+		}
+		return null;
 	}
 
 }

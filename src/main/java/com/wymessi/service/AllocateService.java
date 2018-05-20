@@ -1,5 +1,7 @@
 package com.wymessi.service;
 
+import java.util.List;
+
 import com.wymessi.po.Allocate;
 
 /**
@@ -10,4 +12,6 @@ import com.wymessi.po.Allocate;
 public interface AllocateService {
 
 	void insert(Allocate allocate);
+
+	List<Allocate> listByExpertId(Long id);
 }

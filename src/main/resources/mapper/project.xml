@@ -45,6 +45,12 @@
 			        #{item}
 			    </foreach>
 	        </if>
+	        <if test="groupIds != null">
+	            and group_id in 
+				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
+	        </if>
 	        <if test="startTime != null">
 	            and create_time &gt; #{startTime} 
 	        </if>

@@ -4,7 +4,7 @@
 
 	<resultMap type="allocate" id="allocateMap">
 		<id column="id" property="id" />
-		<result column="allocate_user_id" property="allocatUserId" />
+		<result column="allocate_user_id" property="allocateUserId" />
 		<result column="group_id" property="groupId" />
 		<result column="allocate_time" property="allocateTime" />
 		<result column="expert_id" property="expertId" />
@@ -18,5 +18,7 @@
 		VALUES(#{id},#{allocateUserId},#{groupId},#{allocateTime},#{expertId})
 	</insert>
 	
-	
+	<select id="listByExpertId" parameterType="long" resultMap="allocateMap">
+		SELECT * FROM allocate WHERE expert_id = #{id}
+	</select>
 </mapper>

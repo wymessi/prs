@@ -20,8 +20,10 @@ import com.alibaba.druid.util.StringUtils;
 import com.wymessi.exception.CustomException;
 import com.wymessi.param.GenerateApplyParam;
 import com.wymessi.param.ProjectListParam;
+import com.wymessi.po.Allocate;
 import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
+import com.wymessi.service.AllocateService;
 import com.wymessi.service.ProjectService;
 import com.wymessi.service.UserService;
 import com.wymessi.utils.CustomDateUtils;
@@ -38,6 +40,9 @@ public class ProjectController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AllocateService allocateService;
 	
 	/**
 	 * 项目申请页面
@@ -283,6 +288,7 @@ public class ProjectController {
 		String status = request.getParameter("status");
 		String createTime = request.getParameter("createTime");
 		String isApplicant = request.getParameter("isApplicant");
+		String isExpert = request.getParameter("isExpert");
 		int limit = Integer.valueOf(request.getParameter("limit"));
 		List<Long> createUserIds = null;
 		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
@@ -296,6 +302,14 @@ public class ProjectController {
 			createUserIds = new ArrayList<Long>();
 			createUserIds.add(user.getId());
 			param.setCreateUserIds(createUserIds);
+		}
+		if (!StringUtils.isEmpty(isExpert)){
+			List<Allocate> allocates = allocateService.listByExpertId(user.getId());
+			List<Long> groupIds = new ArrayList<Long>();
+			for (Allocate allocate : allocates) {
+				groupIds.add(allocate.getGroupId());
+			}
+			param.setGroupIds(groupIds);
 		}
 		String createUserName = request.getParameter("username");
 		if (!StringUtils.isEmpty(createUserName)) {
