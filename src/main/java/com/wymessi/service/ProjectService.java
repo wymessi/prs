@@ -79,4 +79,18 @@ public interface ProjectService {
 	 */
 	void updateStatusByIds(List<Long> projectIds, String status);
 
+	/**
+	 * 某专家已评审项目总记录数
+	 * @param param
+	 * @return
+	 */
+	int getReivewdTotalCount(ProjectListParam param);
+
+	/**
+	 * 某专家已评审项目
+	 * @param param
+	 * @return
+	 */
+	List<Project> listReivewdtProject(ProjectListParam param);
+
 }

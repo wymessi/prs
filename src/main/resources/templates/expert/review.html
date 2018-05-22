@@ -189,7 +189,9 @@
 			    	window.location.href="/prs/review/download?id="+projectId;
 			    } 
 				if(layEvent === 'review'){
-			      
+			    	var id = data.createUserId;
+			    	var projectId = data.id;
+			    	window.location.href="/prs/review/gradePage?projectId="+projectId+"&&applicantId="+id;
 			    }
 			  });
 			

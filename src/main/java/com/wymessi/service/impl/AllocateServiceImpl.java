@@ -16,11 +16,11 @@ public class AllocateServiceImpl implements AllocateService {
 	private AllocateDao allocateDao;
 	
 	@Override
-	public void insert(Allocate allocate) {
+	public int insert(Allocate allocate) {
 		if(allocate == null){
-			return;
+			return 0;
 		}
-		allocateDao.insert(allocate);
+		return allocateDao.insert(allocate);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -170,7 +171,7 @@ public class ProjectController {
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-		model.addAttribute("groupId",id);
+		session.setAttribute("groupId", id);
 		return "system/allocateManage/allocate";
 	}
 	
@@ -305,11 +306,13 @@ public class ProjectController {
 		}
 		if (!StringUtils.isEmpty(isExpert)){
 			List<Allocate> allocates = allocateService.listByExpertId(user.getId());
-			List<Long> groupIds = new ArrayList<Long>();
-			for (Allocate allocate : allocates) {
-				groupIds.add(allocate.getGroupId());
+			if (!CollectionUtils.isEmpty(allocates)) {
+				List<Long> groupIds = new ArrayList<Long>();
+				for (Allocate allocate : allocates) {
+					groupIds.add(allocate.getGroupId());
+				}
+				param.setGroupIds(groupIds);
 			}
-			param.setGroupIds(groupIds);
 		}
 		String createUserName = request.getParameter("username");
 		if (!StringUtils.isEmpty(createUserName)) {
@@ -355,7 +358,7 @@ public class ProjectController {
 			if (Project.PROJECT_REVIEW_STATUS_IN_REVIEW.equals(project.getStatus())) {
 				project.setStatus("评审中");
 			}
-			if (Project.PROJECT_REVIEW_STATUS_REVIEW_DONG.equals(project.getStatus())) {
+			if (Project.PROJECT_REVIEW_STATUS_REVIEW_DONE.equals(project.getStatus())) {
 				project.setStatus("评审完成");
 			}
 		}

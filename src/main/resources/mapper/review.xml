@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wymessi.dao.ReviewDao">
+
+	<resultMap type="review" id="reviewMap">
+		<id column="id" property="id" />
+		<result column="applicant_id" property="applicantId" />
+		<result column="project_id" property="projectId" />
+		<result column="expert_id" property="expertId"/>
+		<result column="opinion" property="opinion"/>
+		<result column="grade" property="grade"/>
+		<result column="review_time" property="reviewTime"/>
+	</resultMap>
+	<insert id="insert" parameterType="review">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO review(id,applicant_id,project_id,expert_id,opinion,grade,review_time)
+		VALUES(#{id},#{applicantId},#{projectId},#{expertId},#{opinion},#{grade},#{reviewTime})
+	</insert>
+	<select id="listByProjectId" resultMap="reviewMap" parameterType="long">
+		SELECT * FROM review WHERE project_id = #{id}
+	</select>
+</mapper>

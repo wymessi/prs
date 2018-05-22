@@ -196,7 +196,7 @@ public class FieldController {
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
-		model.addAttribute("expertId", id);
+		session.setAttribute("expertId", id);
 		return "system/userManage/allocateField";
 	}
 	/**
@@ -207,18 +207,24 @@ public class FieldController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ResponseBody
 	@RequestMapping("/allocateField")
-	public String allocateField(HttpSession session, Model model, Long expertId, Long fieldId) throws Exception {
+	public Result<String> allocateField(HttpSession session, Model model, Long expertId, Long fieldId) throws Exception {
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
+		Result<String> result = new Result<String>();
 		EntityField entityField = new EntityField();
 		entityField.setEntityId(expertId);
 		entityField.setFieldId(fieldId);
 		entityField.setEntityType(EntityField.ENTITY_TYPE_EXPERT);
-		entityFieldMappingService.insert(entityField);
-		model.addAttribute("message", "添加领域成功");
-		return "system/userManage/allocateField";
+		int num = entityFieldMappingService.insert(entityField);
+		if (num > 0){
+			result.setData("添加领域成功");
+		} else {
+			result.setData("添加领域失败");
+		}
+		return result;
 	}
 }

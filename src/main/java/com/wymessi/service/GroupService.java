@@ -52,7 +52,7 @@ public interface GroupService {
 	 * 分配专家
 	 * @param param
 	 */
-	void allocate(GroupAllocateParam param);
+	int allocate(GroupAllocateParam param);
 	
 	/**
 	 * 根据id删除

@@ -96,7 +96,6 @@
 			if (message != null){
 				layer.msg(message)
 			}
-			var groupId = [[${groupId}]];
 			 //执行一个 table 实例
 			   var tableIns = table.render({
 			    elem: '#expertinfo'
@@ -118,8 +117,22 @@
 				    var data = obj.data //获得当前行数据
 				    ,layEvent = obj.event; //获得 lay-event 对应的值
 				    if(layEvent === 'allocate'){
-				    	var id = data.id;
-				    	window.location.href="/prs/group/allocate?expertId="+id+"&&groupId="+groupId;
+				    	obj.del();
+				    	//window.location.href="/prs/group/allocate?expertId="+id+"&&groupId="+groupId;
+				    	var groupId = [[${session.groupId}]];
+				        $.ajax({
+				             type: "POST",
+				             url: "/prs/group/allocate",
+				             data: {
+				            	 id:data.id,
+				            	 expertId : data.id,
+				            	 groupId : groupId
+				             },
+				             dataType: "json",
+				             success: function(data){
+				                     layer.msg(data.data);   
+				             }
+				         });
 				    }
 				  });
 		});

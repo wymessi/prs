@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PRS-评审结果信息</title>
+<link rel="stylesheet" href="../../static/layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}" />
+<link rel="stylesheet" href="../../static/css/baseinfo.css"
+	th:href="@{/css/baseinfo.css}" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">科研项目评审系统</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+
+			<ul th:if="${session.user.roleId==2}" class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="" th:href="@{/user/baseinfoPage?role=2}">基本信息</a>
+						</dd>
+						<dd>
+							<a href="" th:href="@{/review/reviewInfoPage}">我的评审</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
+			</ul>
+			<ul th:if="${session.user.roleId==1}" class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span>
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="" th:href="@{/user/baseinfoPage?role=2}">基本信息</a>
+						</dd>
+						<dd>
+							<a href="" th:href="@{/review/reviewInfoPage}">我的评审</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
+			</ul>
+			<ul th:if="${session.user.roleId==3}" class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img" /><span th:text="${session.user.username}">贤心</span></a></li>
+				<li class="layui-nav-item"><a href="" th:href="@{/user/logout}">注销</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul th:if="${session.user.roleId==2}" class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/review/reviewPage}">项目评审</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="" th:href="@{/user/baseinfoPage?role=2}">基本信息</a>
+							</dd>
+							<dd>
+								<a href="" th:href="@{/review/reviewInfoPage}">我的评审</a>
+							</dd>
+						</dl></li>
+				</ul>
+				<ul th:if="${session.user.roleId==1}" class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/project/uploadPage}">项目申请</a></li>
+					<li class="layui-nav-item"><a href="javascript:;">个人中心</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="" th:href="@{/user/baseinfoPage?role=1}">基本信息</a>
+							</dd>
+							<dd>
+								<a href="" th:href="@{/user/applyInfoPage}">我的申请</a>
+							</dd>
+						</dl></li>
+				</ul>
+				<ul th:if="${session.user.roleId==3}" class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;" th:href="@{/group/groupManagePage}">项目分组管理</a>
+					</li>
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/project/allocateManagePage}">项目分配管理</a></li>
+					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" th:href="@{/project/managePage}">项目管理</a></li>
+					<li class="layui-nav-item layui-nav-itemed"><a href="javascript:;">用户管理</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=1}">申请者管理</a>
+							</dd>
+							<dd>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=2}">评审专家管理</a>
+							</dd>
+							<dd>
+								<a class="" href="javascript:;" th:href="@{/project/userPage?role=3}">工作人员管理</a>
+							</dd>
+						</dl></li>
+						<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;" th:href="@{/field/fieldPage}">领域标签管理</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<!-- <table class="layui-hide" id="baseinfo" lay-filter="baseinfotable"></table>
+
+			<script type="text/html" id="barDemo">
+               <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+               <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	        </script>  -->
+	        <span class="layui-breadcrumb" lay-separator="/">
+			  <a href=""><cite>评审结果页面</cite></a>
+			</span>
+			<blockquote class="layui-elem-quote">评审结果列表</blockquote>
+	        <table class="layui-hide" lay-data="{id: 'reloadId'}" id="resultinfo" lay-filter="resultinfo"></table>
+		</div>
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			<p style="text-align: center;">© All Rights Reserve By PRS</p><!-- <a th:href="${#httpServletRequest.getContextPath()} "
+ id="contextPath"></a> -->
+		</div>
+	</div>
+	<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		//JavaScript代码区域
+		layui.use([ 'form', 'jquery', 'layer', 'element','table'],function() {
+			var form = layui.form, 
+				$ = layui.$, 
+				layer = layui.layer, 
+				element = layui.element, 
+				table = layui.table;
+			var id = [[${projectId}]];
+			
+			table.render({
+			    elem: '#resultinfo'
+			    ,url: '/prs/review/result?id='+id
+			    ,width: 766
+			    ,cols: [[ //表头
+			       {field: 'expertName', title: '评审专家', width:90}
+			      ,{field: 'opinion', title: '评语', width:371}
+			      ,{field: 'grade', title: '评审结果', width: 120}
+			      ,{field: 'reviewTime', title: '评审时间', width: 180}
+			    ]]
+			  });
+		});
+		/* ]]> */
+	</script>
+
+</body>
+</html>

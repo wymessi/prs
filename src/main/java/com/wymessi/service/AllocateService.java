@@ -11,7 +11,7 @@ import com.wymessi.po.Allocate;
  */
 public interface AllocateService {
 
-	void insert(Allocate allocate);
+	int insert(Allocate allocate);
 
 	List<Allocate> listByExpertId(Long id);
 }

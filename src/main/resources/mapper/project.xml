@@ -10,6 +10,7 @@
 		<result column="file_save_path" property="fileSavePath" />
 		<result column="create_time" property="createTime" />
 		<result column="last_update_time" property="lastUpdateTime" />
+		<result column="group_id" property="groupId" />
 		<result column="create_user_id" property="createUserId" />
 		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser"/>
 			
@@ -60,6 +61,34 @@
         </where>
         LIMIT #{offset},#{limit}
 	</select>
+	<select id="listReivewdtProject" resultMap="projectMap">
+		SELECT * FROM project p, review r 
+		<where>
+			p.id = r.project_id
+			<if test="projectName != null">
+	            and p.project_name LIKE CONCAT('%',#{projectName},'%')
+	        </if>
+	        <if test="status != null">
+	            and p.status = #{status}
+	        </if>
+	        <if test="createUserIds != null">
+	            and p.create_user_id in 
+				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
+	        </if>
+	        <if test="startTime != null">
+	            and p.create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and p.create_time &lt; #{endTime}
+	        </if>
+	        <if test="expertId != null">
+	            and r.expert_id = #{expertId}
+	        </if>
+        </where>
+        LIMIT #{offset},#{limit}
+	</select>
 	<select id="getCreateUser" resultType="sysUser" parameterType="long">
 		SELECT * FROM sys_user WHERE id = #{create_user_id}
 	</select>
@@ -72,9 +101,15 @@
 	        <if test="status != null">
 	            and status = #{status}
 	        </if>
-	        <if test="createUserIds != null">
+	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
+	        </if>
+	        <if test="groupIds != null and groupIds > 0">
+	            and group_id in 
+				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
 			        #{item}
 			    </foreach>
 	        </if>
@@ -83,6 +118,33 @@
 	        </if>
 	        <if test="endTime != null">
 	            and create_time &lt; #{endTime}
+	        </if>
+        </where>
+	</select>
+	<select id="getReivewdTotalCount" resultType="int">
+		SELECT count(*) FROM project p, review r 
+		<where>
+			p.id = r.project_id
+			<if test="projectName != null">
+	            and p.project_name LIKE CONCAT('%',#{projectName},'%')
+	        </if>
+	        <if test="status != null">
+	            and p.status = #{status}
+	        </if>
+	        <if test="createUserIds != null">
+	            and p.create_user_id in 
+				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
+			        #{item}
+			    </foreach>
+	        </if>
+	        <if test="startTime != null">
+	            and p.create_time &gt; #{startTime} 
+	        </if>
+	        <if test="endTime != null">
+	            and p.create_time &lt; #{endTime}
+	        </if>
+	        <if test="expertId != null">
+	            and r.expert_id = #{expertId}
 	        </if>
         </where>
 	</select>

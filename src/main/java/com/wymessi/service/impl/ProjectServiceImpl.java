@@ -204,4 +204,20 @@ public class ProjectServiceImpl implements ProjectService {
 			projectDao.updateStatusByIds(projectIds, status);
 		}
 	}
+
+	@Override
+	public int getReivewdTotalCount(ProjectListParam param) {
+		if (param != null){
+			return projectDao.getReivewdTotalCount(param);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Project> listReivewdtProject(ProjectListParam param) {
+		if (param != null){
+			return projectDao.listReivewdtProject(param);
+		}
+		return null;
+	}
 }

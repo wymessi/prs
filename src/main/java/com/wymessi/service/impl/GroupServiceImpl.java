@@ -108,13 +108,13 @@ public class GroupServiceImpl implements GroupService {
 
 	@Transactional
 	@Override
-	public void allocate(GroupAllocateParam param) {
+	public int allocate(GroupAllocateParam param) {
 		Allocate allocate = new Allocate();
 		allocate.setAllocateUserId(param.getUser().getId());
 		allocate.setExpertId(param.getExpertId());
 		allocate.setGroupId(param.getGroupId());
 		allocate.setAllocateTime(new Date());
-		allocateService.insert(allocate);
+		int num = allocateService.insert(allocate);
 		
 		Group group = getById(param.getGroupId());
 		group.setStatus(Group.PROJECT_GROUP_STATUS_ALLOCATE_DONE);
@@ -130,6 +130,7 @@ public class GroupServiceImpl implements GroupService {
 			}
 			projectService.updateStatusByIds(projectIds, Project.PROJECT_REVIEW_STATUS_WAIT_REVIEW);
 		}
+		return num;
 	}
 
 	

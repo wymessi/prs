@@ -18,7 +18,7 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO sys_user(id,username,password,sex,mail,phone,title,role_id)
-		VALUES(#{id},#{username},#{password},#{sex},#{mail},#{mail},#{title},#{roleId})
+		VALUES(#{id},#{username},#{password},#{sex},#{mail},#{phone},#{title},#{roleId})
 	</insert>
 
 	<select id="login" resultMap="userMap">

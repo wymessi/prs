@@ -131,7 +131,7 @@
 			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
 			      ,{field: 'projectName', title: '项目名', width:130, edit:true}
 			      ,{field: 'description', title: '摘要', width:150, edit:true}
-			      ,{field: 'status', title: '评审状态', width:85} 
+			      ,{field: 'status', title: '评审状态', width:100} 
 			      ,{field: 'createUserName', title: '创建人', width: 85}
 			      ,{field: 'createTime', title: '创建时间', width: 200, sort: true}
 			      ,{field: 'lastUpdateTime', title: '最后更改时间', width: 200, sort: true}
@@ -161,19 +161,8 @@
 			    	if (data.status != '评审完成'){
 			    		layer.msg('目前评审状态为：'+ data.status + ",请耐心等待");
 			    	} else {
-			    		$.ajax({
-				             type: "POST",
-				             url: "/prs/review/result",
-				             data: {
-				            	 id:data.id,
-				            	 projectName:data.projectName,
-				            	 description:data.description
-				             },
-				             dataType: "json",
-				             success: function(data){
-				                 layer.msg(data.data);   
-				             }
-				         });
+			    		var projectId = data.id;
+				    	window.location.href="/prs/review/resultPage?id="+projectId;
 			    	}
 			      
 			    } else if(layEvent === 'del'){

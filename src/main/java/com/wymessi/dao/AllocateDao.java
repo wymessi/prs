@@ -6,7 +6,7 @@ import com.wymessi.po.Allocate;
 
 public interface AllocateDao {
 
-	void insert(Allocate allocate);
+	int insert(Allocate allocate);
 
 	List<Allocate> listByExpertId(Long id);
 }

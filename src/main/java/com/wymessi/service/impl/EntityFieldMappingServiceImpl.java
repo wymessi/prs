@@ -25,10 +25,11 @@ public class EntityFieldMappingServiceImpl implements EntityFieldMappingService 
 	 * @param entityField
 	 */
 	@Override
-	public void insert(EntityField entityField) {
+	public int insert(EntityField entityField) {
 		if (entityField != null) {
-			entityFieldMappingDao.insert(entityField);
+			return entityFieldMappingDao.insert(entityField);
 		}
+		return 0;
 	}
 
 	/**

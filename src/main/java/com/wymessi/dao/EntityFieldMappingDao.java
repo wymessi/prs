@@ -11,7 +11,7 @@ public interface EntityFieldMappingDao {
 	 * 插入关联记录
 	 * @param entityField
 	 */
-	public void insert(EntityField entityField);
+	public int insert(EntityField entityField);
 
 	/**
 	 * 根据projectId查询

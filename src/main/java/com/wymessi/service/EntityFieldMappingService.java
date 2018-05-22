@@ -15,7 +15,7 @@ public interface EntityFieldMappingService {
 	 * 添加关联
 	 * @param entityField
 	 */
-	void insert(EntityField entityField);
+	int insert(EntityField entityField);
 
 	/**
 	 * 根据projectId查询

@@ -61,4 +61,18 @@ public interface ProjectDao {
 	 * @param projectIds
 	 */
 	void updateStatusByIds(@Param("list")List<Long> projectIds, @Param("status")String status);
+
+	/**
+	 * 某专家已评审项目总记录数
+	 * @param param
+	 * @return
+	 */
+	int getReivewdTotalCount(ProjectListParam param);
+
+	/**
+	 * 某专家已评审项目
+	 * @param param
+	 * @return
+	 */
+	List<Project> listReivewdtProject(ProjectListParam param);
 }

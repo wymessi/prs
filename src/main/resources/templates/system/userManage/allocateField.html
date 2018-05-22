@@ -147,9 +147,22 @@
 				        obj.del(); //删除对应行（tr）的DOM结构
 				        layer.close(index);
 				        //向服务端发送指令
-				        var expertId = [[${expertId}]];
+				        var expertId = [[${session.expertId}]];
+				        $.ajax({
+				             type: "POST",
+				             url: "/prs/field/allocateField",
+				             data: {
+				            	 id:data.id,
+				            	 fieldId : data.id,
+				            	 expertId : expertId
+				             },
+				             dataType: "json",
+				             success: function(data){
+				                     layer.msg(data.data);   
+				             }
+				         });
 				        //$.get("/prs/field/allocateField", { fieldId: data.id,expertId:expertId} );
-				        window.location.href="/prs/field/allocateField?fieldId="+data.id+"&&expertId="+expertId;
+				        //window.location.href="/prs/field/allocateField?fieldId="+data.id+"&&expertId="+expertId;
 				      });
 			    } 
 			  });

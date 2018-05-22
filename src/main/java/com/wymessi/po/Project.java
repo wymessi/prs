@@ -15,7 +15,7 @@ public class Project {
 	public static final String PROJECT_REVIEW_STATUS_WAIT_ALLOCATE = "WAIT_ALLOCATE";
     public static final String PROJECT_REVIEW_STATUS_WAIT_REVIEW = "WAIT_REVIEW";
     public static final String PROJECT_REVIEW_STATUS_IN_REVIEW = "IN_REVIEW";
-    public static final String PROJECT_REVIEW_STATUS_REVIEW_DONG = "REVIEW_DONG" ;
+    public static final String PROJECT_REVIEW_STATUS_REVIEW_DONE = "REVIEW_DONE" ;
 	
 	private long id;
 	private String projectName; // 项目名
