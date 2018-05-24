@@ -87,6 +87,25 @@ public class GroupController {
 	}
 	
 	/**
+	 * 查询分组中已添加项目页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/groupProjectPage")
+	public String groupProjectPage(HttpSession session,String groupId,Model model) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		if(StringUtils.isEmpty(groupId)){
+			throw new CustomException("分组信息异常，请刷新后重试", "/prs/group/addProjectPage");
+		}
+		model.addAttribute("groupId", groupId);
+		return "system/groupManage/groupProject";
+	}
+	
+	
+	/**
 	 * 为分组添加项目
 	 * 
 	 * @return

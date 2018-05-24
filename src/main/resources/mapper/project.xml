@@ -37,6 +37,9 @@
 			<if test="projectName != null">
 	            and project_name LIKE CONCAT('%',#{projectName},'%')
 	        </if>
+	        <if test="groupId != null">
+	            and group_id = #{groupId}
+	        </if>
 	        <if test="status != null">
 	            and status = #{status}
 	        </if>
@@ -97,6 +100,9 @@
 		<where>
 			<if test="projectName != null">
 	            and project_name LIKE CONCAT('%',#{projectName},'%')
+	        </if>
+	        <if test="groupId != null">
+	            and group_id = #{groupId}
 	        </if>
 	        <if test="status != null">
 	            and status = #{status}

@@ -22,9 +22,11 @@ import com.wymessi.exception.CustomException;
 import com.wymessi.param.GenerateApplyParam;
 import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.Allocate;
+import com.wymessi.po.Group;
 import com.wymessi.po.Project;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.AllocateService;
+import com.wymessi.service.GroupService;
 import com.wymessi.service.ProjectService;
 import com.wymessi.service.UserService;
 import com.wymessi.utils.CustomDateUtils;
@@ -41,6 +43,9 @@ public class ProjectController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private GroupService groupService;
 	
 	@Autowired
 	private AllocateService allocateService;
@@ -290,11 +295,14 @@ public class ProjectController {
 		String createTime = request.getParameter("createTime");
 		String isApplicant = request.getParameter("isApplicant");
 		String isExpert = request.getParameter("isExpert");
+		String groupId = request.getParameter("groupId");
 		int limit = Integer.valueOf(request.getParameter("limit"));
 		List<Long> createUserIds = null;
 		int offset = (Integer.valueOf(request.getParameter("page")) - 1) * limit;
 		// 生成查询参数
 		ProjectListParam param = new ProjectListParam();
+		if (!StringUtils.isEmpty(groupId))
+			param.setGroupId(Long.parseLong(groupId.trim()));
 		if (!StringUtils.isEmpty(projectName))
 			param.setProjectName(projectName.trim());
 		if (!StringUtils.isEmpty(status))
@@ -338,6 +346,37 @@ public class ProjectController {
 		return map;
 	}
 
+	/**
+	 * 删除分组中某个已添加项目
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/delGroup")
+	public void delGroup(HttpSession session,Long id,Long groupId) throws Exception {
+		if (session.getAttribute("user") == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		Project p = projectService.getProjectById(id);
+		if (p == null) {
+			throw new CustomException("该申请记录不存在，请刷新页面重新查看", "/prs/group/groupProjectPage");
+		}
+		p.setGroupId(0);
+		p.setStatus(Project.PROJECT_REVIEW_STATUS_WAIT_GROUP);
+		p.setLastUpdateTime(new Date());
+		projectService.update(p);
+		
+		List<Project> groupProjects = projectService.listByGroupId(groupId); 
+		if (CollectionUtils.isEmpty(groupProjects)){
+			Group group = groupService.getById(groupId);
+			if (group == null) {
+				throw new CustomException("该分组不存在，请刷新页面重新查看", "/prs/group/groupManagePage");
+			}
+			group.setStatus(Group.PROJECT_GROUP_STATUS_WAIT_ADD_PROJECT);
+			groupService.update(group);
+		}
+	}
+	
 	/**
 	 * 因为layui数据表格的限制，故将数据转成表格需要的格式
 	 * 
