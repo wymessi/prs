@@ -59,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
 		boolean isSuffixValid = checkFileSuffix(param.getFile().getOriginalFilename());
 		if (!isSuffixValid) {
 			param.getModel().addAttribute("message", "不支持的文件类型");
+			return;
 		}
 		// 将文件保存
 		String filePath = null;

@@ -40,13 +40,13 @@
 	        <if test="status != null">
 	            and status = #{status}
 	        </if>
-	        <if test="createUserIds != null">
+	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
 			        #{item}
 			    </foreach>
 	        </if>
-	        <if test="groupIds != null">
+	        <if test="groupIds != null and groupIds.size() > 0">
 	            and group_id in 
 				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
 			        #{item}
@@ -71,7 +71,7 @@
 	        <if test="status != null">
 	            and p.status = #{status}
 	        </if>
-	        <if test="createUserIds != null">
+	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and p.create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
 			        #{item}
@@ -107,7 +107,7 @@
 			        #{item}
 			    </foreach>
 	        </if>
-	        <if test="groupIds != null and groupIds > 0">
+	        <if test="groupIds != null and groupIds.size() > 0">
 	            and group_id in 
 				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
 			        #{item}
@@ -131,7 +131,7 @@
 	        <if test="status != null">
 	            and p.status = #{status}
 	        </if>
-	        <if test="createUserIds != null">
+	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and p.create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
 			        #{item}
