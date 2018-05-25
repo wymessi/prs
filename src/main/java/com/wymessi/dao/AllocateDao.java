@@ -9,4 +9,6 @@ public interface AllocateDao {
 	int insert(Allocate allocate);
 
 	List<Allocate> listByExpertId(Long id);
+
+	List<Allocate> listByGroupId(Long groupId);
 }

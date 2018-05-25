@@ -32,4 +32,13 @@ public class AllocateServiceImpl implements AllocateService {
 		return null;
 	}
 
+	@Override
+	public List<Allocate> listByGroupId(Long groupId) {
+		if (groupId != null) {
+			List<Allocate> allocates = allocateDao.listByGroupId(groupId);
+			return allocates;
+		}
+		return null;
+	}
+
 }

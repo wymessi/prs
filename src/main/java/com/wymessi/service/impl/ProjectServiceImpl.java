@@ -221,4 +221,9 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		return null;
 	}
+
+	@Override
+	public void updateReviewCountById(Long id) {
+		projectDao.updateReviewCountById(id);
+	}
 }

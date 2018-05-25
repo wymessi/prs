@@ -277,10 +277,10 @@ public class GroupController {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
 		Result<String> result = new Result<String>();
-		if (session.getAttribute("groupId") == null) {
+		/*if (session.getAttribute("groupId") == null) {
 			result.setData("对于每个分组，目前系统仅支持分配一个专家");
 			return result;
-		}
+		}*/
 		GroupAllocateParam param = new GroupAllocateParam();
 		param.setExpertId(expertId);
 		param.setGroupId(groupId);
@@ -288,7 +288,7 @@ public class GroupController {
 		int num = groupService.allocate(param);
 		if (num > 0){
 			result.setData("分配成功");
-			session.removeAttribute("groupId");
+//			session.removeAttribute("groupId");
 		} else {
 			result.setData("分配失败");
 		}

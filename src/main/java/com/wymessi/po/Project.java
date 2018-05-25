@@ -28,6 +28,7 @@ public class Project {
 	private Date lastUpdateTime; // 最后更改时间
 	private SysUser user; // 项目申请者持久类
 	private long groupId;
+	private int reviewCount;
 	
 	public long getId() {
 		return id;
@@ -115,6 +116,14 @@ public class Project {
 
 	public void setGroupId(long groupId) {
 		this.groupId = groupId;
+	}
+
+	public int getReviewCount() {
+		return reviewCount;
+	}
+
+	public void setReviewCount(int reviewCount) {
+		this.reviewCount = reviewCount;
 	}
 	
 }

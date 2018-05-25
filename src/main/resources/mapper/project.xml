@@ -11,6 +11,7 @@
 		<result column="create_time" property="createTime" />
 		<result column="last_update_time" property="lastUpdateTime" />
 		<result column="group_id" property="groupId" />
+		<result column="review_count" property="reviewCount" />
 		<result column="create_user_id" property="createUserId" />
 		<association property="user" javaType="sysUser" column="create_user_id" select="getCreateUser"/>
 			
@@ -54,6 +55,7 @@
 				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
 			        #{item}
 			    </foreach>
+			    and status in('IN_REVIEW','WAIT_REVIEW')
 	        </if>
 	        <if test="startTime != null">
 	            and create_time &gt; #{startTime} 
@@ -71,9 +73,7 @@
 			<if test="projectName != null">
 	            and p.project_name LIKE CONCAT('%',#{projectName},'%')
 	        </if>
-	        <if test="status != null">
-	            and p.status = #{status}
-	        </if>
+	        and p.status in('IN_REVIEW','REVIEW_DONE')
 	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and p.create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
@@ -118,6 +118,7 @@
 				<foreach collection="groupIds" item="item" separator="," open="(" close=")">
 			        #{item}
 			    </foreach>
+			    and status in('IN_REVIEW','WAIT_REVIEW')
 	        </if>
 	        <if test="startTime != null">
 	            and create_time &gt; #{startTime} 
@@ -134,9 +135,7 @@
 			<if test="projectName != null">
 	            and p.project_name LIKE CONCAT('%',#{projectName},'%')
 	        </if>
-	        <if test="status != null">
-	            and p.status = #{status}
-	        </if>
+	        and p.status in('IN_REVIEW','REVIEW_DONE')
 	        <if test="createUserIds != null and createUserIds.size() > 0">
 	            and p.create_user_id in 
 				<foreach collection="createUserIds" item="item" separator="," open="(" close=")">
@@ -200,5 +199,8 @@
 		<foreach collection="list" item="item" separator="," open="(" close=")">
 			#{item}
 		</foreach>
+	</update>
+	<update id="updateReviewCountById" parameterType="long">
+		UPDATE project SET review_count = review_count + 1 	WHERE id = #{id};
 	</update>
 </mapper>

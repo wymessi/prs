@@ -136,7 +136,7 @@
 			 //执行一个 table 实例
 			   var tableIns = table.render({
 			    elem: '#reviewinfo'
-			    ,url: '/prs/project/projects.json?status=WAIT_REVIEW&&isExpert=isExpert'
+			    ,url: '/prs/project/projects.json?isExpert=isExpert'
 			    ,width: 1090
 			    ,cols: [[ //表头
 			      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left'}
@@ -191,7 +191,7 @@
 				if(layEvent === 'review'){
 			    	var id = data.createUserId;
 			    	var projectId = data.id;
-			    	window.location.href="/prs/review/gradePage?projectId="+projectId+"&&applicantId="+id;
+			    	window.location.href="/prs/review/gradePage?projectId="+projectId+"&&applicantId="+id+"&&groupId="+data.groupId;
 			    }
 			  });
 			

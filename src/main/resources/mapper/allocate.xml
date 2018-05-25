@@ -21,4 +21,7 @@
 	<select id="listByExpertId" parameterType="long" resultMap="allocateMap">
 		SELECT * FROM allocate WHERE expert_id = #{id}
 	</select>
+	<select id="listByGroupId" parameterType="long" resultMap="allocateMap">
+		SELECT * FROM allocate WHERE group_id = #{groupId}
+	</select>
 </mapper>

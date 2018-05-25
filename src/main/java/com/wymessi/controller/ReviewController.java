@@ -1,5 +1,6 @@
 package com.wymessi.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.wymessi.exception.CustomException;
 import com.wymessi.param.ProjectListParam;
 import com.wymessi.po.Project;
+import com.wymessi.po.Result;
 import com.wymessi.po.Review;
 import com.wymessi.po.SysUser;
 import com.wymessi.service.ProjectService;
@@ -97,12 +99,21 @@ public class ReviewController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/gradePage")
-	public String gradePage(Model model, HttpSession session, Long projectId, Long applicantId) throws Exception {
-		if (session.getAttribute("user") == null) {
+	public String gradePage(Model model, HttpSession session, Long projectId, Long applicantId, Long groupId) throws Exception {
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
 		}
+		if (projectId != null){
+			Review review = reviewService.getByExpertIdAndProjectId(user.getId(),projectId);
+			if (review != null) {
+				throw new CustomException("你已评审过该项目！！", "/prs/review/reviewPage");
+			}
+		}
+		
 		model.addAttribute("projectId", projectId);
 		model.addAttribute("applicantId", applicantId);
+		model.addAttribute("groupId", groupId);
 		session.setAttribute("token", UUIDUtils.generateUUIDString());
 		return "expert/grade";
 	}
@@ -129,7 +140,7 @@ public class ReviewController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/grade")
-	public String grade(Model model, HttpSession session, Review review, String token) throws Exception {
+	public String grade(Model model, HttpSession session, Review review, String token, Long groupId) throws Exception {
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (session.getAttribute("user") == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
@@ -139,7 +150,7 @@ public class ReviewController {
 			return "expert/reviewinfo";
 		}
 		if (session.getAttribute("token").equals(token)) {
-			reviewService.review(review,user);
+			reviewService.review(review,user,groupId);
 			model.addAttribute("message", "评审打分成功");
 			session.removeAttribute("token");
 		}
@@ -155,7 +166,7 @@ public class ReviewController {
 	 */
 	@ResponseBody
 	@RequestMapping("/result")
-	public Map<String, Object> result(HttpSession session,Long id, HttpServletRequest request){
+	public Map<String, Object> result(HttpSession session,Long id){
 		SysUser user = (SysUser) session.getAttribute("user");
 		if (user == null) {
 			throw new CustomException("未登录，请先登录", "/prs/");
@@ -167,6 +178,39 @@ public class ReviewController {
 		map.put("count", 0);
 		map.put("msg", "");
 		map.put("data", reviews);
+		return map;
+	}
+	
+	/**
+	 * 最终评审结果
+	 * @param session
+	 * @param id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/lastResult")
+	public Map<String, Object> lastResult(HttpSession session,Long id){
+		SysUser user = (SysUser) session.getAttribute("user");
+		if (user == null) {
+			throw new CustomException("未登录，请先登录", "/prs/");
+		}
+		List<Review> reviews = reviewService.listByProjectId(id);
+		double sum = 0;
+		for (Review review : reviews) {
+			sum += Double.parseDouble(review.getGrade());
+		}
+		Result r = new Result();
+		r.setAverageGrade(sum/reviews.size());
+		if (r.getAverageGrade() >= 60) {
+			r.setResult("评审通过");
+		} else {
+			r.setResult("评审未通过");
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 0);
+		map.put("count", 0);
+		map.put("msg", "");
+		map.put("data", Arrays.asList(r));
 		return map;
 	}
 	
@@ -198,7 +242,6 @@ public class ReviewController {
 	@RequestMapping("/projects.json")
 	public Map<String, Object> getProjectsJson(HttpSession session, HttpServletRequest request,Long expertId) {
 		String projectName = request.getParameter("projectName");
-		String status = request.getParameter("status");
 		String createTime = request.getParameter("createTime");
 		int limit = Integer.valueOf(request.getParameter("limit"));
 		List<Long> createUserIds = null;
@@ -207,8 +250,6 @@ public class ReviewController {
 		ProjectListParam param = new ProjectListParam();
 		if (!StringUtils.isEmpty(projectName))
 			param.setProjectName(projectName.trim());
-		if (!StringUtils.isEmpty(status))
-			param.setStatus(status.trim());
 		String createUserName = request.getParameter("username");
 		if (!StringUtils.isEmpty(createUserName)) {
 			createUserIds = userService.getUserByUserName(createUserName.trim());

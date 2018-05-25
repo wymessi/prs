@@ -22,4 +22,8 @@
 	<select id="listByProjectId" resultMap="reviewMap" parameterType="long">
 		SELECT * FROM review WHERE project_id = #{id}
 	</select>
+	
+	<select id="getByExpertIdAndProjectId" resultMap="reviewMap">
+		SELECT * FROM review WHERE project_id = #{projectId} AND expert_id = #{expertId}
+	</select>
 </mapper>

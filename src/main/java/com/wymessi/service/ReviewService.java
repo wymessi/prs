@@ -21,7 +21,9 @@ public interface ReviewService {
 	 * @param review
 	 * @param attribute
 	 */
-	void review(Review review, SysUser user);
+	void review(Review review, SysUser user,Long groupId);
 
 	List<Review> listByProjectId(Long id);
+
+	Review getByExpertIdAndProjectId(Long expertId, Long projectId);
 }

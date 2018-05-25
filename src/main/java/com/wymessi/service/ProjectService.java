@@ -93,4 +93,6 @@ public interface ProjectService {
 	 */
 	List<Project> listReivewdtProject(ProjectListParam param);
 
+	void updateReviewCountById(Long id);
+
 }

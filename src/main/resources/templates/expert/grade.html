@@ -11,8 +11,7 @@
 	th:href="@{/css/register.css}" />
 <style type="text/css">
 #opinion{
-	width:200px;
-	border-radius:10px; 
+	width:190px;
 }
 .register{
 	padding-top: 100px;
@@ -37,16 +36,19 @@
 			<div class="register">
 				<form class="layui-form layui-bg-gray" method="POST" th:action="@{/review/grade}">
 					<div class="layui-form-item">
-					<label class="layui-form-label">专家评语</label>
-						<div class="layui-input-block">
-						<textarea id="opinion" name="opinion" placeholder="请输入您的评语" class="layui-textarea" lay-verify="required"></textarea>
+						<label class="layui-form-label">评审分数</label>
+						<div class="layui-input-inline">
+							<!-- <input id="grade" type="radio" name="grade" value="PASS" title="通过"  checked="checked"/> <input
+								type="radio" name="grade" value="REJECT" title="未通过"/> -->
+								<input id="grade" type="text" name="grade" 
+							placeholder="输入0-100的数字" lay-verify="grade" autocomplete="off"
+							class="layui-input"/>
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">评审结果</label>
+					<label class="layui-form-label">专家评语</label>
 						<div class="layui-input-block">
-							<input id="grade" type="radio" name="grade" value="PASS" title="通过"  checked="checked"/> <input
-								type="radio" name="grade" value="REJECT" title="未通过"/>
+						<textarea id="opinion" name="opinion" placeholder="请输入您的评语" class="layui-textarea" lay-verify="required"></textarea>
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -57,6 +59,7 @@
 					<input type="hidden" name="projectId" th:value="${projectId}"/>
 					<input name="token" type="hidden" th:value="${session.token}"/>
 					<input type="hidden" name="applicantId" th:value="${applicantId}"/>
+					<input type="hidden" name="groupId" th:value="${groupId}"/>
 				</form>
 			</div>
 		</div>
@@ -75,7 +78,13 @@
 			var form = layui.form
 			,$ = layui.$, layer = layui.layer;
 			
-			
+			form.verify({
+				grade: function(value, item){
+					if(!new RegExp("^(\\d|[1-9]\\d|100)$").test(value)){
+					      return "分数只能为0-100的数字";
+					}
+				}
+			});
  			//监听提交
 			form.on('submit(appRegister)', function(data) {
 				  

@@ -75,4 +75,6 @@ public interface ProjectDao {
 	 * @return
 	 */
 	List<Project> listReivewdtProject(ProjectListParam param);
+
+	void updateReviewCountById(Long id);
 }
