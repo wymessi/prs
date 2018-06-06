@@ -289,6 +289,7 @@ public class ProjectController {
 	@ResponseBody
 	@RequestMapping("/projects.json")
 	public Map<String, Object> getProjectsJson(HttpSession session, HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		SysUser user = (SysUser) session.getAttribute("user");
 		String projectName = request.getParameter("projectName");
 		String status = request.getParameter("status");
@@ -325,6 +326,13 @@ public class ProjectController {
 		String createUserName = request.getParameter("username");
 		if (!StringUtils.isEmpty(createUserName)) {
 			createUserIds = userService.getUserByUserName(createUserName.trim());
+			if (CollectionUtils.isEmpty(createUserIds)){
+				map.put("code", 0);
+				map.put("count", 0);
+				map.put("msg", "");
+				map.put("data", new ArrayList<Project>());
+				return map;
+			}
 			param.setCreateUserIds(createUserIds);
 		}
 		
@@ -338,7 +346,6 @@ public class ProjectController {
 		List<Project> projects = projectService.listProject(param);
 		// 因为layui数据表格的限制，故将数据转成表格需要的格式
 		formatProject(projects);
-		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 0);
 		map.put("count", totalCount);
 		map.put("msg", "");

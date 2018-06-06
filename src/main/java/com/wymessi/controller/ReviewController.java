@@ -1,5 +1,6 @@
 package com.wymessi.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -241,6 +243,7 @@ public class ReviewController {
 	@ResponseBody
 	@RequestMapping("/projects.json")
 	public Map<String, Object> getProjectsJson(HttpSession session, HttpServletRequest request,Long expertId) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		String projectName = request.getParameter("projectName");
 		String createTime = request.getParameter("createTime");
 		int limit = Integer.valueOf(request.getParameter("limit"));
@@ -254,6 +257,13 @@ public class ReviewController {
 		if (!StringUtils.isEmpty(createUserName)) {
 			createUserIds = userService.getUserByUserName(createUserName.trim());
 			param.setCreateUserIds(createUserIds);
+			if (CollectionUtils.isEmpty(createUserIds)){
+				map.put("code", 0);
+				map.put("count", 0);
+				map.put("msg", "");
+				map.put("data", new ArrayList<Project>());
+				return map;
+			}
 		}
 		
 		// 设置正确的日期格式
@@ -267,7 +277,6 @@ public class ReviewController {
 		List<Project> projects = projectService.listReivewdtProject(param);
 		// 因为layui数据表格的限制，故将数据转成表格需要的格式
 		formatProject(projects);
-		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 0);
 		map.put("count", totalCount);
 		map.put("msg", "");
